@@ -1,0 +1,37 @@
+#Kentel.dev with alpha logo on it
+#16TH of dec
+
+from flask import Flask,render_template,request,redirect,send_file
+import stripe
+import os
+import pymongo
+import time
+import redis
+from user_agents import parse as uaparse
+
+app = Flask(__name__)
+mongo = pymongo.MongoClient()
+db = mongo["KentelPlatform"]
+users = db["Users"]
+logs = db["logs"]
+mode = "test"
+base = "http://127.0.0.1:3000"
+
+@app.route("/")
+def index():
+    agent =uaparse(str(request.headers.get("User-Agent")))
+    device = agent.device.family
+    osinfo = agent.os.family
+    data = {
+
+        "device":str(device),
+        "os":str(osinfo),
+        "time":time.time(),
+        "ipaddr":"127.0.0.1"
+    }
+
+    return render_template("index.html")
+
+
+if __name__ == "__main__":
+    app.run(debug=True,port=3000)

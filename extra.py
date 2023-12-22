@@ -1,4 +1,13 @@
+#Efe akaroz @ 2023
+
 import random
+import smptplib
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from pymongo import MongoClient
+import redis
+
 
 def generate_id(charNumber):
     alphabet = "thequickbrownfoxjumpedoverthelazydog"
@@ -22,6 +31,32 @@ def generate_id(charNumber):
             output+=num
 
     return output
+
+class Mailer:
+    def code(code,email):
+        emailHTMLStart= open("templates/email/code.html","r").read()
+        emailHTMLStart.replace("-code-",str(code))
+        emailHTMLStart.replace("-date-",time.ctime(time.time()))
+        
+        
+        
+        msg = MIMEMultipart()
+        msg.set_unixfrom('author')
+        msg['From'] = 'sales@kentel.dev'
+        msg['To'] = m
+        msg['Subject'] = 'Here is your verification code! - Kentel'
+        message = emailHTMLStart
+        msg.attach(MIMEText(message,"html"))
+
+        mailserver = smtplib.SMTP_SSL('smtpout.secureserver.net', 465)
+        mailserver.ehlo()
+        mailserver.login('sales@kentel.dev', 'greenanarchist')
+
+        mailserver.sendmail('sales@kentel.dev',m,msg.as_string())
+
+        mailserver.quit()
+        
+        return True
 
 if __name__ == "__main__":
     print(generate_id(25))

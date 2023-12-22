@@ -19,8 +19,10 @@ mongo = pymongo.MongoClient()
 db = mongo["KentelPlatform"]
 users = db["Users"]
 logs = db["logs"]
+filters = db["Filters"]
 mode = "test"
 base = "http://127.0.0.1:3000"
+red = redis.Redis()
 
 @app.route("/")
 def index():
@@ -32,7 +34,10 @@ def index():
         password =psha256.hexdigest()
         
         u = users.find({"email":email,"password":password})[0]
-        return render_template("home.html",data=u)
+        if u["emailVerified"]:
+            return render_template("home.html",data=u)
+        else:
+            return redirect("/verify/email")
     except:
         pass
     
@@ -59,6 +64,13 @@ class Auth:
             email = request.form.get("email")
             if '@' not in email or '.' not in email:
                 return redirect("/signup?err=Email+not+valid")
+
+            try:
+                u_e = users.find({"email":email})[0]
+            
+                return redirect("/signup?err=There is an user signed up  with this email")
+            except:
+                pass
             
             password =request.form.get("password")
             psha256 = haslib.sha256()
@@ -76,7 +88,8 @@ class Auth:
                 "sentIssues":[],
                 "openedIssues":[],
                 "stripeScc":False,
-                "giftCode":None
+                "giftCode":None,
+                "emailVerified":False,
                 "time":time.time(),
                 "_id":generate_id(20)
             }
@@ -123,6 +136,11 @@ class Auth:
     def forgotpassword():
         if request.method == "POST":
             email = request.form.get("email")
+            try:
+                u = users.find({"email":email})[0]
+            except:
+                return render_template("forgot_password.html",mode="email",err="The user does not exist")
+            
             response = make_response(redirect("/forgot_password/code"))
             response.set_cookie("e",email)
             return response
@@ -132,8 +150,25 @@ class Auth:
     def forgotpasswordAPI():
         if request.method == "POST":
             email =request.cookies.get("e")
+            password = request.form.get("password")
             codeForm = request.form.get("code")
             codeCookie = request.cookies.get("code")
+            sha = hashlib.sha256()
+            sha.update(codeForm.encode())
+            codeForm = sha.hexdigest()
+            
+            if codeCookie == codeForm:
+                psha = hashlib.sha256()
+                psha.update(password.encode())
+                password = psha.hexdigest()
+            else:
+                return render_template("forgot_password.html",mode="code", err="Code doesn't match the original.")
+            try:
+                u=users.find({"email":email})[0]
+            except:
+                return render_template("forgot_password.html",mode="code",err="There is no such user with the email given.")
+            users.update_one({"_id":u["_id"]},{"$set":{"password":password}})
+            return render_template("success.html",red="/login",msg="Your password has reset successfully")
             
         if request.method == "GET":
             email = request.cookies.get("e")
@@ -150,7 +185,139 @@ class Auth:
             
             
             return response
+    @app.route("/verify/email",methods=["POST","GET"])
+    def verifyEmail():
+        if request.method == "POST":
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            try:
+                u = users.find({"email":email,"password":password})[0]
+            except:
+                return redirect("/login")
+
+            codeForm = request.form.get("code")
+            codeRedis = red.get(email+"_code").decode()
+            if codeForm == codeRedis:
+                #code verified
+                u["emailVerified"] = True
+
+                users.update_one({"_id":u["_id"]},{"$set":u})
+                return redirect("/")
+            else:
+                return render_template("verify.html",msg="Wrong Code.")
+                #wrong code, or expired.
             
+        if request.method == "GET":
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            try:
+                u = users.find({"email":email,"password":password})[0]
+            except:
+                return redirect("/")
+            if u["emailVerified"]:
+                return redirect("/")
+            verificationCode = random.randint(10000,100000)
+            red.set(email+"_code",str(verificationCode),ex=600)
+            Mailer.code(verificationCode,email)
+            return render_template("verify.html")
+
+
+    
+            
+    
+
+
+
+
+class APIs:
+    @app.route("/api/login",methods=["POST"])
+    def apiLogin():
+        if request.method == "POST":
+            email = request.form.get("email")
+            password = request.form.get("password")
+            hashP = hashlib.sha256()
+            hasP.update(password.encode())
+            password=hashP.hexdigest()
+            try:
+                u = users.find({"email":email,"password":password})[0]
+            except:
+                return {"err":"Check your credentials."},401
+            
+            return u,200
+        
+    @app.route("/api/register",methods=["POST"])
+    def apiRegister():
+         if True:
+            email = request.form.get("email")
+            try:
+                ue = users.find({"email":email})[0]
+                return {"err":"This user already exists"},409
+            except:
+                pass
+            password =request.form.get("password")
+            psha256 = haslib.sha256()
+            psha256.update(password.encode())
+            password = psha256.hexdigest()
+            #hashing all passwords
+            
+            fullName = request.form.get("fullName")
+            #giftCode = request.forrm.get("giftCode")
+            data = {
+
+                "email":email,
+                "password":password,
+                "fullName":fullName,
+                "sentIssues":[],
+                "openedIssues":[],
+                "stripeScc":False,
+                "giftCode":None,
+                "emailVerified":False,
+                "time":time.time(),
+                "_id":generate_id(20)
+            }
+            users.insert_one(data)
+            return data,200
+    @app.route("/api/verify/email",methods=["POST","PUT"])
+    def apiVerifyEmail():
+        
+        email = request.form.get("email")
+        password = request.form.get("hash")
+        try:
+            u = users.find({"email":email,"password":password})[0]
+        except:
+            return {"err":"Verification Failed"},403
+        if u["emailVerified"]:
+            return {"err":"Email already verified"},401
+
+        if request.method == "PUT":
+            code = request.form.get("code")
+            codeServer = red.get(email+"_code").decode()
+            if code == codeServer:
+                u["emailVerified"] = True              
+                return {"msg":"Email verified"},200
+            else:
+                
+                return {"err":"Codes does not match."},401
+        
+        verificationCode = random.randint(10000,100000)
+        red.set(email+"_code",str(verificationCode),ex=600)
+        Mailer.code(verificationCode,email)
+        return {"msg":"Code sent"},200
+    @app.route("/api/list/filters")
+    def listFiltersAPI():
+        f= []
+        allFilters = filters.find({})
+        for _ in allFilters:
+            del _["_id"]
+            f.append(_)
+        
+        return {"f":f}
+    @app.route("/api/exchanges")
+    def exchanges():
+        return {"ex":["NASDAQ"]}
+
+    
+        
 class Policies:
     @app.route("/privacy-policy")
     def privacy_policy():
