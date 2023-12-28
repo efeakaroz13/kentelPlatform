@@ -1,7 +1,6 @@
 #Efe akaroz @ 2023
 
 import random
-import smptplib
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText

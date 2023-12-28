@@ -1,7 +1,7 @@
 #Kentel.dev with alpha logo on it
 #16TH of dec
 #Practice makes perfect.
-from flask import Flask,render_template,request,redirect,send_file,make_response
+from flask import Flask,render_template,request,redirect,send_file,make_response,jsonify
 import stripe
 import os
 import pymongo
@@ -44,18 +44,37 @@ def index():
     agent =uaparse(str(request.headers.get("User-Agent")))
     device = agent.device.family
     osinfo = agent.os.family
+
+    referer = request.headers.get("Referer")
+    try:
+        acceptLang = request.headers.get("Accept-Language")
+        acceptLang.split(";")[0].split(",")[0]
+    except:
+        acceptLang = None
     data = {
 
         "device":str(device),
         "os":str(osinfo),
         "time":time.time(),
-        "ipaddr":"127.0.0.1",
-        "_id":generate_id(50)
+        "ipaddr":request.environ.get('HTTP_X_REAL_IP', request.remote_addr),
+        "host":request.headers.get("Host"),
+        "_id":generate_id(50),
+        "referer":referer,
+        "language":acceptLang
     }
+    try:
+        l = logs.find({"ipaddr":request.environ.get('HTTP_X_REAL_IP', request.remote_addr)})[0]
+        if l["time"]<time.time()-345600:
+            pass 
+        else:
+            return render_template("index.html")
+    except:
+        pass 
     if agent.is_bot == False:
         logs.insert_one(data)
     
     return render_template("index.html")
+
 
 class Auth:
     @app.route("/signup",methods=["POST","GET"])
@@ -77,7 +96,7 @@ class Auth:
             psha256.update(password.encode())
             password = psha256.hexdigest()
             #hashing all passwords
-            
+            plan = request.cookies.get("plan")
             fullName = request.form.get("fullName")
             #giftCode = request.forrm.get("giftCode")
             data = {
@@ -88,8 +107,11 @@ class Auth:
                 "sentIssues":[],
                 "openedIssues":[],
                 "stripeScc":False,
+                "plan":plan,
                 "giftCode":None,
                 "emailVerified":False,
+                "newbie":True,
+                "beta":False,
                 "time":time.time(),
                 "_id":generate_id(20)
             }
@@ -221,7 +243,17 @@ class Auth:
             Mailer.code(verificationCode,email)
             return render_template("verify.html")
 
-
+    @app.route("/newbie/remove")
+    def newbieRemove():
+        email = request.cookies.get("e")
+        password = request.cookies.get("p")
+        try:
+            u = users.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/login")
+        if u["newbie"]:
+            users.update_one({"_id":u["_id"]},{"$set":{"newbie":False}})
+        return redirect("/")
     
             
     
@@ -271,6 +303,7 @@ class APIs:
                 "openedIssues":[],
                 "stripeScc":False,
                 "giftCode":None,
+                "newbie":True,
                 "emailVerified":False,
                 "time":time.time(),
                 "_id":generate_id(20)
@@ -316,6 +349,27 @@ class APIs:
     def exchanges():
         return {"ex":["NASDAQ"]}
 
+    @app.route("/set/cookie")
+    def setcookieWithJS():
+        f = request.args.get("redirect")
+        if f != None:
+            response = make_response(redirect(f))
+        else:
+            response = make_response({})
+        key = request.args.get("key")
+        value = request.args.get("value")
+        exp = request.args.get("exp")
+        if exp == None:
+            exp = "365"
+        try:
+            exp = int(exp)
+        except:
+            return {"err":"expire invalid."}
+        expire_date = datetime.datetime.now()
+        expire_date = expire_date + datetime.timedelta(days=exp)
+        response.set_cookie(key,value,expires=expire_date)
+
+        return response 
     
         
 class Policies:

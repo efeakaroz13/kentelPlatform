@@ -1,0 +1,22 @@
+Base Package:(14.99$ a month, 5 days free trial)(152.99$ a year, 12.75 a month)
+ - Mailing List
+ - 1 Daily Scan
+ - Indvidual Search
+ - 1 filter
+Standard Package:(59.99$ a month) - (612$ annually, 50.99$ per month)
+ - Mailing List(optional)
+ - Unlimited Scans
+ - Indvidual Stock Search
+ - 10+ filters
+ - Save to portfolio and watch the stock
+
+
+Pro Package:(coming soon)
+ - Add notifications and alarms to a certain stock
+ - Follow list signal change alarms
+ - Sell signals(short trading)
+ - quarterly stock analysis, finding new opportunities
+
+ note: add an experimental mode to limit the number of outcomes.
+ note: save button in email with href to add a certain stock to an accounts portfolio
+ 
