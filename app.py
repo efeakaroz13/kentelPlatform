@@ -6,6 +6,7 @@ import stripe
 import os
 import pymongo
 import time
+import stripe
 import redis
 import hashlib
 from user_agents import parse as uaparse
@@ -24,18 +25,24 @@ mode = "test"
 base = "http://127.0.0.1:3000"
 red = redis.Redis()
 
+plans = ["standardM","basicM"]
+stripe.api_key = "sk_test_51KNGcuEz0P2Wm1hTXPKe291k3qbGjhJqxaryuuNe2J0mSFhiZrI69LYIbWIAYIbGT3LYPOc4MyTAnkGmtleJobxh00LPcn5oI7"
+
+
 @app.route("/")
 def index():
     email  =request.cookies.get("e")
     password = request.cookies.get("p")
     try:
-        psha256 = haslib.sha256()
-        psha256.update(password.encode())
-        password =psha256.hexdigest()
+
         
         u = users.find({"email":email,"password":password})[0]
         if u["emailVerified"]:
-            return render_template("home.html",data=u)
+            if  stripe.Subscription.list(customer=u["customer_id"])["data"][0]["plan"]["active"]:
+
+                return render_template("home.html",data=u)
+            else:
+                return redirect("/not_paid")
         else:
             return redirect("/verify/email")
     except:
@@ -79,6 +86,17 @@ def index():
 class Auth:
     @app.route("/signup",methods=["POST","GET"])
     def signup():
+        plan = request.cookies.get("plan")
+        if plan == None:
+            return redirect("/")
+        if plan not in plans:
+            return redirect("/")
+        planVisual = ""
+        if plan == "basicM":
+            planVisual = "Daily Insight"
+        if plan == "standardM":
+            planVisual = "Standard"
+
         if request.method == "POST":
             email = request.form.get("email")
             if '@' not in email or '.' not in email:
@@ -92,12 +110,18 @@ class Auth:
                 pass
             
             password =request.form.get("password")
-            psha256 = haslib.sha256()
+            psha256 = hashlib.sha256()
             psha256.update(password.encode())
             password = psha256.hexdigest()
             #hashing all passwords
-            plan = request.cookies.get("plan")
             fullName = request.form.get("fullName")
+            if fullName == None:
+                return abort(403)
+            cus = stripe.Customer.create(
+              name=fullName,
+              email=email
+            )
+            
             #giftCode = request.forrm.get("giftCode")
             data = {
 
@@ -113,21 +137,22 @@ class Auth:
                 "newbie":True,
                 "beta":False,
                 "time":time.time(),
-                "_id":generate_id(20)
+                "_id":generate_id(20),
+                "customer_id":cus["id"]
             }
 
             expire_date = datetime.datetime.now()
             expire_date = expire_date + datetime.timedelta(days=120)
             
             response = make_response(redirect("/"))
-            response.set_cookie("e",email,expires=expire_date)
-            response.set_cookie("p",password,expires=expire_date)
+            response.set_cookie("e",email,expires=expire_date,secure=True,samesite="Lax")
+            response.set_cookie("p",password,expires=expire_date,secure=True,samesite="Lax")
             
             users.insert_one(data)
             return response
         else:
             err = request.args.get("err")
-            return render_template("signup.html",err=err)
+            return render_template("signup.html",err=err,planVisual=planVisual)
 
 
     @app.route("/login",methods=["POST","GET"])
@@ -142,18 +167,18 @@ class Auth:
             try:
                 u = users.find({"email":email,"password":password})[0]
             except:
-                return redirect("/login?err=Couldn't sign you in!")
+                return redirect("/login?err=Check credentials")
             response = make_response(redirect("/"))
             expire_date = datetime.datetime.now()
             expire_date = expire_date + datetime.timedelta(days=120)
-            response.set_cookie("e",email,expires=expire_date)
-            response.set_cookie("p",password,expires=expire_date)
+            response.set_cookie("e",email,expires=expire_date,secure=True,samesite="Lax")
+            response.set_cookie("p",password,expires=expire_date,secure=True,samesite="Lax")
             return response
         
             
         if request.method == "GET":
-            err =request.form.get("err")
-            return render_template("signup.html",err=err)
+            err =request.args.get("err")
+            return render_template("login.html",err=err)
     @app.route("/forgot_password",methods=["POST","GET"])
     def forgotpassword():
         if request.method == "POST":
@@ -218,7 +243,10 @@ class Auth:
                 return redirect("/login")
 
             codeForm = request.form.get("code")
-            codeRedis = red.get(email+"_code").decode()
+            try:
+                codeRedis = red.get(email+"_code").decode()
+            except:
+                return redirect("/login")
             if codeForm == codeRedis:
                 #code verified
                 u["emailVerified"] = True
@@ -238,9 +266,12 @@ class Auth:
                 return redirect("/")
             if u["emailVerified"]:
                 return redirect("/")
-            verificationCode = random.randint(10000,100000)
-            red.set(email+"_code",str(verificationCode),ex=600)
-            Mailer.code(verificationCode,email)
+            try:
+                codeRedis = red.get(email+"_code").decode()
+            except:
+                verificationCode = random.randint(10000,100000)
+                red.set(email+"_code",str(verificationCode),ex=600)
+                Mailer.code(verificationCode,email)
             return render_template("verify.html")
 
     @app.route("/newbie/remove")
@@ -287,7 +318,7 @@ class APIs:
             except:
                 pass
             password =request.form.get("password")
-            psha256 = haslib.sha256()
+            psha256 = hashlib.sha256()
             psha256.update(password.encode())
             password = psha256.hexdigest()
             #hashing all passwords
@@ -379,5 +410,106 @@ class Policies:
     @app.route("/terms-and-conditions")
     def terms_and_conditions():
         return render_template("terms.html")
+
+
+class StripeRoutes:
+    @app.route("/checkout")
+    def stripecheckout():
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+            plan = u["plan"]
+
+        except:
+            return redirect("/")
+        if plan == "standardM":
+            price_id = 'price_1OSLwuEz0P2Wm1hTxf5UXsGK'
+
+            session = stripe.checkout.Session.create(
+              success_url=base+'/checkout/success?session_id={CHECKOUT_SESSION_ID}',
+              cancel_url=base+'/checkout/canceled',
+              mode='subscription',
+              line_items=[{
+                'price': price_id,
+                # For metered billing, do not pass quantity
+                'quantity': 1
+              }],
+              customer=u["customer_id"]
+              
+            )
+
+            # Redirect to the URL returned on the session
+            return redirect(session.url, code=303)
+        if plan == "basicM":
+
+            price_id = 'price_1OSMSiEz0P2Wm1hTieKpwDBJ'
+
+            session = stripe.checkout.Session.create(
+              success_url=base+'/checkout/success?session_id={CHECKOUT_SESSION_ID}',
+              cancel_url=base+'/checkout/canceled',
+              mode='subscription',
+              line_items=[{
+                'price': price_id,
+                # For metered billing, do not pass quantity
+                'quantity': 1
+              }],
+              subscription_data={"trial_period_days":7},
+              customer=u["customer_id"]
+            )
+
+            # Redirect to the URL returned on the session
+            return redirect(session.url, code=303)
+        #return {}
+    @app.route("/checkout/success")
+    def checkout_scc():
+        session_id = request.args.get("session_id")
+        try:
+            session = stripe.checkout.Session.retrieve(session_id)
+        except:
+            return ("/")
+
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+            activeq = stripe.Subscription.list(customer=u["customer_id"])["data"][0]["plan"]["active"]
+            if activeq != True:
+                return redirect("/not_paid")
+        except:
+            return redirect("/login")
+        return jsonify(session)
+    @app.route("/checkout/canceled")
+    def checkout_cancel():
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+            activeq = stripe.Subscription.list(customer=u["customer_id"])["data"][0]["plan"]["active"]
+            if activeq != True:
+                return redirect("/not_paid")
+
+            return render_template("canceled.html",u=u)
+        except:
+            return redirect("/")
+    @app.route("/customer")
+    def customerOBJ():
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+            cus = stripe.Subscription.list(customer=u["customer_id"])["data"][0]["plan"]["active"]
+            return str(cus)
+        except:
+            return redirect("/")
+
+    @app.route("/not_paid")
+    def not_paid():
+        response = make_response("<script>alert('You did not make your payments, cant sign you in. Contact support -> efeakaroz@kentel.dev');window.location.assign('/')</script>")
+        response.set_cookie("e","")
+        response.set_cookie("p","")
+
+        return response
+
 if __name__ == "__main__":
     app.run(debug=True,port=3000)

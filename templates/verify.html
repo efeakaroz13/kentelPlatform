@@ -17,16 +17,14 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
 
-    <title>Signup to Kentel</title>
+    <title>Verify Email</title>
   </head>
 
   <body>
 
   <!-- N A V B A R -->
-  <nav class="navbar navbar-default navbar-expand-lg fixed-top custom-navbar">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="icon ion-md-menu"></span>
-    </button>
+ <nav class="navbar navbar-default navbar-expand-lg fixed-top custom-navbar">
+    
     <img src="/static/images/logo.png" class="img-fluid nav-logo-mobile" alt="Company Logo">
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <div class="container">
@@ -43,15 +41,13 @@
       <div class="row">
         
         <div class="col content-box hero-content">
-          <span>Kentel - {{planVisual}}<br> <i style="font-size:10px;text-decoration: underline;" onclick="window.location.assign('/#pricing')">Change Plan</i></span>
-          <h1>Sign Up</h1>
-          <br>
+          <span>Kentel</span>
+          <h1>Verify Email</h1>
 
-          <form action="" method="POST">
-          	<input name="fullName" placeholder="Full Name" class="form-control" required> <br>
-          	<input name="email" placeholder="E-Mail" class="form-control" required> <br>
-          	<input name="password" minlength="8" placeholder="Password" type="password" class="form-control" required> <br>
-          	<button href="" class="btn btn-regular">Sign Up</button>
+
+          <form action="" method="POST"><p style="font-size:16px;">If you didn't recieve any email, check your spam folder. If you don't see anything, <a id="resendBtn" style="opacity:0.8">Resend in </a></p><br><br>
+          	<input name="code" placeholder="Enter the code..." class="form-control" required> <br>
+          	<button href="" class="btn btn-regular">Confirm</button>
           </form>
           
         </div>
@@ -59,7 +55,38 @@
     </div>
   </section>
   <!-- E N D  H E R O -->
+  <script>
 
+  	remaining = localStorage.getItem("remaining");
+  	if(remaining == null){
+  		localStorage.setItem("remaining", 600);
+  		remaining = 600
+  	}
+  	g("resendBtn").innerHTML = "Resend in "+remaining+"s"
+  	function g(id){
+  		return document.getElementById(id)
+  	}
+  	function countSeconds(){
+  		resendBtn = document.getElementById("resendBtn");
+
+		g("resendBtn").innerHTML = "Resend in "+remaining+"s";
+		localStorage.setItem("remaining", remaining);
+		if(remaining == 0){
+			localStorage.removeItem("remaining");
+
+			clearInterval(countSeconds);
+			g("resendBtn").href="/verify/email";
+			g("resendBtn").style.opacity = "1"
+			g("resendBtn").innerHTML = "Resend Email.";
+		}else{
+			remaining -=1
+		}
+		
+
+
+  	}
+  	setInterval(countSeconds,1000);
+  </script>
 
   <!--  F O O T E R  -->
   <footer>

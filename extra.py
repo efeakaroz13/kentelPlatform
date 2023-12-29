@@ -6,6 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pymongo import MongoClient
 import redis
+import time
 
 
 def generate_id(charNumber):
@@ -34,15 +35,15 @@ def generate_id(charNumber):
 class Mailer:
     def code(code,email):
         emailHTMLStart= open("templates/email/code.html","r").read()
-        emailHTMLStart.replace("-code-",str(code))
-        emailHTMLStart.replace("-date-",time.ctime(time.time()))
+        emailHTMLStart = emailHTMLStart.replace("-code-",str(code))
+        emailHTMLStart = emailHTMLStart.replace("-date-",time.ctime(time.time()))
         
         
         
         msg = MIMEMultipart()
         msg.set_unixfrom('author')
         msg['From'] = 'sales@kentel.dev'
-        msg['To'] = m
+        msg['To'] = email
         msg['Subject'] = 'Here is your verification code! - Kentel'
         message = emailHTMLStart
         msg.attach(MIMEText(message,"html"))
@@ -51,7 +52,7 @@ class Mailer:
         mailserver.ehlo()
         mailserver.login('sales@kentel.dev', 'greenanarchist')
 
-        mailserver.sendmail('sales@kentel.dev',m,msg.as_string())
+        mailserver.sendmail('sales@kentel.dev',email,msg.as_string())
 
         mailserver.quit()
         
