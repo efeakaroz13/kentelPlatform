@@ -13,12 +13,14 @@ from user_agents import parse as uaparse
 import random
 from extra import generate_id,Mailer
 import datetime
-
+import urllib.parse
+import pprint
 
 app = Flask(__name__)
 mongo = pymongo.MongoClient()
 db = mongo["KentelPlatform"]
 users = db["Users"]
+issues = db["issues"]
 logs = db["logs"]
 filters = db["Filters"]
 mode = "test"
@@ -37,16 +39,22 @@ def index():
 
         
         u = users.find({"email":email,"password":password})[0]
-        if u["emailVerified"]:
-            if  stripe.Subscription.list(customer=u["customer_id"])["data"][0]["plan"]["active"]:
 
-                return render_template("home.html",data=u)
+
+        if u["emailVerified"]:
+            if len(stripe.Subscription.list(customer=u["customer_id"])["data"]) == 0:
+                return redirect("/checkout")
             else:
-                return redirect("/not_paid")
+                if  stripe.Subscription.list(customer=u["customer_id"])["data"][0]["plan"]["active"]:
+                    msg = request.args.get("msg")
+                    return render_template("home.html",data=u,msg=msg,active="home",title="")
+                else:
+                    return redirect("/not_paid")
         else:
             return redirect("/verify/email")
-    except:
-        pass
+    except Exception as e:
+        print(e)
+        
     
     agent =uaparse(str(request.headers.get("User-Agent")))
     device = agent.device.family
@@ -86,6 +94,8 @@ def index():
 class Auth:
     @app.route("/signup",methods=["POST","GET"])
     def signup():
+        err = request.args.get("err")
+
         plan = request.cookies.get("plan")
         if plan == None:
             return redirect("/")
@@ -145,14 +155,18 @@ class Auth:
             expire_date = expire_date + datetime.timedelta(days=120)
             
             response = make_response(redirect("/"))
-            response.set_cookie("e",email,expires=expire_date,secure=True,samesite="Lax")
-            response.set_cookie("p",password,expires=expire_date,secure=True,samesite="Lax")
+            response.set_cookie("e",email,expires=expire_date,secure=False,samesite="Lax")
+            response.set_cookie("p",password,expires=expire_date,secure=False,samesite="Lax")
             
             users.insert_one(data)
             return response
         else:
             err = request.args.get("err")
-            return render_template("signup.html",err=err,planVisual=planVisual)
+            try:
+                err = urllib.parse.unquote(err)
+            except:
+                err= None
+            return render_template("signup.html",planVisual=planVisual,err=err)
 
 
     @app.route("/login",methods=["POST","GET"])
@@ -171,8 +185,8 @@ class Auth:
             response = make_response(redirect("/"))
             expire_date = datetime.datetime.now()
             expire_date = expire_date + datetime.timedelta(days=120)
-            response.set_cookie("e",email,expires=expire_date,secure=True,samesite="Lax")
-            response.set_cookie("p",password,expires=expire_date,secure=True,samesite="Lax")
+            response.set_cookie("e",email,expires=expire_date,secure=False,samesite="Lax")
+            response.set_cookie("p",password,expires=expire_date,secure=False,samesite="Lax")
             return response
         
             
@@ -440,6 +454,8 @@ class StripeRoutes:
             )
 
             # Redirect to the URL returned on the session
+
+
             return redirect(session.url, code=303)
         if plan == "basicM":
 
@@ -468,17 +484,29 @@ class StripeRoutes:
             session = stripe.checkout.Session.retrieve(session_id)
         except:
             return ("/")
+        cus_id = session["customer"]
 
         try:
-            email = request.cookies.get("e")
-            password = request.cookies.get("p")
-            u = users.find({"email":email,"password":password})[0]
-            activeq = stripe.Subscription.list(customer=u["customer_id"])["data"][0]["plan"]["active"]
+            
+            activeq = stripe.Subscription.list(customer=cus_id)["data"][0]["plan"]["active"]
             if activeq != True:
                 return redirect("/not_paid")
+            else:
+
+                u = users.find({"customer_id":cus_id})[0]
+                email = u["email"]
+                password = u["password"]
+                response =  redirect("/")
+                expire_date = datetime.datetime.now()
+                expire_date = expire_date + datetime.timedelta(days=120)
+                
+
+                response.set_cookie("e",email,expires=expire_date,secure=False,samesite="Lax")
+                response.set_cookie("p",password,expires=expire_date,secure=False,samesite="Lax")
+                return response
         except:
             return redirect("/login")
-        return jsonify(session)
+
     @app.route("/checkout/canceled")
     def checkout_cancel():
         try:
@@ -492,16 +520,16 @@ class StripeRoutes:
             return render_template("canceled.html",u=u)
         except:
             return redirect("/")
-    @app.route("/customer")
-    def customerOBJ():
+    @app.route("/check_paid")
+    def checkpaidUser():
         try:
             email = request.cookies.get("e")
             password = request.cookies.get("p")
             u = users.find({"email":email,"password":password})[0]
-            cus = stripe.Subscription.list(customer=u["customer_id"])["data"][0]["plan"]["active"]
-            return str(cus)
         except:
-            return redirect("/")
+            return {},403
+        out = (len(stripe.Subscription.list(customer=u["customer_id"])["data"])==0)
+        return {"paid":out},200
 
     @app.route("/not_paid")
     def not_paid():
@@ -510,6 +538,156 @@ class StripeRoutes:
         response.set_cookie("p","")
 
         return response
+
+
+class InstanceExchange:
+    @app.route("/secret/kentel/mailingL",methods=["POST"])
+    def mailingListSecretKentel():
+        #50 items per page.
+        #page 0: 0-50
+        page = request.form.get("page")
+
+        if page == None:
+            page = 0
+        try:
+            page = int(page)
+        except:
+            page = 0 
+        identity = request.headers.get("User-Agent")
+        if identity == "sagent":
+            pass 
+        else:
+            return abort(404)
+        passpharase = request.form.get("passpharase")
+        p = hashlib.sha256()
+        p.update(passpharase.encode())
+        passpharase = p.hexdigest()
+
+        if passpharase == "1047f6357e92f30f4c947aec89da6ae9ac3e09b2cdc6b49a9a781f4de8ab4e97":
+            #pass it trough
+            mailingList = []
+            basicUsers = users.find({"plan":"baicM"})
+            standard = users.find({"plan":"standardM"})
+            listEnd = (page+1)*50
+            listStart = page*50
+
+            for b in basicUsers:
+                b= {
+                            "email":b["email"],
+                            "_id":b["_id"]
+                }
+                mailingList.append(b)
+            for s in standard:
+                try:
+                    notPref = s["notPref"]
+                    if notPref["dailyInsight"]:
+                        s= {
+                            "email":s["email"],
+                            "_id":s["_id"]
+                        }
+                        mailingList.append(s)
+                except:
+                    s= {
+                            "email":s["email"],
+                            "_id":s["_id"]
+                    }
+                    mailingList.append(s)
+
+            mailingList = mailingList[page*50:][:50]
+            return {"m":mailingList}
+        else:
+            return abort(404)
+
+    @app.route("/secret/kentel/issueUpload",methods=["POST"])
+    def issueUploadThing():
+
+        identity = request.headers.get("User-Agent")
+        if identity == "sagent":
+            pass 
+        else:
+            return abort(404)
+        data= request.json
+        passpharase = data["passpharase"]
+        p = hashlib.sha256()
+        p.update(passpharase.encode())
+        passpharase = p.hexdigest()
+        mailingList = []
+        basicUsers = users.find({"plan":"baicM"})
+        standard = users.find({"plan":"standardM"})
+        listEnd = (page+1)*50
+        listStart = page*50
+
+        for b in basicUsers:
+            b= {
+                        "email":b["email"],
+                        "_id":b["_id"]
+            }
+            mailingList.append(b)
+        for s in standard:
+            try:
+                notPref = s["notPref"]
+                if notPref["dailyInsight"]:
+                    s= {
+                        "email":s["email"],
+                        "_id":s["_id"]
+                    }
+                    mailingList.append(s)
+            except:
+                s= {
+                        "email":s["email"],
+                        "_id":s["_id"]
+                }
+                mailingList.append(s)
+        totalMails = len(mailingList)
+
+        if passpharase == "1047f6357e92f30f4c947aec89da6ae9ac3e09b2cdc6b49a9a781f4de8ab4e97":
+            try:
+                d = data["d"]
+                d["totalMails"] = totalMails
+                d["openedMails"] = 0
+                issues.insert_one(d)
+                return {"scc":True},200
+            except:
+                return {"err":"d"},500
+        return {"d":"Done"},200
+
+class UXRoutes:
+    @app.route("/notifications",methods=["POST","GET"])
+    def notificationSettings():
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            u= users.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/login") 
+        try:
+            notPref= u["notPref"]
+        except:
+            notPref = {
+                "dailyInsight":True,
+                "portfolioNotifications":False
+            }
+        if request.method == "POST":
+
+            dailyInsight = request.form.get("dailyInsight")
+            portfolioNotifications = request.form.get("portfolioNot")
+
+            if dailyInsight == "on":
+                dailyInsight = True
+            if dailyInsight == "off":
+                dailyInsight = False 
+            if portfolioNotifications == "off":
+                portfolioNotifications = False 
+            if portfolioNotifications =="on":
+                portfolioNotifications = True 
+            nd = {
+                "dailyInsight":dailyInsight,
+                "portfolioNotifications":portfolioNotifications
+            }
+            users.update_one({"_id":u["_id"]},{"$set":{"notPref":nd}})
+            return redirect("/notifications")
+        return render_template("notifications.html",data=u,title="Notifications - ",active="notifications",prefs=notPref)
+
 
 if __name__ == "__main__":
     app.run(debug=True,port=3000)
