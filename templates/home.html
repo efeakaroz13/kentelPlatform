@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% block head %}
+<script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+{% endblock %}
 {% block body %}
     {% if data["newbie"] %}
     <div class="container-fluid">
@@ -15,8 +20,46 @@
             </div>
         </div>
     {% else %}
+        <div id="discover">
+            <h1>Discover</h1>
+        </div>
+        <div id="search" style="display:none">
+            <h1>Search</h1>
+            <ion-searchbar id="entrySearch" animated="true" placeholder="Enter company"></ion-searchbar>
+            <div style="overflow-y: scroll!important;">
+                <ion-list id="searchRecommend">
+                  
+                </ion-list>
+            </div>
+        </div>
 
+        <nav class="navbar navbar-inverse navbar-fixed-bottom" style="width:100%;position: fixed;bottom:0px;left:0px;padding:20px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;background: white;">
+          <div class="container-fluid" style="text-align: center; width: 100%;display: grid;grid-template-columns: 50% 50%; max-width: 1000px">
+        <button id="openDiscover" style="width:100%;" class="active"><i class="fa fa-compass"></i></button>
+        <button id="openSearch" style="width:100%;"><i class="fa-solid fa-magnifying-glass"></i></button>
+          </div>
+        <style>
+            button{
+                background:none;
+                border:0px solid#000;
+                color:#4285F4;
+            }
+            .active{
+                font-weight: 500;
+                color:#7b35f2;
+                
 
-        
+            }
+            #searchRecommend{
+                overflow-y:auto; 
+            }
+            body{
+                overflow-y:auto; 
+            }
+
+        </style>
+
+        <script src="/static/js/home.js"></script>
+            
     {% endif %}
 {% endblock %}

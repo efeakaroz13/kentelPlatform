@@ -108,7 +108,29 @@ class MailFetcher:
         else:
             self.fetch(p=p+1)
 
+def send(mails,content):
+    #There is a person identifier image that let's us see if the person opened the email or not.
+    #For that, you need to send the user ID to the HTML content.
+    for m in mails:
+        id_ = m["_id"]
+        content.replace("-id-",id_)
+        m = m["email"]
+        msg = MIMEMultipart()
+        msg.set_unixfrom('author')
+        msg['From'] = 'sales@kentel.dev'
+        msg['To'] = m
+        msg['Subject'] = 'Here is your daily stock report'
+        message = content
+        msg.attach(MIMEText(message,"html"))
 
+        mailserver = smtplib.SMTP_SSL('smtpout.secureserver.net', 465)
+        mailserver.ehlo()
+        mailserver.login('sales@kentel.dev', 'greenanarchist')
+
+        mailserver.sendmail('sales@kentel.dev',m,msg.as_string())
+
+        mailserver.quit()
+    return 0
 if __name__ == "__main__":
     if server == "main":
         pass
@@ -136,7 +158,7 @@ if __name__ == "__main__":
             counter = 0
         counter +=1
 
-    
+
 
 
     filter_main = "https://finviz.com/screener.ashx?v=111&f=cap_microover,fa_curratio_o1.5,fa_estltgrowth_u10,fa_roe_o15,ta_beta_o1.5,ta_sma20_pa&ft=4"
@@ -147,9 +169,11 @@ if __name__ == "__main__":
     for s in stocks:
 
         signal,score,price,change = trader.DailySignal(s["ticker"])
+        score = round(score*100,2)
         acc= float(r.get(s["ticker"]).decode())*100
-        if acc<74:
+        if acc<72:
             continue
+        acc=  round(acc,2)
         if signal == "BUY" and score>97:
             d = {
                 "comp":s,
@@ -161,19 +185,38 @@ if __name__ == "__main__":
 
             }
             notifications.append(d)
+
+    print(notifications)
     data = {
         "d":{
             "notifications":notifications,
             "time":time.time(),
             "_id":generate_id(45)
-        }
+        },
         "passpharase":"efeakaroz"
 
     }
     now = datetime.now()
     datestring = f"{now.month}/{now.day}/{now.year}"
-    mailHTML = open("templates/email/scan.html","r").read().replace("-date-",datestring).replace("-id-",data["_id"])
-    upload= requests.post("/secret/kentel/issueUpload",data=json.dumps(data),headers={"User-Agent":"sagent"})
+    content = ""
+    for n in notifications:
+        line = f"<p style='font-weight:400;font-size:20px'>{n['comp']['ticker']} | <a style='color:green'>{n['score']}% {n['signal']}</a> | <a>{n['acc']} Accuracy</a> | <a>{round(n['price'],2)}$</a></style></p>"
+        content = content+line
 
+    mailHTML = open("templates/email/scan.html","r").read().replace("-date-",datestring).replace("-content-",content).replace("-number-",str(len(notifications)))
+    upload= requests.post(f"{base}/secret/kentel/issueUpload",data=json.dumps(data),headers={"User-Agent":"sagent"})
+    p1= Process(target=send,args=(t1,mailHTML))
+    p2= Process(target=send,args=(t2,mailHTML))
+    p3= Process(target=send,args=(t3,mailHTML))
+    p4= Process(target=send,args=(t4,mailHTML))
+
+    p1.start()
+    p2.start()
+    p3.start()
+    p4.start()
+    p1.join()
+    p2.join()
+    p3.join()
+    p4.join()
 
 

@@ -15,6 +15,7 @@ from extra import generate_id,Mailer
 import datetime
 import urllib.parse
 import pprint
+import json 
 
 app = Flask(__name__)
 mongo = pymongo.MongoClient()
@@ -416,7 +417,35 @@ class APIs:
 
         return response 
     
-        
+
+    @app.route("/api/ux/search")
+    def searchRecommender():
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+        except:
+            return {},401
+        query = request.args.get("q")
+        if query == None:
+            return {"out":[]}
+        if len(query)<3:
+            return {"out":[]}
+
+        data = open("exchanges/search.json","r").read()
+        data = json.loads(data)
+        data = data["out"]
+        out = []
+        query = query.strip().lower()
+        for d in data:
+            concatted = d["ticker"].lower()+" "+d["name"].lower()
+            if query in concatted:
+                d["summary"] = d["summary"][:60]+"..."
+                out.append(d)
+
+
+        return {"out":out}
+       
 class Policies:
     @app.route("/privacy-policy")
     def privacy_policy():
@@ -688,6 +717,28 @@ class UXRoutes:
             return redirect("/notifications")
         return render_template("notifications.html",data=u,title="Notifications - ",active="notifications",prefs=notPref)
 
+    @app.route("/stock/<ticker>")
+    def stockView(ticker):
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            u= users.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/login") 
+
+        if u["plan"] == "basicM":
+            try:
+                remaining = int(red.get(f"search{u['_id']}"))
+                remaining -=1
+                red.set(f"search{u['_id']}",str(remaining))
+
+            except:
+                remaining = 14 
+                red.set(f"search{u['_id']}",str(remaining))
+
+        #Dailyscan with API and load graph
+
+        return render_template("stock.html",ticker=ticker,data=u,title=f"{ticker} - ",active="home")
 
 if __name__ == "__main__":
     app.run(debug=True,port=3000)
