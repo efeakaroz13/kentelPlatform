@@ -16,8 +16,13 @@ import datetime
 import urllib.parse
 import pprint
 import json 
+from flask_cors import CORS
+import requests
 
 app = Flask(__name__)
+CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 mongo = pymongo.MongoClient()
 db = mongo["KentelPlatform"]
 users = db["Users"]
@@ -445,7 +450,29 @@ class APIs:
 
 
         return {"out":out}
-       
+    @app.route("/api/v1/stockGraph/<ticker>")
+    def stockGraphTicker(ticker):
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+        except:
+            return {},401
+
+        try:
+            page = requests.get("https://query1.finance.yahoo.com/v8/finance/chart/"+ticker+"?region=US&lang=en-US&includePrePost=false&interval=15m&useYfid=true&range=5d&corsDomain=finance.yahoo.com&.tsrc=finance",headers={"User-Agent":"Mozilla Firefox Macintel"})
+            data = json.loads(page.content)
+
+            rd = []
+            closes =  data["chart"]["result"][0]["indicators"]["quote"][0]["close"];
+            timestamps =  data["chart"]["result"][0]["timestamp"];
+            counter = 0
+            for c in closes:
+                rd.append({"x":timestamps[counter]*1000,"y":c})
+                counter +=1
+            return {"out":rd}
+        except Exception as e:
+            return {"e":str(e)}
 class Policies:
     @app.route("/privacy-policy")
     def privacy_policy():
@@ -734,7 +761,7 @@ class UXRoutes:
 
             except:
                 remaining = 14 
-                red.set(f"search{u['_id']}",str(remaining))
+                red.set(f"search{u['_id']}",str(remaining),ex=54000)
 
         #Dailyscan with API and load graph
 

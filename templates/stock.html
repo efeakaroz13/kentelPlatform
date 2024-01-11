@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block head %}
+<script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+
+{% endblock %}
+
+{% block body %}
+
+    <h1>{{ticker}}</h1>
+
+        <canvas id="chartMine" ></canvas>
+
+
+
+    <script type="text/javascript" src="/static/js/stock.js"></script>
+    
+    <nav class="navbar navbar-inverse navbar-fixed-bottom" style="width:100%;position: fixed;bottom:0px;left:0px;padding:20px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;background: white;">
+          <div class="container-fluid" style="text-align: center; width: 100%;display: grid;grid-template-columns: 50% 50%; max-width: 1000px">
+        <button id="openDiscover" style="width:100%;" onclick="window.location.assign('/')"><i class="fa fa-compass"></i></button>
+        <button id="openSearch" style="width:100%;" onclick="window.location.assign('/')" class="active"><i class="fa-solid fa-magnifying-glass"></i></button>
+    
+
+    <style>
+            button{
+                background:none;
+                border:0px solid#000;
+                color:#4285F4;
+            }
+            .active{
+                font-weight: 500;
+                color:#7b35f2;
+                
+
+            }
+            #searchRecommend{
+                overflow-y:auto; 
+            }
+            body{
+                overflow-y:auto; 
+            }
+           
+
+    </style>
+
+{% endblock %}
