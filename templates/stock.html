@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block head %}
-<script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
-<script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
@@ -10,15 +8,47 @@
 {% endblock %}
 
 {% block body %}
+    <center>
+    <div id="loading" style="width:100%;position: fixed;height:100vh;background:#fff;top:0;left:0; align-items: center;padding-top:40%">
 
-    <h1>{{ticker}}</h1>
+        <img  src="/static/images/loading.gif">
+    </div></center>
+
+    <div class="titleGrid">
+        <div>
+        <h1>{{ticker}}</h1>
+        </div>
+        <div>
+            <button><i class="fa-solid fa-plus"></i></button>
+        </div>
+    </div>
+    <h1 style="font-weight: 600">$<a id="price"></a>   <a style="color:green; font-size:12px" id="trend"><i id="trendIndicate" class="fa-solid fa-angle-up"></i> $<a style="color:green; font-size:12px" id="change"></a> <a style="color:gray;font-size:12px">Today</a></a></h1>
+
+
 
         <canvas id="chartMine" ></canvas>
+    <br><br>
+    <h3>AI Prediction</h3><br>
+    <center>
+    <div id="predictionPlace"><div id="buy"></div><div id="sell"></div></div>
+    <div style="padding-left:15px;display:grid;grid-template-columns: 50% 50%">
+        <div style="width:100%;text-align:center">
+            <h4 id="predictionResult" style="color:red">92% Sell</h4>
+        </div>
+        <div style="width:100%;text-align:center">
+            <h4 id="accuracy" style="color:blue">74% Accuracy</h4>
+        </div>
+    </div>
 
-
-
+</center>
+    <br>
+    <br>
+    <br>
+    <h3>Company Details</h3>
+    <p style="font-weight: 400" id="companyName"></p>
+    <p id="summary"></p>
     <script type="text/javascript" src="/static/js/stock.js"></script>
-    
+    <br><br>
     <nav class="navbar navbar-inverse navbar-fixed-bottom" style="width:100%;position: fixed;bottom:0px;left:0px;padding:20px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;background: white;">
           <div class="container-fluid" style="text-align: center; width: 100%;display: grid;grid-template-columns: 50% 50%; max-width: 1000px">
         <button id="openDiscover" style="width:100%;" onclick="window.location.assign('/')"><i class="fa fa-compass"></i></button>
@@ -43,7 +73,48 @@
             body{
                 overflow-y:auto; 
             }
-           
+            #predictionPlace{
+                width:90%;
+                height:20px;
+                border-radius: 10px;
+                display:grid;
+                grid-template-columns: 10% 90%;
+
+            }
+            #buy{
+                height:10px;
+                width:100%;
+                background:rgb(89, 250, 2,0.7);
+                border-top-left-radius: 10px;
+                border-bottom-left-radius: 10px;
+                padding-left:4px;
+
+            }
+            #sell{
+                height:10px;
+                width:100%;
+                border-top-right-radius: 10px;
+                border-bottom-right-radius: 10px;
+                background:rgb(245, 15, 26,0.7);
+                padding-left:4px;
+            }
+            .titleGrid{
+
+                width:10%;
+                display: grid;
+                grid-template-columns: auto auto;
+
+            }
+            .titleGrid button{
+                background:none;
+                border:0px;
+                width:30px;
+                color:gray;
+                transition: 0.2s;
+                color:gray;
+                font-size:15px;
+                margin-top:10px;
+            }
 
     </style>
 

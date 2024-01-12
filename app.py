@@ -18,6 +18,8 @@ import pprint
 import json 
 from flask_cors import CORS
 import requests
+import yfinance as yf
+import trader
 
 app = Flask(__name__)
 CORS(app)
@@ -450,6 +452,23 @@ class APIs:
 
 
         return {"out":out}
+    @app.route("/api/ux/calculate/<ticker>")
+    def calculateThis(ticker):
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+        except:
+            return {},401
+
+        signal,score,price,change = trader.DailySignal(ticker)
+        try:
+            acc = float(red.get(ticker).decode())*100
+        except:
+            acc = 0
+
+        
+        return {"signal":signal,"ticker":ticker,"price":price,"acc":acc,"score":score*100}
     @app.route("/api/v1/stockGraph/<ticker>")
     def stockGraphTicker(ticker):
         try:
@@ -470,7 +489,12 @@ class APIs:
             for c in closes:
                 rd.append({"x":timestamps[counter]*1000,"y":c})
                 counter +=1
-            return {"out":rd}
+            try:
+                compinfo = yf.Ticker(ticker).info
+            except Exception as e:
+
+                compinfo = {"e":str(e)}
+            return {"out":rd,"compinfo":compinfo}
         except Exception as e:
             return {"e":str(e)}
 class Policies:
