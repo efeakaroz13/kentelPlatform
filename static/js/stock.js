@@ -2,6 +2,15 @@ function g(id){
     return document.getElementById(id);
 }
 
+g("atp").addEventListener("click",function(){
+    g("atpPopup").classList.toggle("hidden");
+    g("blackout").classList.toggle("hidden")
+})
+g("closePopup").addEventListener("click",function(){
+    g("atpPopup").classList.toggle("hidden");
+    g("blackout").classList.toggle("hidden")
+})
+
 async function loadGraph(stock){
     page = await fetch("/api/v1/stockGraph/"+stock)
     content = await page.json();
@@ -9,7 +18,8 @@ async function loadGraph(stock){
     dataset = content.out
     compinfo = content.compinfo
     price = compinfo.currentPrice
-    g("price").innerHTML = price
+    g("price").innerHTML = price;
+    g("stockPriceP").value = price
     previousClose = compinfo.previousClose
     change = (previousClose-price)*-1
     if (change<0){
@@ -132,25 +142,32 @@ async function getPrediction(ticker){
     page = await fetch("/api/ux/calculate/"+ticker);
     data = await page.json();
     if(data){
-        clearInterval(loadingInterval);
+            clearInterval(loadingInterval);
     }
-    acc =  Number(data.acc).toFixed(2)
-    score = Number(data.score).toFixed(2)
-    signal = data.signal
-    if (signal=="SELL"){
+    if(data.err){
+        g("predictionResult").style.color="red";
+        g("predictionResult").innerHTML = data.err
+    }else{
+        
+        acc =  Number(data.acc).toFixed(2)
+        score = Number(data.score).toFixed(2)
+        signal = data.signal
+        if (signal=="SELL"){
 
-        g("predictionResult").innerHTML = score+"% Sell";
-        g("predictionResult").style.color = "red";
-        sell = score;
+            g("predictionResult").innerHTML = score+"% Sell";
+            g("predictionResult").style.color = "red";
+            sell = score;
 
+        }
+        if (signal=="BUY"){
+            sell = 100-score
+            g("predictionResult").innerHTML = score+"% Buy";
+            g("predictionResult").style.color = "green"
+        }
+        g("accuracy").innerHTML = acc+"% Accuracy"
+        AIPredictingAnimation()
     }
-    if (signal=="BUY"){
-        sell = 100-score
-        g("predictionResult").innerHTML = score+"% Buy";
-        g("predictionResult").style.color = "green"
-    }
-    g("accuracy").innerHTML = acc+"% Accuracy"
-    AIPredictingAnimation()
+    
 }
 
 getPrediction(document.getElementsByTagName("h1")[0].innerHTML)

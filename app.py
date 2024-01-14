@@ -460,14 +460,16 @@ class APIs:
             u = users.find({"email":email,"password":password})[0]
         except:
             return {},401
-
-        signal,score,price,change = trader.DailySignal(ticker)
+        try:
+            signal,score,price,change = trader.DailySignal(ticker)
+        except:
+            return {"err":"There is an error on our side, AI not available."}
         try:
             acc = float(red.get(ticker).decode())*100
         except:
             acc = 0
 
-        
+
         return {"signal":signal,"ticker":ticker,"price":price,"acc":acc,"score":score*100}
     @app.route("/api/v1/stockGraph/<ticker>")
     def stockGraphTicker(ticker):

@@ -13,15 +13,25 @@
 
         <img  src="/static/images/loading.gif">
     </div></center>
-
+    <div class="blackout hidden" id="blackout">
+    </div>
+    <div class="popup hidden" id="atpPopup">
+        <button class="transparent close" id="closePopup"><i class="fa-solid fa-xmark"></i></button>
+        <h2>Add to portfolio</h2>
+        <input placeholder="Price" value='' id="stockPriceP" type="number"><br>
+        <input placeholder="Shares" value='1' id="stockPriceP" type="number"><br>
+        <button class="btn btn-primary bottomButton">Add To Portfolio</button>
+    </div>
     <div class="titleGrid">
         <div>
         <h1>{{ticker}}</h1>
         </div>
         <div>
-            <button><i class="fa-solid fa-plus"></i></button>
+            <button id="atp"><i class="fa-solid fa-plus"></i></button>
         </div>
+
     </div>
+
     <h1 style="font-weight: 600">$<a id="price"></a>   <a style="color:green; font-size:12px" id="trend"><i id="trendIndicate" class="fa-solid fa-angle-up"></i> $<a style="color:green; font-size:12px" id="change"></a> <a style="color:gray;font-size:12px">Today</a></a></h1>
 
 
@@ -114,6 +124,50 @@
                 color:gray;
                 font-size:15px;
                 margin-top:10px;
+            }
+            .hidden{
+                opacity: 0;
+                z-index:-1;
+                transition:0.3s;
+            }
+            .blackout{
+                position:fixed;
+                top:0px;
+                left:0px;
+                width:100%;
+                height:100vh;
+
+                background: rgb(0,0,0,0.5);
+                transition: 0.5s
+            }
+            .popup{
+                position:fixed;
+                width:60%;
+                height:40vh;
+                background:white;
+                top:30vh;
+                bottom:30vh;
+                left:20%;
+                right:20%;
+                border-radius: 10px;
+                transition: 0.5s;
+                padding:15px;
+            }
+            .transparent{
+                background:none;
+                border:0px;
+            }
+            .close{
+                position:relative;
+                left:5px;
+                top:5px;
+            }
+            .bottomButton{
+                position: relative;
+                width:50%;
+                left:25%;
+                right:25%;
+                
             }
 
     </style>

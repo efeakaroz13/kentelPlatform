@@ -20,7 +20,11 @@ g("openSearch").addEventListener("click",function(){
     g("openDiscover").className = "";
 })
 
-g("entrySearch").addEventListener("keyup",async function(){
+g("entrySearch").addEventListener("keyup",async function(event){
+    key = event.keyCode;
+    if (key==13) {
+        window.location.assign("/stock/"+g("entrySearch").value)
+    }
     searchTerm = g("entrySearch").value;
     response= await fetch("/api/ux/search?q="+searchTerm)
     data= await response.json();
