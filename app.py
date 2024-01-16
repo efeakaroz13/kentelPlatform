@@ -773,6 +773,7 @@ class UXRoutes:
 
     @app.route("/stock/<ticker>")
     def stockView(ticker):
+
         try:
             email = request.cookies.get("e")
             password = request.cookies.get("p")
@@ -794,6 +795,38 @@ class UXRoutes:
 
         return render_template("stock.html",ticker=ticker,data=u,title=f"{ticker} - ",active="home")
 
+
+    @app.route("/portfolio")
+    def portfolioView():
+        try:
+            email  =request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/login")
+        try:
+            usrPort = portfolios.find({"_id":u["_id"]})[0]
+        except:
+            usrPort = {
+                "_id":u["_id"],
+
+                "items":[]
+            }
+        for i in usrPort["items"]:
+            try:
+                page = requests.get("https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&apikey=BLR59U0EOSMIDDTT&symbol=AAPL&interval=1min")
+                data = json.loads(page.content)
+
+                lastRefreshed = data["Meta Data"]["3. Last Refreshed"]
+                price =float( data["Time Series (1min)"][lastRefreshed]["4. close"])
+                i["lp"] = round((price-i["cost"])*i["shares"],2)
+                i["lpPercent"] = round(i["lp"]*i["shares"]*100/(i["cost"]*i["shares"]),2)
+            except Exception as e:
+
+                print("[ERR] AlphaVantage API /portfolio/",e,flush=True)
+                i["lp"]="*"
+                i["lpPercent"] = "*"
+        return render_template("portfolio.html",usrPort=usrPort,active="portfolio",title="Portfolio - ",data=u)
 class Portfolio:
     @app.route("/api/add2port/<ticker>",methods=["GET"])
     def add2p(ticker):

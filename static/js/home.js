@@ -42,3 +42,14 @@ g("entrySearch").addEventListener("keyup",async function(event){
         g("searchRecommend").innerHTML = g("searchRecommend").innerHTML +html
     }
 })
+
+function checkSearchInside(){
+    if(!g("searchRecommend").innerHTML.includes("<")){
+        g("searchRecommend").style.display="none";
+    }else{
+        g("searchRecommend").style.display="";
+    }
+}
+checkSearchInside()
+
+setInterval(checkSearchInside,200)

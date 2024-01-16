@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block head %}
-<script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
-<script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+
 {% endblock %}
 {% block body %}
     {% if data["newbie"] %}
@@ -27,9 +25,9 @@
             <h1>Search</h1>
             <ion-searchbar  id="entrySearch" animated="true" placeholder="Enter company"></ion-searchbar>
             <div style="overflow-y: scroll!important;">
-                <ion-list id="searchRecommend">
+                <ion-list inset="true" id="searchRecommend">
                   
-                </ion-list>
+                </ion-list><br><br>
             </div>
         </div>
 
