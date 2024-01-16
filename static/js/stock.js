@@ -173,3 +173,21 @@ async function getPrediction(ticker){
 getPrediction(document.getElementsByTagName("h1")[0].innerHTML)
 
 
+
+function addToPortfolio(){
+    ticker = document.getElementsByTagName("h1")[0].innerHTML;
+    quantity = g("shares").value;
+    price = g("stockPriceP").value;
+    $.getJSON("/api/add2port/"+ticker+"?quantity="+quantity+"&fromPrice="+price,function(data){
+        if (!data.err){
+            alert(ticker+" has been added to portfolio!")
+            console.log(data);
+            g("atpPopup").classList.toggle("hidden");
+            g("blackout").classList.toggle("hidden")
+        }else{
+            alert("Some error occured, try again.")
+        }
+        
+    })
+
+}

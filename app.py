@@ -31,6 +31,7 @@ users = db["Users"]
 issues = db["issues"]
 logs = db["logs"]
 filters = db["Filters"]
+portfolios = db["Portfolios"]
 mode = "test"
 base = "http://127.0.0.1:3000"
 red = redis.Redis()
@@ -793,5 +794,84 @@ class UXRoutes:
 
         return render_template("stock.html",ticker=ticker,data=u,title=f"{ticker} - ",active="home")
 
+class Portfolio:
+    @app.route("/api/add2port/<ticker>",methods=["GET"])
+    def add2p(ticker):
+        try:
+            email =  request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+        except:
+            return {},401
+
+        quantity = request.args.get("quantity")
+        fromPrice = request.args.get("fromPrice")
+        if quantity == None or fromPrice == None:
+            return {"err":"quantity&fromPrice"}
+        try:
+            quantity = int(quantity)
+            fromPrice = float(fromPrice)
+        except:
+            return {"err":"needed int or double"},403
+        update = False
+        try:
+            usrPort = portfolios.find({"_id":u["_id"]})[0]
+            update=True
+        except:
+            usrPort = {
+                "_id":u["_id"],
+
+                "items":[]
+            }
+
+        tickerInItems = False 
+        whereAt = 0
+        counter = 0
+
+        for i in usrPort["items"]:
+            if ticker==i["ticker"]:
+                tickerInItems= True
+                whereAt = counter
+                break
+                counter +=1
+        if tickerInItems:
+            costData = usrPort["items"][whereAt]
+        else:
+            costData = {
+                "cost":0,
+                "shares":0,
+                "ticker":ticker,
+                "addedAt":time.time(),
+
+            }
+        if costData["shares"] == 0:
+            costData["shares"] = quantity
+            costData["cost"] = fromPrice
+        else:
+            oldCost = costData["cost"]
+            oldShareNumber = costData["shares"]
+            oldTotalCost = oldCost*oldShareNumber
+            newTotalCost = quantity*fromPrice
+            allTotalCost = oldTotalCost+newTotalCost
+            totalShares = oldShareNumber["shares"]+quantity
+
+
+            costData["cost"] = allTotalCost/totalShares
+            costData["shares"] = totalShares
+        if tickerInItems:
+            usrPort["items"][whereAt] = costData
+
+        else:
+            usrPort["items"].append(costData)
+
+
+        if update:
+            portfolios.update_one({"_id":u["_id"]},{"$set":usrPort})
+        else:
+            portfolios.insert_one(usrPort)
+
+
+
+        return costData,200
 if __name__ == "__main__":
     app.run(debug=True,port=3000)
