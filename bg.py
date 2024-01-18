@@ -29,8 +29,10 @@ tasks = {
 	"alarms":{
 		"days":[1,2,3,4,5],
 		"time":["17:30","18:30","19:30","20:30","21:30","22:30"],
-		"command":"python3 alarms.py"
+		"command":"python3 portfolioChecker.py"
 	}
+
+
 }
 
 a= True

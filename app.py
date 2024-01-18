@@ -681,6 +681,56 @@ class InstanceExchange:
         else:
             return abort(404)
 
+
+
+    @app.route("/secret/kentel/portfolioNotifier",methods=["POST"])
+    def portfolioNotifierAPISecret():
+        page = request.form.get("page")
+
+        if page == None:
+            page = 0
+        try:
+            page = int(page)
+        except:
+            page = 0 
+
+
+        identity = request.headers.get("User-Agent")
+        if identity == "sagent":
+            pass 
+        else:
+            return abort(404)
+        allPortfolios = portfolios.find({})
+        notifiers = []
+        for p in allPortfolios:
+            pid = p["_id"]
+            try:
+                u = users.find({"_id":pid})[0]
+            except:
+                continue 
+            if u["plan"] == "standardM":
+                uda = {
+                    "email":u["email"],
+                    "portfolioD":p
+                }
+                try:
+                    if u["notPref"]["portfolioNotifications"]:
+                        notifiers.append(uda)
+                except:
+                    pass
+
+        passpharase = request.form.get("passpharase")
+        p = hashlib.sha256()
+        p.update(passpharase.encode())
+        passpharase = p.hexdigest()
+
+        if passpharase == "1047f6357e92f30f4c947aec89da6ae9ac3e09b2cdc6b49a9a781f4de8ab4e97":
+            notifiers = notifiers[page*50:][:50]
+            return {"n":notifiers}
+
+        else:
+            return {},403
+
     @app.route("/secret/kentel/issueUpload",methods=["POST"])
     def issueUploadThing():
 
@@ -814,11 +864,10 @@ class UXRoutes:
             }
         for i in usrPort["items"]:
             try:
-                page = requests.get("https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&apikey=BLR59U0EOSMIDDTT&symbol=AAPL&interval=1min")
-                data = json.loads(page.content)
+               
 
-                lastRefreshed = data["Meta Data"]["3. Last Refreshed"]
-                price =float( data["Time Series (1min)"][lastRefreshed]["4. close"])
+                
+                price =yf.Ticker(i["ticker"]).info["currentPrice"]
                 i["lp"] = round((price-i["cost"])*i["shares"],2)
                 i["lpPercent"] = round(i["lp"]*i["shares"]*100/(i["cost"]*i["shares"]),2)
             except Exception as e:

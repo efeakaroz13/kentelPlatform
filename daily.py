@@ -200,7 +200,7 @@ if __name__ == "__main__":
     datestring = f"{now.month}/{now.day}/{now.year}"
     content = ""
     for n in notifications:
-        line = f"<p style='font-weight:400;font-size:20px'>{n['comp']['ticker']} | <a style='color:green'>{n['score']}% {n['signal']}</a> | <a>{n['acc']} Accuracy</a> | <a>{round(n['price'],2)}$</a></style></p>"
+        line = f"<p style='font-weight:400;font-size:20px'>{n['comp']['ticker']} | <a style='color:green'>{n['score']}% {n['signal']}</a> | <a>{n['acc']} Accuracy</a> | <a>{round(n['price'],2)}$</a></p>"
         content = content+line
 
     mailHTML = open("templates/email/scan.html","r").read().replace("-date-",datestring).replace("-content-",content).replace("-number-",str(len(notifications)))

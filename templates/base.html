@@ -19,6 +19,7 @@
     <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
     <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.5.6/css/ionicons.min.css" integrity="sha512-0/rEDduZGrqo4riUlwqyuHDQzp2D1ZCgH/gFIfjMIL5az8so6ZiXyhf1Rg8i6xsjv+z/Ubc4tt1thLigEcu6Ug==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     {% block head %}
     {% endblock %}
 
@@ -88,8 +89,12 @@
 </div><br><br><br><br>
 <ion-app>
     <ion-content color="light" class="ion-padding"><br><br><br>
+        <center>
+      <div style="max-width: 1000px;text-align: left">
         {% block body %}
         {% endblock %}
+        </div>
+    </center>
     </ion-content>
 </ion-app>
 
