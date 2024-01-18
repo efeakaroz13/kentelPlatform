@@ -30,6 +30,11 @@ tasks = {
 		"days":[1,2,3,4,5],
 		"time":["17:30","18:30","19:30","20:30","21:30","22:30"],
 		"command":"python3 portfolioChecker.py"
+	},
+	"maintenance":{
+		"days":[6],
+		"time":["13:30"],
+		"command":"python3 maintenance.py"
 	}
 
 

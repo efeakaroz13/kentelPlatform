@@ -77,7 +77,7 @@ def DailySignal(ticker_name):
     data.drop(data[data['Signal'] == "HOLD"].index, inplace=True)
     data = data.reset_index()
     data= data.drop(columns=['index'])
-    data.to_csv('hello.csv')
+
     
     startTime = time.time()
     
