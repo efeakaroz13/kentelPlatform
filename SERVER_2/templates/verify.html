@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+
+    <!-- Ionic icons -->
+    <link href="https://unpkg.com/ionicons@4.2.0/dist/css/ionicons.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+
+    <title>Verify Email</title>
+  </head>
+
+  <body>
+
+  <!-- N A V B A R -->
+ <nav class="navbar navbar-default navbar-expand-lg fixed-top custom-navbar">
+    
+    <img src="/static/images/logo.png" class="img-fluid nav-logo-mobile" alt="Company Logo">
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <div class="container">
+      	<img src="/static/images/logo.png" class="img-fluid nav-logo-desktop" alt="Company Logo">
+        
+      </div>
+    </div>
+  </nav>
+  <!-- E N D  N A V B A R -->
+  
+  <!-- H E R O -->
+  <section id="hero">
+    <div class="container">
+      <div class="row">
+        
+        <div class="col content-box hero-content">
+          <span>Kentel</span>
+          <h1>Verify Email</h1>
+
+
+          <form action="" method="POST"><p style="font-size:16px;">If you didn't recieve any email, check your spam folder. If you don't see anything, <a id="resendBtn" style="opacity:0.8">Resend in </a></p><br><br>
+          	<input name="code" placeholder="Enter the code..." class="form-control" required> <br>
+          	<button href="" class="btn btn-regular">Confirm</button>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- E N D  H E R O -->
+  <script>
+
+  	remaining = localStorage.getItem("remaining");
+  	if(remaining == null){
+  		localStorage.setItem("remaining", 600);
+  		remaining = 600
+  	}
+  	g("resendBtn").innerHTML = "Resend in "+remaining+"s"
+  	function g(id){
+  		return document.getElementById(id)
+  	}
+  	function countSeconds(){
+  		resendBtn = document.getElementById("resendBtn");
+
+		g("resendBtn").innerHTML = "Resend in "+remaining+"s";
+		localStorage.setItem("remaining", remaining);
+		if(remaining == 0){
+			localStorage.removeItem("remaining");
+
+			clearInterval(countSeconds);
+			g("resendBtn").href="/verify/email";
+			g("resendBtn").style.opacity = "1"
+			g("resendBtn").innerHTML = "Resend Email.";
+		}else{
+			remaining -=1
+		}
+		
+
+
+  	}
+  	setInterval(countSeconds,1000);
+  </script>
+
+  <!--  F O O T E R  -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        
+        <div class="col-md-3">
+          <h5>Company</h5>
+          <p>Contact us from this email for B2B products and in case of any questions.</p>
+          <p><a href="mailto:sales@kentel.dev" class="external-links">sales@kentel.dev</a></p>
+        </div>
+      </div> 
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <a href="#"><i class="icon ion-logo-facebook"></i></a>
+            <a href="#"><i class="icon ion-logo-instagram"></i></a>
+            <a href="#"><i class="icon ion-logo-twitter"></i></a>
+            <a href="#"><i class="icon ion-logo-youtube"></i></a>
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <small>2023 &copy; All rights reserved. Kentel LTD
+          </div>
+      </div>
+    </div>
+  </footer>
+  <div class="fixed-bottom p-4">
+    <div style="display:none" class="toast bg-dark text-white w-100 mw-100" role="alert" data-autohide="false">
+        <div class="toast-body p-4 d-flex flex-column">
+            <h4>Cookie Warning</h4>
+            <p>
+            This website stores data such as cookies to enable site functionality including analytics and personalization. By using this website, you automatically accept that we use cookies. 
+            </p>
+            <div class="ml-auto">
+                <button type="button" class="btn btn-outline-light mr-3" id="btnDeny">
+                    Deny
+                </button>
+                <button type="button" class="btn btn-light" id="btnAccept">
+                    Accept
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+  <!--  E N D  F O O T E R  -->
+    <script src="/static/js/logo.js"></script>
+
+    <!-- External JavaScripts -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="/static/js/mainCode.js"></script>
+  </body>
+</html>

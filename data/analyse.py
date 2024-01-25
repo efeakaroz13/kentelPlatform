@@ -18,6 +18,7 @@ for i in issues:
     if i["exchange"] == "BIST":
         continue
     stockList = i["stockList"]
+    stockList=stockList[:5]
 
     today = datetime.datetime.today()
     issueDate = datetime.datetime.fromtimestamp(i["time"])

@@ -49,6 +49,24 @@ def index():
         
         u = users.find({"email":email,"password":password})[0]
 
+        if u["plan"] == "basicM":
+            """
+            today = datetime.datetime.today()
+            day = datetime.datetime(today.year,today.month,today.day)
+
+            try:
+                issueFind = issues.find({"time":{"$gt":day.timestamp()},"exchange":"NASDAQ"})[0]
+            except:
+                issueFind = None
+            """
+            #The opening scan of the day, but I prefered to load the last at the opening of the stock market
+            #14.30 in UTC
+            """
+                                                try:
+                                    
+                                                    issueToReturn = issues.find({"exchange":"SERVER2_DAILY_NASDAQ"})[-1]
+                                                except:
+                                                    issueToReturn = None """
 
         if u["emailVerified"]:
             if len(stripe.Subscription.list(customer=u["customer_id"])["data"]) == 0:
@@ -313,7 +331,39 @@ class Auth:
     
 
 
+class IssuesDifferentPackages:
+    @app.route("/get/last/issue")
+    def getLastIssue():
+        try:
+            email= request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/login")
+        if u["plan"] == "standardM":
+            try:
+                i = issues.find({})[-1]
+                del i["allF"]
 
+                return i
+
+            except:
+                return {"stockList":[]}
+        elif u["plan"] == "basicM":
+
+            try:
+
+                issueToReturn = issues.find({"exchange": "SERVER2_DAILY_NASDAQ"})
+                issueToReturn_ = []
+                for i in issueToReturn:
+                    issueToReturn_.append(i)
+                issueToReturn = issueToReturn_[-1]
+            except Exception as e:
+                issueToReturn = {"e":str(e)} 
+
+            return issueToReturn
+        else:
+            return {"stockList":[]}
 
 class APIs:
     @app.route("/api/login",methods=["POST"])
@@ -745,6 +795,15 @@ class InstanceExchange:
         p.update(passpharase.encode())
         passpharase = p.hexdigest()
         mailingList = []
+
+        page = request.form.get("page")
+        if page == None:
+            page = 0
+        else:
+            try:
+                page = int(page)
+            except:
+                page = 0
         basicUsers = users.find({"plan":"baicM"})
         standard = users.find({"plan":"standardM"})
         listEnd = (page+1)*50
@@ -779,8 +838,10 @@ class InstanceExchange:
                 d["totalMails"] = totalMails
                 d["openedMails"] = 0
                 issues.insert_one(d)
+                print(d)
                 return {"scc":True},200
-            except:
+            except Exception as e:
+                print(e)
                 return {"err":"d"},500
         return {"d":"Done"},200
 

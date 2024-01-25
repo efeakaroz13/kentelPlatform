@@ -20,6 +20,19 @@
     {% else %}
         <div id="discover">
             <h1>Discover</h1>
+            <ion-list inset="true" id="discoverList">
+                  <ion-item>
+                    <div class="discoverGrid bold">
+                        <div>Company</div>
+                        <div>Signal</div>
+                        <div>Score</div>
+                        <div>Accuracy</div>
+                        <div></div>
+
+                    </div>
+                  </ion-item>
+                  
+            </ion-list><br><br>
         </div>
         <div id="search" style="display:none">
             <h1>Search</h1>
@@ -54,10 +67,26 @@
             body{
                 overflow-y:auto; 
             }
+            .discoverGrid{
+                display:grid;
+                grid-template-columns: 22% 22% 22% 22% 10%;
+                width:100%;
 
+            }
+            .bold{
+                font-weight: 500;
+                font-size: 15px;
+            }
+            .transparent{
+                background: none;
+                border:0px;
+            }
         </style>
 
-        <script src="/static/js/home.js"></script>
+        
             
     {% endif %}
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/home.js"></script>
 {% endblock %}

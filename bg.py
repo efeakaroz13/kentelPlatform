@@ -1,3 +1,5 @@
+
+## This file is designed for the main server. Do not use it in a secondary one
 import time
 import os
 import pymongo
@@ -21,20 +23,21 @@ except:
 
 
 tasks = {
-	"dailyInsight":{
+	
+	"scanner":{
 		"days":[1,2,3,4,5],
-		"time":["17:10"],
-		"command":"python3 daily.py"
-	},
-	"alarms":{
-		"days":[1,2,3,4,5],
-		"time":["17:30","18:30","19:30","20:30","21:30","22:30"],
-		"command":"python3 portfolioChecker.py"
+		"time":["17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","24:00"],
+		"command":"python3 scanner.py NASDAQ output"
 	},
 	"maintenance":{
 		"days":[6],
 		"time":["13:30"],
 		"command":"python3 maintenance.py"
+	},
+	"firstScanner":{
+		"days":[7],
+		"time":["9:30"],
+		"command":"python3 scanner.py NASDAQ output"
 	}
 
 

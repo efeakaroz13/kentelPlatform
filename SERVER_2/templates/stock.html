@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block head %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+<link rel="stylesheet" href="/static/css/stock.css">
+{% endblock %}
+
+{% block body %}
+    <center>
+    <div id="loading" style="width:100%;position: fixed;height:100vh;background:#fff;top:0;left:0; align-items: center;padding-top:30vh">
+
+        <img  src="/static/images/loading.gif">
+    </div></center>
+    <div class="blackout hidden" id="blackout">
+    </div>
+    <div class="popup hidden" id="atpPopup">
+        <button class="transparent close" id="closePopup"><i class="fa-solid fa-xmark"></i></button>
+        <h2>Add to portfolio</h2>
+        <label for="price">Price</label>
+        <input placeholder="Price" class="form-control" value='' name="price" id="stockPriceP" type="number"><br>
+        <label for="shares">Shares</label>
+        <input placeholder="Shares" class="form-control" value='1' name="shares" id="shares" type="number"><br>
+        <button class="btn btn-primary bottomButton" onclick="addToPortfolio()">Add To Portfolio</button>
+    </div>
+    <div class="titleGrid">
+        <div>
+        <h1>{{ticker}}</h1>
+        </div>
+        <div>
+            <button id="atp"><i class="fa-solid fa-plus"></i></button>
+        </div>
+
+    </div>
+
+    <h1 style="font-weight: 600">$<a id="price"></a>   <a style="color:green; font-size:12px" id="trend"><i id="trendIndicate" class="fa-solid fa-angle-up"></i> $<a style="color:green; font-size:12px" id="change"></a> <a style="color:gray;font-size:12px">Today</a></a></h1>
+
+
+
+        <canvas id="chartMine" ></canvas>
+    <br><br>
+    <h3>AI Prediction</h3><br>
+    <center>
+    <div id="predictionPlace"><div id="buy"></div><div id="sell"></div></div>
+    <div style="padding-left:15px;display:grid;grid-template-columns: 50% 50%">
+        <div style="width:100%;text-align:center">
+            <h4 id="predictionResult" style="color:red">92% Sell</h4>
+        </div>
+        <div style="width:100%;text-align:center">
+            <h4 id="accuracy" style="color:blue">74% Accuracy</h4>
+        </div>
+    </div>
+
+</center>
+    <br>
+    <br>
+    <br>
+    <h3>Company Details</h3>
+    <p style="font-weight: 400" id="companyName"></p>
+    <p id="summary"></p>
+
+    
+    <br><br>
+    <nav class="navbar navbar-inverse navbar-fixed-bottom" style="width:100%;position: fixed;bottom:0px;left:0px;padding:20px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;background: white;">
+          <div class="container-fluid" style="text-align: center; width: 100%;display: grid;grid-template-columns: 50% 50%; max-width: 1000px">
+        <button id="openDiscover" style="width:100%;" onclick="window.location.assign('/')"><i class="fa fa-compass"></i></button>
+        <button id="openSearch" style="width:100%;" onclick="window.location.assign('/')" class="active"><i class="fa-solid fa-magnifying-glass"></i></button>
+    
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="/static/js/stock.js"></script>
+{% endblock %}

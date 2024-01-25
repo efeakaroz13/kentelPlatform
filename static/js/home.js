@@ -53,3 +53,42 @@ function checkSearchInside(){
 checkSearchInside()
 
 setInterval(checkSearchInside,200)
+
+
+function loadScan(){
+    $.getJSON("/get/last/issue",function(data){
+        var exchange = data.exchange
+        basehtml = '<ion-item>\
+                    <div class="discoverGrid bold">\
+                        <div>Company</div>\
+                        <div>Signal</div>\
+                        <div>Score</div>\
+                        <div>Accuracy</div>\
+                        <div></div>\
+                    </div>\
+                  </ion-item>'
+         g("discoverList").innerHTML = basehtml
+        if(exchange=="SERVER2_DAILY_NASDAQ"){
+            var items = data.notifications
+            for (var i = items.length - 1; i >= 0; i--) {
+                d = items[i]
+                chtml = '<ion-item>\
+                    <div class="discoverGrid ">\
+                        <div ><a title="'+d.comp.company+'">'+d.comp.ticker+'</a></div>\
+                        <div>'+d.signal+'</div>\
+                        <div>'+d.score+'</div>\
+                        <div style="font-weight: 500;color:darkblue">'+d.acc+'%</div>\
+                        <div><button class="transparent"><i class="fa-solid fa-plus"></i></button></div>\
+                    </div>\
+                  </ion-item>'
+                g("discoverList").innerHTML=g("discoverList").innerHTML+chtml
+            }
+            //basic package
+            
+        }else{
+            //unlimited Scans
+            // add scan button.
+        }
+    })
+}
+loadScan()

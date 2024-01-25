@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="/static/css/portfolio.css">
+{% endblock %}
+
+{% block body %}
+        
+
+      <h1 style="width: 100%;text-align: left">Portfolio</h1>
+      <center>
+      <ion-list style="max-width: 1000px" inset="true">
+        
+        <ion-item >
+            <div class="gridder">
+                <label><strong>Company</strong></label>
+                <label><strong>Cost/share</strong></label>
+                <label><strong>Shares</strong></label>
+                <label><strong>Cost</strong></label>
+                <label><strong>L/P</strong></label>
+                <label><strong></strong></label>
+
+                
+            </div>
+
+        </ion-item>
+
+        {% for item in usrPort["items"] %}
+            <ion-item style="padding:3px;" >
+                <div class="gridder">
+                    <label onclick="window.location.assign('/stock/{{item["ticker"]}}')"><strong>{{item["ticker"]}}</strong></label>
+                    <label><a>{{item["cost"]}}</a></label>
+                    <label><a>{{item["shares"]}}</a></label>
+                    <label><a>{{item["cost"]*item["shares"]}}</a></label>
+                    {% if item["lp"] =="0" %}
+                    <label><a style="color:green">{{item["lp"]}}$ ({{item["lpPercent"]}}%)</a></label>
+                    {% elif item["lp"] ==0  %}
+                    <label><a style="color:#d6c100">{{item["lp"]}}$ ({{item["lpPercent"]}}%)</a></label>
+                    {% else %}
+                    <label><a style="color:red">{{item["lp"]}}$ ({{item["lpPercent"]}}%)</a></label>
+                    {% endif %}
+                    <label>
+                        <ion-button (click)="onClick()"  color="dark">
+                         <ion-icon name="create-outline"></ion-icon>
+                        </ion-button>
+                    </label>
+                    
+                </div>
+
+            </ion-item>
+
+        {% endfor %}
+
+      </ion-list>
+
+
+    </center>
+    </div>
+    <style>
+        
+    </style>
+
+
+
+
+{% endblock %}
+
