@@ -68,6 +68,8 @@ function loadScan(){
                     </div>\
                   </ion-item>'
          g("discoverList").innerHTML = basehtml
+         scanTime  = new Date( data.time*1000);
+         g("date").innerHTML = scanTime.toLocaleString()
         if(exchange=="SERVER2_DAILY_NASDAQ"){
             var items = data.notifications
             for (var i = items.length - 1; i >= 0; i--) {
@@ -78,7 +80,6 @@ function loadScan(){
                         <div>'+d.signal+'</div>\
                         <div>'+d.score+'</div>\
                         <div style="font-weight: 500;color:darkblue">'+d.acc+'%</div>\
-                        <div><button class="transparent"><i class="fa-solid fa-plus"></i></button></div>\
                     </div>\
                   </ion-item>'
                 g("discoverList").innerHTML=g("discoverList").innerHTML+chtml
@@ -88,6 +89,19 @@ function loadScan(){
         }else{
             //unlimited Scans
             // add scan button.
+            var items = data.stockList
+            for (var i = items.length - 1; i >= 0; i--) {
+                d = items[i]
+                chtml = '<ion-item>\
+                    <div class="discoverGrid ">\
+                        <div ><a >'+d.ticker+'</a></div>\
+                        <div>'+d.signal+'</div>\
+                        <div>'+d.score+'</div>\
+                        <div style="font-weight: 500;color:darkblue">'+d.acc+'%</div>\
+                    </div>\
+                  </ion-item>'
+                g("discoverList").innerHTML=g("discoverList").innerHTML+chtml
+            }
         }
     })
 }

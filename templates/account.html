@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1>Account</h1>
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>{{data["fullName"]}}</ion-card-title>
+    <ion-card-subtitle>{{data["email"]}}</ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content >
+
+   {% if data["plan"] == "basicM" %}
+   <h3><strong>Basic Plan </strong></h3>
+   {% elif data["plan"] == "standardM" %}
+   <h3><strong>Standard Monthly</strong></h3>
+   {% elif data["plan"] == "proM" %}
+    <h3><strong>Kentel Pro</strong></h3>
+   {% endif %}
+   <h3>Signed up at:{{time.ctime(data["time"])}}</h3>
+   {% if stripe_status == True %}
+   <h3 style="color:green">No waiting payments</h3>
+   {% else %}
+    <h3 style="color:red">Account inactivated</h3>
+   {% endif %}
+   {% if data["plan"] == "basicM" %}
+   <ion-button>Upgrade plan</ion-button>
+   {% endif %}
+  </ion-card-content>
+</ion-card>
+<style>
+
+</style>
+{% endblock %}

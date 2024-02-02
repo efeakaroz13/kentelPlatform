@@ -50,7 +50,7 @@ class Mailer:
 
         mailserver = smtplib.SMTP_SSL('smtpout.secureserver.net', 465)
         mailserver.ehlo()
-        mailserver.login('sales@kentel.dev', 'greenanarchist')
+        mailserver.login('sales@kentel.dev', 'efeAkaroz123')
 
         mailserver.sendmail('sales@kentel.dev',email,msg.as_string())
 

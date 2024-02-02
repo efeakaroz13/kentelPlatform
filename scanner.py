@@ -16,7 +16,7 @@ from app import generate_id
 
 red = redis.Redis()
 mongo = MongoClient()
-db = mongo["Kentel"]
+db = mongo["KentelPlatform"]
 issues = db["Issues"]
 
 

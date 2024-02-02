@@ -17,7 +17,7 @@ from datetime import datetime
 
 r=redis.Redis()
 server = "main"
-base = "http://127.0.0.1:3000"
+base = "https://kentel.dev"
 
 stripe.api_key = "sk_test_51KNGcuEz0P2Wm1hTXPKe291k3qbGjhJqxaryuuNe2J0mSFhiZrI69LYIbWIAYIbGT3LYPOc4MyTAnkGmtleJobxh00LPcn5oI7"
 
@@ -147,7 +147,7 @@ def send(mails,content):
 
         mailserver = smtplib.SMTP_SSL('smtpout.secureserver.net', 465)
         mailserver.ehlo()
-        mailserver.login('sales@kentel.dev', 'greenanarchist')
+        mailserver.login('sales@kentel.dev', 'efeAkaroz123')
 
         mailserver.sendmail('sales@kentel.dev',m,msg.as_string())
 

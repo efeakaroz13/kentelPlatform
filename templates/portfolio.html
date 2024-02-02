@@ -31,7 +31,7 @@
                     <label><a>{{item["cost"]}}</a></label>
                     <label><a>{{item["shares"]}}</a></label>
                     <label><a>{{item["cost"]*item["shares"]}}</a></label>
-                    {% if item["lp"] =="0" %}
+                    {% if item["lp"] >0 %}
                     <label><a style="color:green">{{item["lp"]}}$ ({{item["lpPercent"]}}%)</a></label>
                     {% elif item["lp"] ==0  %}
                     <label><a style="color:#d6c100">{{item["lp"]}}$ ({{item["lpPercent"]}}%)</a></label>

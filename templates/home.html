@@ -19,15 +19,20 @@
         </div>
     {% else %}
         <div id="discover">
-            <h1>Discover</h1>
+            <h1>Discover <ion-button fill="clear" (click)="loadScan()" style="margin-bottom:20px"><ion-icon name="refresh-outline"></ion-icon></ion-button></h1>
+            <p id="date">Loading...</p>
+
             <ion-list inset="true" id="discoverList">
+                <ion-item>
+                    
+                  </ion-item>
                   <ion-item>
                     <div class="discoverGrid bold">
                         <div>Company</div>
                         <div>Signal</div>
                         <div>Score</div>
                         <div>Accuracy</div>
-                        <div></div>
+                        
 
                     </div>
                   </ion-item>
@@ -69,7 +74,7 @@
             }
             .discoverGrid{
                 display:grid;
-                grid-template-columns: 22% 22% 22% 22% 10%;
+                grid-template-columns: 25% 25% 25% 25%;
                 width:100%;
 
             }

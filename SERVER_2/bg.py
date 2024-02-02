@@ -3,10 +3,9 @@ import os
 import pymongo
 import redis
 from datetime import datetime
-
-from app import base
 import trader
 
+base = "https://kentel.dev"
 
 red = redis.Redis()
 filters = []
@@ -20,17 +19,17 @@ except:
 tasks = {
 	"dailyInsight":{
 		"days":[1,2,3,4,5],
-		"time":["17:10"],
+		"time":["14:10"],
 		"command":"python3 daily.py"
 	},
 	"alarms":{
 		"days":[1,2,3,4,5],
-		"time":["17:30","18:30","19:30","20:30","21:30","22:30"],
+		"time":["14:30","15:30","16:30","17:30","18:30","19:30"],
 		"command":"python3 portfolioChecker.py"
 	},
 	"maintenance":{
 		"days":[6],
-		"time":["13:30"],
+		"time":["10:30"],
 		"command":"python3 maintenance.py"
 	}
 

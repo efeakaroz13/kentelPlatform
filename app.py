@@ -28,12 +28,12 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 mongo = pymongo.MongoClient()
 db = mongo["KentelPlatform"]
 users = db["Users"]
-issues = db["issues"]
+issues = db["Issues"]
 logs = db["logs"]
 filters = db["Filters"]
 portfolios = db["Portfolios"]
 mode = "test"
-base = "http://127.0.0.1:3000"
+base = "https://kentel.dev"
 red = redis.Redis()
 
 plans = ["standardM","basicM"]
@@ -937,6 +937,37 @@ class UXRoutes:
                 i["lp"]="*"
                 i["lpPercent"] = "*"
         return render_template("portfolio.html",usrPort=usrPort,active="portfolio",title="Portfolio - ",data=u)
+
+    @app.route("/account")
+    def account():
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+            cus_id = u["customer_id"]
+        except:
+            return redirect("/login")
+        status = stripe.Subscription.list(customer=cus_id)["data"][0]["plan"]["active"]
+        return render_template("account.html",data=u,active="account",title="Account - ",time=time,stripe_status=status)
+
+    @app.route("/settings")
+    def settingsUX():
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/")
+
+
+        return render_template("settings.html",data=u,active="settings",time=time)
+    @app.route("/logout")
+    def logout():
+        response  = make_response(redirect("/"))
+        response.set_cookie("e","")
+        response.set_cookie("p","")
+        return response
+    
 class Portfolio:
     @app.route("/api/add2port/<ticker>",methods=["GET"])
     def add2p(ticker):

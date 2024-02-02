@@ -14,7 +14,7 @@ from email.mime.text import MIMEText
 
 red= redis.Redis()
 
-baseURL= "http://127.0.0.1:3000"
+baseURL= "https://kentel.dev"
 dataURL = "/secret/kentel/portfolioNotifier"
 
 

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Settings</h1>
+<ion-list>
+  <ion-item>
+    <ion-label>Upgrade Plan</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label>Change Theme</ion-label>
+  </ion-item>
+  <ion-item (click)="logout()">
+    <ion-button full  color="danger" fill="clear">
+        Log Out
+    </ion-button>
+  </ion-item>
+  <ion-item>
+    <ion-label color="danger">Unsubscribe</ion-label>
+  </ion-item>
+  
+</ion-list>
+
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/"></script>
+{% endblock %}
