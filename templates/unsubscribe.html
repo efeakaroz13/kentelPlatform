@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Unsubscribe</h1>
+<center>
+<form action="" method="post" style="width: 70%;">
+    <label for="reason" style="width: 100%;text-align: left;">I quit Kentel because:</label><br>
+    <select name="reason" id="reason" class="form-control">
+        <option value="notenough">The app is not enough</option>
+        <option value="loss">I lost money because of Kentel AI</option>
+        <option value="idontneed">I do not need Kentel anymore</option>
+        <option value="tooManyNotifications">I get too many notifications</option>
+        <option value="poorCommunity">Poor user community</option>
+        <option value="other">Other</option>
+    </select><br>
+    <textarea required class="form-control" name="explain" placeholder="Write the ways we can improve and why did you exactly quit..."></textarea><br>
+    <ion-button type="submit" fill="outline" color="danger">QUIT</ion-button>
+</form>
+</center>
+
+{% endblock %}

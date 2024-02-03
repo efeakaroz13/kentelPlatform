@@ -1,7 +1,7 @@
 #Kentel.dev with alpha logo on it
 #16TH of dec
 #Practice makes perfect.
-from flask import Flask,render_template,request,redirect,send_file,make_response,jsonify
+from flask import Flask,render_template,request,redirect,send_file,make_response,jsonify,abort
 import stripe
 import os
 import pymongo
@@ -32,6 +32,8 @@ issues = db["Issues"]
 logs = db["logs"]
 filters = db["Filters"]
 portfolios = db["Portfolios"]
+forms = db["forms"]
+
 mode = "test"
 base = "https://kentel.dev"
 red = redis.Redis()
@@ -968,6 +970,42 @@ class UXRoutes:
         response.set_cookie("p","")
         return response
     
+    @app.route("/unsubscribe",methods=["POST","GET"])
+    def unsubscribeRoute():
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/login")
+        if request.method =="POST":
+            reason = request.form.get("reason")
+            explain = request.form.get("explain")
+            data = {
+                "_id":u["_id"],
+                "type":"unsubscribe",
+                "reason":reason,
+                "explanation":explain,
+                "usr":u
+            }
+            forms.insert_one(data)
+            stripe.Subscription.cancel(stripe.Subscription.list(customer=u["customer_id"])["data"][0]["id"])
+            users.delete_one({"_id":u["_id"]})
+            Mailer.sorryToSeeYouGo(u)
+            return redirect("/")
+        return render_template("unsubscribe.html",data=u,active="settings",time=time)
+    
+    @app.route("/notanewbie")
+    def imnotanewbie():
+        try:
+            email = request.cookies.get("e")
+            password =request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/")
+        users.update_one({"_id":u["_id"]},{"$set":{"newbie":False}})
+        return redirect("/")
+        
 class Portfolio:
     @app.route("/api/add2port/<ticker>",methods=["GET"])
     def add2p(ticker):

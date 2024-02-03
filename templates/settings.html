@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block body %}
 <h1>Settings</h1>
+<ion-alert
+  header="Are you sure?"
+  
+  message="Do you really want to unsubscribe? If you have any issues with the app, you can always contact us."
+></ion-alert>
 <ion-list>
   <ion-item>
     <ion-label>Upgrade Plan</ion-label>
@@ -8,18 +13,20 @@
   <ion-item>
     <ion-label>Change Theme</ion-label>
   </ion-item>
-  <ion-item (click)="logout()">
-    <ion-button full  color="danger" fill="clear">
+  <ion-item >
+    <ion-button full  color="danger" fill="clear" onclick="logout()" >
         Log Out
     </ion-button>
   </ion-item>
   <ion-item>
-    <ion-label color="danger">Unsubscribe</ion-label>
+    <ion-button  onclick="alert.isOpen = true" full  color="danger" fill="clear" onclick="openUnsubscribePopup()" >
+      Unsubscribe
+    </ion-button>
   </ion-item>
   
 </ion-list>
 
 {% endblock %}
 {% block scripts %}
-<script src="/static/js/"></script>
+<script src="/static/js/settings.js"></script>
 {% endblock %}

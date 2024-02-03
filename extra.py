@@ -57,6 +57,30 @@ class Mailer:
         mailserver.quit()
         
         return True
+    def sorryToSeeYouGo(udata):
+        emailHTMLStart= open("templates/email/sorry.html","r").read()
+
+
+        
+        
+        
+        msg = MIMEMultipart()
+        msg.set_unixfrom('author')
+        msg['From'] = 'sales@kentel.dev'
+        msg['To'] = udata["email"]
+        msg['Subject'] = '😿 We are sorry to see you go :('
+        message = emailHTMLStart
+        msg.attach(MIMEText(message,"html"))
+
+        mailserver = smtplib.SMTP_SSL('smtpout.secureserver.net', 465)
+        mailserver.ehlo()
+        mailserver.login('sales@kentel.dev', 'efeAkaroz123')
+
+        mailserver.sendmail('sales@kentel.dev',udata["email"],msg.as_string())
+
+        mailserver.quit()
+        
+        return True
 
 if __name__ == "__main__":
     print(generate_id(25))
