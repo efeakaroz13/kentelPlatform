@@ -1,0 +1,53 @@
+body{
+    background:#000;
+    color:greenyellow;
+    font-family: 'Courier New', Courier, monospace;
+    margin:0;
+    padding:0;
+}
+nav{
+    border-bottom:1px solid greenyellow ;
+    width: 100%;
+    padding-left:10px;
+
+}
+.card{
+    width:70%;
+    padding:20px;
+    border:1px solid greenyellow;
+}
+input{
+    border:1px solid greenyellow;
+    color:greenyellow;
+    background:none;
+    padding:5px;
+
+
+}
+input:focus{
+    outline:none;
+}
+::placeholder {
+color: greenyellow;
+opacity: 1; /* Firefox */
+}
+
+::-ms-input-placeholder { /* Edge 12 -18 */
+color: greenyellow;
+}
+button{
+    border:1px solid greenyellow;
+    color:greenyellow;
+    background: none;
+    padding:5px;
+    padding-left:20px;
+    padding-right:20px;
+}
+.leftbottom{
+    position: fixed;
+    left:10px;
+    bottom:10px;
+}
+.container{
+    padding-left:20px;
+}

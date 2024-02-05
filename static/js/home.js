@@ -54,9 +54,21 @@ checkSearchInside()
 
 setInterval(checkSearchInside,200)
 
-
+function checkLStorage(){
+    fil = localStorage.getItem("filter");
+    if(fil!=null){
+        g("filters").value = fil
+    }
+}
+checkLStorage()
 function loadScan(){
-    $.getJSON("/get/last/issue",function(data){
+
+    filter = g("filters").value;
+    if(filter!=undefined){
+        localStorage.setItem("filter",filter);
+    }
+    
+    $.getJSON("/get/last/issue?filter="+filter,function(data){
         var exchange = data.exchange
         basehtml = '<ion-item>\
                     <div class="discoverGrid bold">\
@@ -106,3 +118,11 @@ function loadScan(){
     })
 }
 loadScan()
+
+oldValue = g("filters").value
+function filterChangeChecker(){
+    if(g("filters").value !=oldValue){
+        loadScan();
+        oldValue = g("filters").value;
+    }
+}

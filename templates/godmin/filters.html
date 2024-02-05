@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kentel Godmin</title>
+    <link rel="shortcut icon" href="/static/images/godmin.png" type="image/png">
+    <link rel="stylesheet" href="/static/css/godmin.css">
+</head>
+<body>
+    <nav>
+        <p>Godmin</p>
+
+    </nav><br><br>
+    <div class="container">
+        <h3>Filters</h3>
+        <div class="card">
+            <h4>Create a new filter</h4>
+            <form action="" method="POST">
+                <input type="text" name="filterURL" placeholder="Enter filter URL..."> <br><br>
+                <select name="recurring" id="">
+                    <option value="once">Fetch Once</option>
+                    <option value="1H">Every Hour</option>
+                </select> <br> <br>
+                <input type="text" name="label" placeholder="Filter Label"><br><br>
+                <select name="status" id="">
+                    <option value="beta">Beta</option>
+                    <option value="public">Public</option>
+                </select><br><br>
+                <button type="submit">Create</button>
+
+            </form>
+            
+        </div> <br><br>
+        <ul>
+            {% for f in allFilters %}
+            <li onclick="setID('{{f["_id"]}}')">{{f["label"]}} - {{f["recurring"]}} - {{f["status"]}} - {{f["_id"]}}</li>
+            {% endfor %}
+        
+
+        </ul>
+        <div class="card">
+            <h4>Edit Filter</h4>
+            <p>Click on a filter to select</p>
+            <form action="/godmin/filter/edit" method="POST">
+                <input type="text" name="id" id="id"><br><br>
+                <input type="text" name="filterURL" id="filterURL" placeholder="Enter filter URL..."> <br><br>
+                <select name="recurring"  id="recurring">
+                    <option value="once">Fetch Once</option>
+                    <option value="1H">Every Hour</option>
+                </select> <br> <br>
+                <input type="text" name="label" id="label" placeholder="Filter Label"><br><br>
+                <select name="status" id="status">
+                    <option value="beta">Beta</option>
+                    <option value="public">Public</option>
+                </select><br><br>
+                <button>Save Changes</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        
+        //jsond = JSON.parse(jsonSTR)
+        function setID(id){
+            document.getElementById("id").value = id;
+            console.log(jsond.id)
+        }
+    </script>
+    
+</body>
+</html>

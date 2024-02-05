@@ -127,24 +127,29 @@ def task(tickers,workerID):
                 print(e)
     open(f"temp/{sessionName}{workerID}.json","w").write(json.dumps({"out":outputData},indent=4))
 
+def filters():
+
+    os.system("/home/efeakaroz13/kentelPlatform/env/bin/python3 filterBG.py")
 
 if __name__ == "__main__":
     p1 = Process(target=task,args=(l1,"1"))
     p2 = Process(target=task,args=(l2,"2"))
     p3 = Process(target=task,args=(l3,"3"))
     p4 = Process(target=task,args=(l4,"4"))
-
+    p5 = Process(target=filters)
     
 
     p1.start()
     p2.start()
     p3.start()
     p4.start()
+    p5.start()
 
     p1.join()
     p2.join()
     p3.join()
     p4.join()
+    p5.join()
     finals = []
     ## Compose it all together
     t1 = json.loads(open(f"temp/{sessionName}1.json","r").read())

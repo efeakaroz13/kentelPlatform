@@ -22,9 +22,26 @@
         </div>
     {% else %}
         <div id="discover">
-            <h1>Discover <ion-button fill="clear" (click)="loadScan()" style="margin-bottom:20px"><ion-icon name="refresh-outline"></ion-icon></ion-button></h1>
+            <h1>Discover <ion-button fill="clear" onclick="loadScan()" style="margin-bottom:20px"><ion-icon name="refresh-outline"></ion-icon></ion-button></h1>
             <p id="date">Loading...</p>
-
+            {% if data["plan"] == "standardM" %}
+            <ion-select  label="Select a Filter" label-placement="floating" id="filters">
+                <ion-select-option value="defno" >No Filter</ion-select-option>
+                {% for f in filters %}
+                    <ion-select-option value="{{f['_id']}}">{{f["label"]}}</ion-select-option>
+                {% endfor %}
+                
+            </ion-select>
+            {% endif %}
+            {% if data["plan"] == "basicM" %}
+            <ion-select label="Select a Filter" label-placement="floating" id="filters" value="def">
+                
+                
+                <ion-select-option selected="selected" value="def">Kentel Base Filter - Mailing List</ion-select-option>
+                
+                
+            </ion-select>
+            {%endif%}
             <ion-list inset="true" id="discoverList">
                 <ion-item>
                     

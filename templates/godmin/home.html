@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kentel Godmin</title>
+    <link rel="shortcut icon" href="/static/images/godmin.png" type="image/png">
+    <link rel="stylesheet" href="/static/css/godmin.css">
+</head>
+<body>
+    <nav>
+        <p>Godmin</p>
+
+    </nav><br><br>
+    <div>
+        <center>
+            <h1>Welcome again, select an option.</h1>
+            <ul style="width: 30%;text-align: left;">
+                {% for p in ad["privillages"] %}
+                <li onclick="window.location.assign('/godmin/{{p}}')">{{p}}</li>
+                {% endfor %}
+            </ul>
+            <p class="leftbottom">Kentel LTD &copy;</p>
+        </center>
+    </div>
+    
+</body>
+</html>

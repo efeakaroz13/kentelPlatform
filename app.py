@@ -20,6 +20,7 @@ from flask_cors import CORS
 import requests
 import yfinance as yf
 import trader
+from filters import FinLister
 
 app = Flask(__name__)
 CORS(app)
@@ -33,7 +34,8 @@ logs = db["logs"]
 filters = db["Filters"]
 portfolios = db["Portfolios"]
 forms = db["forms"]
-
+admin = db["admin"]
+filters=  db["filters"]
 mode = "test"
 base = "https://kentel.dev"
 red = redis.Redis()
@@ -76,7 +78,8 @@ def index():
             else:
                 if  stripe.Subscription.list(customer=u["customer_id"])["data"][0]["plan"]["active"]:
                     msg = request.args.get("msg")
-                    return render_template("home.html",data=u,msg=msg,active="home",title="")
+                    filtersList = filters.find({})
+                    return render_template("home.html",data=u,msg=msg,active="home",title="",filters=filtersList)
                 else:
                     return redirect("/not_paid")
         else:
@@ -343,14 +346,67 @@ class IssuesDifferentPackages:
         except:
             return redirect("/login")
         if u["plan"] == "standardM":
-            try:
-                i = issues.find({})[-1]
-                del i["allF"]
+            filter_selected = request.args.get("filter")
+            if filter_selected == None or filter_selected == "" or filter_selected == "undefinded" or filter_selected == "null":
+            
+                try:
+                    i = issues.find({"exchange":"NASDAQ"})
+                    allIssuesArray = []
+                    for _ in i:
+                        allIssuesArray.append(_)
+                    
+                    del i["allF"]
+                    return allIssuesArray[-1]
+                    #return i
 
-                return i
+                except Exception as e:
+                    print("['/get/last/issue']",e,flush=True)
+                    return {"stockList":[]}
+            else:
+                try:
+                    s_f = filters.find({"_id":filter_selected})[0]
+                    items = s_f["items"]
+                    try:
+                        i = issues.find({"exchange":"NASDAQ"})
+                        allIssuesArray = []
+                        for _ in i:
+                            allIssuesArray.append(_)
+                        sissue = allIssuesArray[-1]
+                        seli = sissue["allF"] # selected issue for filtering
 
-            except:
-                return {"stockList":[]}
+                        #return i
+
+                    except Exception as e:
+                        print("['/get/last/issue']",e,flush=True)
+                        return {"stockList":[]}
+                    filterItemsArray = []
+                    for f in items:
+                        filterItemsArray.append(f["ticker"])
+                    output = [] 
+                    for s in seli:
+                        if s["acc"]>73 and s["score"]>97.5 and s["ticker"] in filterItemsArray:
+                            #filter has passed.
+                            output.append(s)
+                    sissue["stockList"] = output
+                    del sissue["allF"]
+                    return sissue
+                
+
+
+                except:
+                    try:
+                        i = issues.find({"exchange":"NASDAQ"})
+                        allIssuesArray = []
+                        for _ in i:
+                            allIssuesArray.append(_)
+                        
+                        del i["allF"]
+                        return allIssuesArray[-1]
+                        #return i
+
+                    except Exception as e:
+                        print("['/get/last/issue']",e,flush=True)
+                        return {"stockList":[]}
         elif u["plan"] == "basicM":
 
             try:
@@ -374,7 +430,7 @@ class APIs:
             email = request.form.get("email")
             password = request.form.get("password")
             hashP = hashlib.sha256()
-            hasP.update(password.encode())
+            hashP.update(password.encode())
             password=hashP.hexdigest()
             try:
                 u = users.find({"email":email,"password":password})[0]
@@ -555,10 +611,11 @@ class APIs:
 class Policies:
     @app.route("/privacy-policy")
     def privacy_policy():
+        return abort(404)
         return render_template("privacy.html")
-    @app.route("/terms-and-conditions")
+    @app.route("/kentel-eula")
     def terms_and_conditions():
-        return render_template("terms.html")
+        return render_template("eula.html")
 
 
 class StripeRoutes:
@@ -1085,5 +1142,113 @@ class Portfolio:
 
 
         return costData,200
+
+class Admin:
+    @app.route("/godmin",methods=["POST","GET"])
+    def godmin():
+        adminPrivillages =["filters","analytics","blog","AI"]
+        err = request.args.get("err")
+        try:
+            email = request.cookies.get("email")
+            password = request.cookies.get("password")
+            ad = admin.find({"email":email,"password":password})[0]
+            return render_template("godmin/home.html",ad=ad)
+        except:
+            pass
+        if request.method == "POST":
+            email = request.form.get("email")
+            password = request.form.get("password")
+            enc = hashlib.sha256()
+            enc.update(password.encode())
+            password = enc.hexdigest()
+            try:
+                ad = admin.find({"email":email,"password":password})[0]
+            except:
+                return redirect("/godmin?err=Incorrect+credentials")
+            response = redirect("/godmin")
+            response.set_cookie("email",email)
+            response.set_cookie("password",password)
+            return response
+
+        return render_template("godmin/login.html",err=err)
+    @app.route("/godmin/filters",methods=["POST","GET"])
+    def godminFilters():
+        try:
+            email =request.cookies.get("email")
+            password = request.cookies.get("password")
+            ad = admin.find({"email":email,"password":password})[0]
+            if "filters" in ad["privillages"]:
+                pass
+            else:
+                return redirect("/godmin")
+        except:
+            return redirect("/godmin")
+        if request.method == "POST":
+            url = request.form.get("filterURL")
+            recurring = request.form.get("recurring")
+            label= request.form.get("label")
+            status = request.form.get("status")
+            fl = FinLister(url=url)
+            fl.fetch()
+            stocks = fl.stocks
+
+            data = {
+                "_id":generate_id(10),
+                "recurring":recurring,
+                "label":label,
+                "status":status,
+                "items":stocks,
+                "lastUpdate":time.time(),
+                "url":url
+            }
+            filters.insert_one(data)
+
+
+            return redirect("/godmin/filters")
+
+
+        allFilters = []
+        for f in filters.find({}):
+            allFilters.append(f)
+
+        afDic = {
+
+        }
+        for f in allFilters:
+            afDic[f['_id']] = f 
+        import json 
+        return render_template("godmin/filters.html",allFilters=allFilters,dic=json.dumps(afDic))
+    @app.route("/godmin/filter/edit",methods=["POST"])
+    def godmingfilterEdit():
+        try:
+            email = request.cookies.get("email")
+            password = request.cookies.get("password")
+            ad  = admin.find({"email":email,"password":password})[0]
+
+        except:
+            return redirect("/godmin")
+        filterID = request.form.get("id")
+        url = request.form.get("filterURL")
+        recurring = request.form.get("recurring")
+        label= request.form.get("label")
+        status = request.form.get("status")
+        fl = FinLister(url=url)
+        fl.fetch()
+        stocks = fl.stocks
+        data = {
+
+                "recurring":recurring,
+                "label":label,
+                "status":status,
+                "items":stocks,
+                "lastUpdate":time.time(),
+                "url":url
+        }
+        try:
+            filters.update_one({"_id":filterID},{"$set":data})
+        except:
+            data["_id"] = generate_id(20)
+            filters.insert_one(data)
+        return redirect("/godmin/filters")
 if __name__ == "__main__":
     app.run(debug=True,port=3000)

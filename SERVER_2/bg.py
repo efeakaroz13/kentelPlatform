@@ -20,17 +20,17 @@ tasks = {
 	"dailyInsight":{
 		"days":[1,2,3,4,5],
 		"time":["14:10"],
-		"command":"python3 daily.py"
+		"command":"/home/efeakaroz13/kentelPlatform/env/bin/python3 daily.py"
 	},
 	"alarms":{
 		"days":[1,2,3,4,5],
 		"time":["14:30","15:30","16:30","17:30","18:30","19:30"],
-		"command":"python3 portfolioChecker.py"
+		"command":"/home/efeakaroz13/kentelPlatform/env/bin/python3 portfolioChecker.py"
 	},
 	"maintenance":{
 		"days":[6],
 		"time":["10:30"],
-		"command":"python3 maintenance.py"
+		"command":"/home/efeakaroz13/kentelPlatform/env/bin/python3 maintenance.py"
 	}
 
 

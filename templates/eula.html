@@ -17,7 +17,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
 
-    <title>Login to Kentel</title>
+    <title>Kentel LTD - End User License Agreement (EULA)</title>
   </head>
 
   <body>
@@ -43,15 +43,33 @@
       <div class="row">
         
         <div class="col content-box hero-content">
-          <span>Kentel</span>
-          <h1>Sign In</h1>
-          <br>
+            <h1>End User License Agreement (EULA)</h1>
 
-          <form action="" method="POST">
-          	<input name="email" placeholder="E-Mail" class="form-control" required> <br>
-          	<input name="password" placeholder="Password" type="password" class="form-control" required> <br>
-          	<button href="" class="btn btn-regular">Sign In</button>
-          </form>
+            <p>This End User License Agreement (the "Agreement") is a legal agreement between you (the "User") and Kentel LTD ("Company") for the use of the Stock Prediction AI (the "Software").</p>
+        
+            <h2>1. Disclaimer of Warranty</h2>
+        
+            <p>The Software is provided "as is" without warranty of any kind, either expressed or implied, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose. The entire risk as to the quality and performance of the Software is with the User.</p>
+        
+            <h2>2. No Financial Advice</h2>
+        
+            <p>The Company is not a financial advisor, and the Software is not intended to provide financial advice. The User acknowledges and agrees that all decisions to buy or sell stocks are made at their own discretion and risk.</p>
+        
+            <h2>3. Limitation of Liability</h2>
+        
+            <p>In no event shall the Company be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of the Software, even if advised of the possibility of such damage.</p>
+        
+            <h2>4. User's Responsibility</h2>
+        
+            <p>The User is solely responsible for any decisions made based on the information provided by the Software. The Company shall not be liable for any financial losses or damages resulting from the User's use of the Software.</p>
+        
+            <h2>5. Governing Law</h2>
+        
+            <p>This Agreement shall be governed by and construed in accordance with the laws of the United Kingdom.</p>
+        
+            <p>By using the Software, the User agrees to be bound by the terms and conditions of this Agreement.</p>
+        
+            <p>Last updated: 05-02-2024(DD/MM/YYYY)</p>
           
         </div>
       </div>
@@ -59,7 +77,7 @@
   </section>
   <!-- E N D  H E R O -->
 
- 
+
   <!--  F O O T E R  -->
   <footer>
     <div class="container">
@@ -85,23 +103,7 @@
       </div>
     </div>
   </footer>
-  <div class="fixed-bottom p-4">
-    <div style="display:none" class="toast bg-dark text-white w-100 mw-100" role="alert" data-autohide="false">
-        <div class="toast-body p-4 d-flex flex-column">
-            <h4>Cookie Warning</h4>
-            <p>
-            This website stores data such as cookies to enable site functionality including analytics and personalization. By using this website, you automatically accept that we use cookies. 
-            </p>
-            <div class="ml-auto">
-                <button type="button" class="btn btn-outline-light mr-3" id="btnDeny">
-                    Deny
-                </button>
-                <button type="button" class="btn btn-light" id="btnAccept">
-                    Accept
-                </button>
-            </div>
-        </div>
-    </div>
+  
 </div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
@@ -113,14 +115,5 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-    {% if err %}
-    <script>
-        alert("{{err}}");
-        window.location.assign("/")
-
-    </script>
-    {% endif %}
-    <script type="text/javascript" src="/static/js/mainCode.js"></script>
     
-  </body>
 </html>
