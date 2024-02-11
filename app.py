@@ -1282,7 +1282,7 @@ class Public:
         return send_file("static/images/favicon.ico",as_attachment=False)
     @app.route("/robots.txt")
     def robotsTXT():
-        return send_file("others/robots.txt",as_attachment=False)
+        return send_file("other/robots.txt",as_attachment=False)
     @app.route("/sitemap.xml")
     def sitemap():
         return send_file("other/sitemap.xml",as_attachment=False)
