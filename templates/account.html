@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block body %}
-<h1>Account</h1>
-<ion-card>
+<br>
+<ion-title class="margin">Account</ion-title>
+<center>
+<ion-card class="lister" style="text-align: left;"> 
   <ion-card-header>
     <ion-card-title>{{data["fullName"]}}</ion-card-title>
     <ion-card-subtitle>{{data["email"]}}</ion-card-subtitle>
@@ -27,6 +29,7 @@
    {% endif %}
   </ion-card-content>
 </ion-card>
+</center>
 <style>
 
 </style>

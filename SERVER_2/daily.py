@@ -139,10 +139,11 @@ def send(mails,content):
         m = m["email"]
         msg = MIMEMultipart()
         msg.set_unixfrom('author')
-        msg['From'] = 'sales@kentel.dev'
+        msg['From'] = 'Kentel <sales@kentel.dev>'
         msg['To'] = m
-        msg['Subject'] = 'Here is your daily stock report'
+        msg['Subject'] = 'Daily Insight'
         message = content
+
         msg.attach(MIMEText(message,"html"))
 
         mailserver = smtplib.SMTP_SSL('smtpout.secureserver.net', 465)
@@ -226,7 +227,7 @@ if __name__ == "__main__":
         line = f"<p style='font-weight:400;font-size:20px'>{n['comp']['ticker']} | <a style='color:green'>{n['score']}% {n['signal']}</a> | <a>{n['acc']} Accuracy</a> | <a>{round(n['price'],2)}$</a></p>"
         content = content+line
 
-    mailHTML = open("templates/email/scan.html","r").read().replace("-date-",datestring).replace("-content-",content).replace("-number-",str(len(notifications)))
+    mailHTML = open("templates/email/scan.html","r").read().replace("-date-",datestring).replace("-content-",content).replace("-number-",str(len(notifications))).replace("-preview-","Stay informed with your daily stock report from Kentel! Discover valuable insights and predictions to navigate the stock market effectively.")
     upload= requests.post(f"{base}/secret/kentel/issueUpload",data=json.dumps(data),headers={"User-Agent":"sagent",'Content-type':'application/json', 'Accept':'application/json'})
     p1= Process(target=send,args=(t1,mailHTML))
     p2= Process(target=send,args=(t2,mailHTML))

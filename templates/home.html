@@ -4,9 +4,9 @@
 {% endblock %}
 {% block body %}
     {% if data["newbie"] %}
-    <div class="container-fluid">
-            <div class="row">
-                <div class="col min-vh-100 p-4">
+
+
+
                     <!-- toggler -->
                     <button class="btn float-end" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" role="button">
                         <i class="bi bi-arrow-right-square-fill fs-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"></i>
@@ -15,17 +15,20 @@
                     <p>Sriracha biodiesel taxidermy organic post-ironic, Intelligentsia salvia mustache 90's code editing brunch. Butcher polaroid VHS art party, hashtag Brooklyn deep v PBR narwhal sustainable mixtape swag wolf squid tote bag. Tote bag cronut semiotics, raw denim deep v taxidermy messenger bag. Tofu YOLO Etsy, direct trade ethical Odd Future jean shorts paleo. Forage Shoreditch tousled aesthetic irony, street art organic Bushwick artisan cliche semiotics ugh synth chillwave meditation. Shabby chic lomo plaid vinyl chambray Vice. Vice sustainable cardigan, Williamsburg master cleanse hella DIY 90's blog.</p>
                     <p>Ethical Kickstarter PBR asymmetrical lo-fi. Dreamcatcher street art Carles, stumptown gluten-free Kickstarter artisan Wes Anderson wolf pug. Godard sustainable you probably haven't heard of them, vegan farm-to-table Williamsburg slow-carb readymade disrupt deep v. Meggings seitan Wes Anderson semiotics, cliche American Apparel whatever. Helvetica cray plaid, vegan brunch Banksy leggings +1 direct trade. Wayfarers codeply PBR selfies. Banh mi McSweeney's Shoreditch selfies, forage fingerstache food truck occupy YOLO Pitchfork fixie iPhone fanny pack art party Portland.</p> Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia cor magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
                     <br><ion-button onclick="window.location.assign('/notanewbie')" >Understood</ion-button>
-                </div>
+
                 
-            </div>
+
             
-        </div>
+
     {% else %}
+    <p style="display: none;" id="date"></p>
         <div id="discover">
-            <h1>Discover <ion-button fill="clear" onclick="loadScan()" style="margin-bottom:20px"><ion-icon name="refresh-outline"></ion-icon></ion-button></h1>
-            <p id="date">Loading...</p>
+            <ion-title class="ion-margin">Discover <ion-button fill="clear"  onclick="loadScan()" style="margin-bottom:20px"><ion-icon name="refresh-outline" color="success"></ion-icon></ion-button></ion-title>
+
+            <center>
+            
             {% if data["plan"] == "standardM" %}
-            <ion-select  label="Select a Filter" label-placement="floating" id="filters">
+            <ion-select style="text-align:left"  class="lister" label="Select a Filter" label-placement="floating" id="filters">
                 <ion-select-option value="defno" >No Filter</ion-select-option>
                 {% for f in filters %}
                     <ion-select-option value="{{f['_id']}}">{{f["label"]}}</ion-select-option>
@@ -34,7 +37,7 @@
             </ion-select>
             {% endif %}
             {% if data["plan"] == "basicM" %}
-            <ion-select label="Select a Filter" label-placement="floating" id="filters" value="def">
+            <ion-select style="text-align:left" class="lister" label="Select a Filter" label-placement="floating" id="filters" value="def">
                 
                 
                 <ion-select-option selected="selected" value="def">Kentel Base Filter - Mailing List</ion-select-option>
@@ -42,22 +45,23 @@
                 
             </ion-select>
             {%endif%}
-            <ion-list inset="true" id="discoverList">
+            
+            <ion-list inset="true" id="discoverList" class="lister">
+                
                 <ion-item>
-                    
-                  </ion-item>
-                  <ion-item>
-                    <div class="discoverGrid bold">
-                        <div>Company</div>
-                        <div>Signal</div>
-                        <div>Score</div>
-                        <div>Accuracy</div>
-                        
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col><strong>Company</strong></ion-col>
+                            <ion-col><strong>Score</strong></ion-col>
+                            <ion-col><strong>Accuracy</strong></ion-col>
 
-                    </div>
-                  </ion-item>
+                        </ion-row>
+                    </ion-grid>
+                </ion-item>
+
                   
             </ion-list><br><br>
+            </center>
         </div>
         <div id="search" style="display:none">
             <h1>Search</h1>
@@ -69,23 +73,17 @@
             </div>
         </div>
 
-        <nav class="navbar navbar-inverse navbar-fixed-bottom" style="width:100%;position: fixed;bottom:0px;left:0px;padding:20px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;background: white;">
-          <div class="container-fluid" style="text-align: center; width: 100%;display: grid;grid-template-columns: 50% 50%; max-width: 1000px">
-        <button id="openDiscover" style="width:100%;" class="active"><i class="fa fa-compass"></i></button>
-        <button id="openSearch" style="width:100%;"><i class="fa-solid fa-magnifying-glass"></i></button>
+        
           </div>
-        <style>
+          <p id="openDiscover" style="display: none;"></p>
+          <p id="openSearch" style="display: none;"></p>
+    <style>
             button{
                 background:none;
                 border:0px solid#000;
                 color:#4285F4;
             }
-            .active{
-                font-weight: 500;
-                color:#7b35f2;
-                
-
-            }
+            
             #searchRecommend{
                 overflow-y:auto; 
             }

@@ -53,6 +53,6 @@ while a==True:
 		else:
 			pass
 
-
+    time.sleep(50)
 
 

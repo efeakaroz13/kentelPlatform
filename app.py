@@ -334,7 +334,16 @@ class Auth:
     
             
     
-
+class ErrorHandlers:
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return redirect("/")
+    @app.errorhandler(500)
+    def page_not_found(e):
+        return render_template('500.html'), 500
+    @app.errorhandler(403)
+    def page_not_found(e):
+        return render_template('403.html'), 403
 
 class IssuesDifferentPackages:
     @app.route("/get/last/issue")
@@ -347,7 +356,7 @@ class IssuesDifferentPackages:
             return redirect("/login")
         if u["plan"] == "standardM":
             filter_selected = request.args.get("filter")
-            if filter_selected == None or filter_selected == "" or filter_selected == "undefinded" or filter_selected == "null":
+            if filter_selected == None or filter_selected == "" or filter_selected == "undefinded" or filter_selected == "null" or filter_selected=="defno" or filter_selected=="def":
             
                 try:
                     i = issues.find({"exchange":"NASDAQ"})
@@ -355,7 +364,7 @@ class IssuesDifferentPackages:
                     for _ in i:
                         allIssuesArray.append(_)
                     
-                    del i["allF"]
+                    del allIssuesArray[-1]["allF"]
                     return allIssuesArray[-1]
                     #return i
 
@@ -400,7 +409,7 @@ class IssuesDifferentPackages:
                         for _ in i:
                             allIssuesArray.append(_)
                         
-                        del i["allF"]
+                        del allIssuesArray[-1]["allF"]
                         return allIssuesArray[-1]
                         #return i
 

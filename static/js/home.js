@@ -67,62 +67,81 @@ function loadScan(){
     if(filter!=undefined){
         localStorage.setItem("filter",filter);
     }
-    
-    $.getJSON("/get/last/issue?filter="+filter,function(data){
+    if(filter!="defno" && filter!=null && filter!=undefined){
+        url = "/get/last/issue?filter="+filter
+    }else{
+        url="/get/last/issue"
+    }
+    /*edit the code because you werent sober writing this
+    */
+    $.getJSON(url,function(data){
         var exchange = data.exchange
         basehtml = '<ion-item>\
-                    <div class="discoverGrid bold">\
-                        <div>Company</div>\
-                        <div>Signal</div>\
-                        <div>Score</div>\
-                        <div>Accuracy</div>\
-                        <div></div>\
-                    </div>\
-                  </ion-item>'
+        <ion-grid>\
+            <ion-row>\
+                <ion-col><strong>Company</strong></ion-col>\
+                <ion-col><strong>Score</strong></ion-col>\
+                <ion-col><strong>Accuracy</strong></ion-col>\
+\
+            </ion-row>\
+        </ion-grid>\
+    </ion-item>\
+    '
          g("discoverList").innerHTML = basehtml
          scanTime  = new Date( data.time*1000);
          g("date").innerHTML = scanTime.toLocaleString()
         if(exchange=="SERVER2_DAILY_NASDAQ"){
-            var items = data.notifications
-            for (var i = items.length - 1; i >= 0; i--) {
+            var items = data.notifications;
+            
+            for (var i=0; i<items.length;i++) {
                 d = items[i]
+                
                 chtml = '<ion-item>\
-                    <div class="discoverGrid ">\
-                        <div ><a title="'+d.comp.company+'">'+d.comp.ticker+'</a></div>\
-                        <div>'+d.signal+'</div>\
-                        <div>'+d.score+'</div>\
-                        <div style="font-weight: 500;color:darkblue">'+d.acc+'%</div>\
-                    </div>\
-                  </ion-item>'
-                g("discoverList").innerHTML=g("discoverList").innerHTML+chtml
+                <ion-grid>\
+                    <ion-row>\
+                        <ion-col>'+d.ticker+'</ion-col>\
+                        <ion-col>'+d.score.toFixed(2)+'%</ion-col>\
+                        <ion-col>'+d.acc.toFixed(2)+'%</ion-col>\
+                    </ion-row>\
+                </ion-grid>\
+            </ion-item>\
+            '
+                g("discoverList").innerHTML=g("discoverList").innerHTML+chtml;
+                
             }
             //basic package
             
         }else{
             //unlimited Scans
             // add scan button.
-            var items = data.stockList
+            var items = data.stockList;
+            items = items.slice(0,12)
             for (var i = items.length - 1; i >= 0; i--) {
                 d = items[i]
-                chtml = '<ion-item>\
-                    <div class="discoverGrid ">\
-                        <div ><a >'+d.ticker+'</a></div>\
-                        <div>'+d.signal+'</div>\
-                        <div>'+d.score+'</div>\
-                        <div style="font-weight: 500;color:darkblue">'+d.acc+'%</div>\
-                    </div>\
-                  </ion-item>'
+                chtml = chtml = '<ion-item>\
+                <ion-grid>\
+                    <ion-row>\
+                        <ion-col>'+d.ticker+'</ion-col>\
+                        <ion-col>'+d.score.toFixed(2)+'%</ion-col>\
+                        <ion-col>'+d.acc.toFixed(2)+'%</ion-col>\
+                    </ion-row>\
+                </ion-grid>\
+            </ion-item>\
+            '
                 g("discoverList").innerHTML=g("discoverList").innerHTML+chtml
             }
         }
     })
+    
+    
 }
 loadScan()
 
-oldValue = g("filters").value
+oldValue = g("filters").value;
 function filterChangeChecker(){
     if(g("filters").value !=oldValue){
         loadScan();
         oldValue = g("filters").value;
     }
 }
+setInterval(filterChangeChecker,1000)

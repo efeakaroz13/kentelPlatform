@@ -1,17 +1,19 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>Settings</h1>
+<br>
+<ion-title class="ion-margin">Settings</ion-title>
 <ion-alert
   header="Are you sure?"
   
   message="Do you really want to unsubscribe? If you have any issues with the app, you can always contact us."
 ></ion-alert>
-<ion-list>
+<center>
+<ion-list class="lister" style="text-align: left;">
   <ion-item>
     <ion-label>Upgrade Plan</ion-label>
   </ion-item>
   <ion-item>
-    <ion-label>Change Theme</ion-label>
+    <ion-button onclick="changeTheme()" color="success" fill="clear">Change Theme</ion-button>
   </ion-item>
   <ion-item >
     <ion-button full  color="danger" fill="clear" onclick="logout()" >
@@ -25,7 +27,7 @@
   </ion-item>
   
 </ion-list>
-
+</center>
 {% endblock %}
 {% block scripts %}
 <script src="/static/js/settings.js"></script>

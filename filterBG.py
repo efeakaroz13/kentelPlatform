@@ -8,23 +8,23 @@ import time
 mongo = pymongo.MongoClient()
 db = mongo["KentelPlatform"]
 filters= db["filters"]
-while True:
-    for f in filters.find({}):
 
-        recurring = f["recurring"]
+for f in filters.find({}):
 
-        if recurring == "1H" and time.time()-f["lastUpdate"]>1200:
+    recurring = f["recurring"]
 
-            fin = FinLister(f["url"])
-            fin.fetch()
-            stocks = fin.stocks 
-            filters.update_one({"_id":f["_id"]},{"$set":{"items":stocks,"lastUpdate":time.time()}})
-        if recurring == "once" and time.time()-f["lastUpdate"]>15552000:
-            fin = FinLister(f["url"])
-            fin.fetch()
-            stocks = fin.stocks 
-            filters.update_one({"_id":f["_id"]},{"$set":{"items":stocks,"lastUpdate":time.time()}})
-    time.sleep(50)
+    if recurring == "1H" and time.time()-f["lastUpdate"]>1200:
+
+        fin = FinLister(f["url"])
+        fin.fetch()
+        stocks = fin.stocks 
+        filters.update_one({"_id":f["_id"]},{"$set":{"items":stocks,"lastUpdate":time.time()}})
+    if recurring == "once" and time.time()-f["lastUpdate"]>15552000:
+        fin = FinLister(f["url"])
+        fin.fetch()
+        stocks = fin.stocks 
+        filters.update_one({"_id":f["_id"]},{"$set":{"items":stocks,"lastUpdate":time.time()}})
+
 
 
         
