@@ -1071,7 +1071,16 @@ class UXRoutes:
             return redirect("/")
         users.update_one({"_id":u["_id"]},{"$set":{"newbie":False}})
         return redirect("/")
-        
+    @app.route("/upgrade-plan")
+    def upgradePlan():
+        try:
+            email = request.cookies.get("e")
+            password =request.cookies.get("p")
+            u= users.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/")
+        sub = stripe.Subscription.list(customer=u["customer_id"])["data"][0]["id"]
+        return sub
 class Portfolio:
     @app.route("/api/add2port/<ticker>",methods=["GET"])
     def add2p(ticker):
