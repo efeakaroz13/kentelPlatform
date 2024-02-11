@@ -1268,5 +1268,17 @@ class Admin:
             data["_id"] = generate_id(20)
             filters.insert_one(data)
         return redirect("/godmin/filters")
+
+
+class Public:
+    @app.route("/about")
+    def about():
+        return render_template("about.html")
+    @app.route("/faq")
+    def faq():
+        return render_template("faq.html")
+    @app.route("/favicon.ico")
+    def faviconIco():
+        return send_file("static/images/favicon.ico",as_attachment=False)
 if __name__ == "__main__":
     app.run(debug=True,port=3000)
