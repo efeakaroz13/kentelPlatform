@@ -27,6 +27,7 @@
       gtag('config', 'G-YXFPT2TM2X');
     </script>
     <meta name="description" content="Unleash the potential of stock market with Kentel's cutting edge AI.">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
 
   <body>
@@ -60,6 +61,7 @@
           	<input name="fullName" placeholder="Full Name" class="form-control" required> <br>
           	<input name="email" placeholder="E-Mail" class="form-control" required> <br>
           	<input name="password" minlength="8" placeholder="Password" type="password" class="form-control" required> <br>
+            <div class="g-recaptcha" data-sitekey="6LczjW8pAAAAAI7QmmC-fmayrL-Nwz1BShHW0ki6"></div><br>
             <p style="font-size:12px;">By singing up, you agree to our <a href="/kentel-eula" target="_blank">End User License Agreement(EULA).</a></p>
           	<button href="" class="btn btn-regular">Sign Up</button>
           </form>
@@ -127,7 +129,7 @@
     {% if err %}
     <script>
         alert("{{err}}");
-        window.location.assign("/")
+        window.location.assign("/signup")
 
     </script>
     {% endif %}  </body>

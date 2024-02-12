@@ -140,6 +140,12 @@ class Auth:
             planVisual = "Standard"
 
         if request.method == "POST":
+            gcaptcha = request.form.get("g-recaptcha-response")
+            if gcaptcha == None or gcaptcha == "":
+                return redirect("/signup?err=Solve+the+captcha")
+            page = json.loads(requests.post("https://www.google.com/recaptcha/api/siteverify",data={"secret":"6LczjW8pAAAAAPQEem6J97xQ_wnAzqmCvO6g5uu2","response":gcaptcha}).content)["success"]
+            if page != True:
+                return redirect("/signup?err=Solve+the+captcha")
             email = request.form.get("email")
             if '@' not in email or '.' not in email:
                 return redirect("/signup?err=Email+not+valid")
