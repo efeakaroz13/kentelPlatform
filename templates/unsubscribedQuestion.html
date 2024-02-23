@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+
+    <!-- Ionic icons -->
+    <link href="https://unpkg.com/ionicons@4.2.0/dist/css/ionicons.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+
+    <title>Kentel - It's nice to see you back!</title>
+    <meta name="description" content="Answer to some of your questions">
+    <meta name="keywords" content="Kentel, AI, stock predictions, finance technology, stock market, artificial intelligence">
+
+   
+  </head>
+
+  <body> 
+    
+  <!-- N A V B A R -->
+  <nav class="navbar navbar-default navbar-expand-lg fixed-top custom-navbar">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="icon ion-md-menu"></span>
+    </button>
+    <img src="/static/images/logo.png" class="img-fluid nav-logo-mobile" alt="Company Logo">
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <div class="container">
+      	<img src="/static/images/logo.png" class="img-fluid nav-logo-desktop" alt="Company Logo">
+        <ul class="navbar-nav ml-auto nav-right" data-easing="easeInOutExpo" data-speed="1250" data-offset="65">
+          <li class="nav-item nav-custom-link">
+            <a class="nav-link" href="/">Home <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+          <li class="nav-item nav-custom-link">
+            <a class="nav-link" href="/#marketing">Features <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+          
+          <li class="nav-item nav-custom-link">
+            <a class="nav-link" href="#pricing">Pricing <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+          <li class="nav-item nav-custom-link">
+            <a class="nav-link" href="/login">Sign In <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+          <li class="nav-item nav-custom-link btn btn-demo-small">
+            <a class="nav-link" href="/#pricing">Try for Free <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- E N D  N A V B A R -->
+  
+  <!-- H E R O -->
+  <section class="container">
+    <h1>It's nice to see you're back!</h1>
+    <p>Hello, welcome back to our platform! Before you continue we need you to send our customer service an email if you want to resubscribe.</p><br>
+    <center>
+        <button class="btn btn-dark" onclick="window.location.assign('mailto:efeakaroz@kentel.dev')">Contact Customer Support</button>
+    </center><br><br><br><br>
+  </section>
+  <!--  F O O T E R  -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        
+        <div class="col-md-3">
+          <h5>Kentel</h5>
+          <p>Contact us from this email for B2B products and in case of any questions.</p>
+          <p><a href="mailto:sales@kentel.dev" class="external-links">sales@kentel.dev</a></p>
+          <p><a href="https://wa.me/447418355491" class="external-links">Whatsapp Business</a></p>
+        </div>
+      </div> 
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col-md-6 col-xs-12" style="display:none">
+            <a href="#"><i class="icon ion-logo-facebook"></i></a>
+            <a href="#"><i class="icon ion-logo-instagram"></i></a>
+            <a href="#"><i class="icon ion-logo-twitter"></i></a>
+            <a href="#"><i class="icon ion-logo-youtube"></i></a>
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <small>2024 &copy; All rights reserved. Kentel LTD
+          </div>
+      </div>
+    </div>
+  </footer>
+  
+</div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script>
+    function setCookie(name,value,days) {
+      var expires = "";
+      if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + (days*24*60*60*1000));
+          expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+  }
+  function getCookie(name) {
+      var nameEQ = name + "=";
+      var ca = document.cookie.split(';');
+      for(var i=0;i < ca.length;i++) {
+          var c = ca[i];
+          while (c.charAt(0)==' ') c = c.substring(1,c.length);
+          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+      }
+      return null;
+  }
+
+  function eraseCookie(name) {   
+      document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  }
+
+  function cookieConsent() {
+      if (!getCookie('allowCookies')) {
+        gc("toast").style.display = ""
+      }
+  }
+
+ 
+
+  // load
+  cookieConsent()
+
+
+  
+  function g(id){
+    return document.getElementById(id)
+
+  }
+  function gc(classN){ 
+    return document.getElementsByClassName(classN)[0]
+
+  }
+  g("btnAccept").addEventListener("click",function(){
+    setCookie('allowCookies','1',7)
+    gc("toast").style.display = "none";
+  })
+  g("btnDeny").addEventListener("click",function(){
+    eraseCookie('allowCookies')
+    gc("toast").style.display = "none";
+  })
+
+
+
+
+  </script>
+  <style>
+    img{
+        border-radius: 10px;
+    }
+  </style>
+  <!--  E N D  F O O T E R  -->
+    <script src="/static/js/logo.js"></script>
+
+    <!-- External JavaScripts -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    {% if msg %}
+    <script>
+        alert("{{msg}}");
+        window.history.pushState({}, document.title, "/" );
+
+    </script>
+    {% endif %}
+    <script src="/static/js/mainCode.js"></script>
+  </body>
+</html>

@@ -22,6 +22,10 @@ import yfinance as yf
 import trader
 from filters import FinLister
 
+## TODO
+## Make least amount of database calls with redis
+
+
 app = Flask(__name__)
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -36,6 +40,7 @@ portfolios = db["Portfolios"]
 forms = db["forms"]
 admin = db["admin"]
 filters=  db["filters"]
+blog = db["blog"]
 mode = "test"
 base = "https://kentel.dev"
 red = redis.Redis()
@@ -50,8 +55,20 @@ def index():
     password = request.cookies.get("p")
     try:
 
+
+        try:
+            u = json.loads(red.get(email))
+            if u["password"] == password:
+                pass
+            else:
+                return redirect("/login?err=Check your credentials")
+        except:
+
+            u = users.find({"email":email,"password":password})[0]
+            red.set(u["_id"],json.dumps(u))
+            red.set(u["email"],json.dumps(u))
         
-        u = users.find({"email":email,"password":password})[0]
+
 
         if u["plan"] == "basicM":
             """
@@ -149,6 +166,11 @@ class Auth:
             email = request.form.get("email")
             if '@' not in email or '.' not in email:
                 return redirect("/signup?err=Email+not+valid")
+            try:
+                forms.find({"reason":"unsubscribe","email":email})[0]
+                return render_template("unsubscribedQuestion.html")
+            except:
+                pass
 
             try:
                 u_e = users.find({"email":email})[0]
@@ -197,6 +219,8 @@ class Auth:
             response.set_cookie("p",password,expires=expire_date,secure=False,samesite="Lax")
             
             users.insert_one(data)
+            red.set(data["email"],json.dumps(data))
+            red.set(data["_id"],json.dumps(data))
             return response
         else:
             err = request.args.get("err")
@@ -217,7 +241,17 @@ class Auth:
             password = p.hexdigest()
 
             try:
-                u = users.find({"email":email,"password":password})[0]
+                try:
+                    u = json.loads(red.get(email))
+                    if u["password"] == password:
+                        pass
+                    else:
+                        return redirect("/login?err=Check your credentials")
+                except:
+
+                    u = users.find({"email":email,"password":password})[0]
+                    red.set(u["_id"],json.dumps(u))
+                    red.set(u["email"],json.dumps(u))
             except:
                 return redirect("/login?err=Check credentials")
             response = make_response(redirect("/"))
@@ -266,12 +300,17 @@ class Auth:
                 u=users.find({"email":email})[0]
             except:
                 return render_template("forgot_password.html",mode="code",err="There is no such user with the email given.")
+            
+
+            u["password"] = password
+            red.set(u["email"],json.dumps(u))
+            red.set(u["_id"],json.dumps(u))
             users.update_one({"_id":u["_id"]},{"$set":{"password":password}})
             return render_template("success.html",red="/login",msg="Your password has reset successfully")
             
         if request.method == "GET":
             email = request.cookies.get("e")
-            if e == None:
+            if email == None:
                 return redirect("/forgot_password")
             code= generate_id(6)
             Mailer.code(code,email)
@@ -290,7 +329,17 @@ class Auth:
             email = request.cookies.get("e")
             password = request.cookies.get("p")
             try:
-                u = users.find({"email":email,"password":password})[0]
+                try:
+                    u = json.loads(red.get(email))
+                    if u["password"] == password:
+                        pass
+                    else:
+                        return redirect("/login")
+                except:
+
+                    u = users.find({"email":email,"password":password})[0]
+                    red.set(u["_id"],json.dumps(u))
+                    red.set(u["email"],json.dumps(u))
             except:
                 return redirect("/login")
 
@@ -304,6 +353,8 @@ class Auth:
                 u["emailVerified"] = True
 
                 users.update_one({"_id":u["_id"]},{"$set":u})
+                red.set(u["email"],json.dumps(u))
+                red.set(u["_id"],json.dumps(u))
                 return redirect("/")
             else:
                 return render_template("verify.html",msg="Wrong Code.")
@@ -331,11 +382,24 @@ class Auth:
         email = request.cookies.get("e")
         password = request.cookies.get("p")
         try:
-            u = users.find({"email":email,"password":password})[0]
+            try:
+                u = json.loads(red.get(email))
+                if u["password"] == password:
+                    pass
+                else:
+                    return redirect("/login")
+            except:
+
+                u = users.find({"email":email,"password":password})[0]
+                red.set(u["_id"],json.dumps(u))
+                red.set(u["email"],json.dumps(u))
         except:
             return redirect("/login")
         if u["newbie"]:
             users.update_one({"_id":u["_id"]},{"$set":{"newbie":False}})
+            u["newbie"] = False
+            red.set(u["email"],json.dumps(u))
+            red.set(u["_id"],json.dumps(u))
         return redirect("/")
     
             
@@ -357,7 +421,17 @@ class IssuesDifferentPackages:
         try:
             email= request.cookies.get("e")
             password = request.cookies.get("p")
-            u = users.find({"email":email,"password":password})[0]
+            try:
+                u = json.loads(red.get(email))
+                if u["password"] == password:
+                    pass
+                else:
+                    return redirect("/login?err=Check your credentials")
+            except:
+
+                u = users.find({"email":email,"password":password})[0]
+                red.set(u["_id"],json.dumps(u))
+                red.set(u["email"],json.dumps(u))
         except:
             return redirect("/login")
         if u["plan"] == "standardM":
@@ -959,10 +1033,21 @@ class UXRoutes:
     @app.route("/stock/<ticker>")
     def stockView(ticker):
 
+        
+        email = request.cookies.get("e")
+        password = request.cookies.get("p")
         try:
-            email = request.cookies.get("e")
-            password = request.cookies.get("p")
-            u= users.find({"email":email,"password":password})[0]
+            try:
+                u = json.loads(red.get(email))
+                if u["password"] == password:
+                    pass
+                else:
+                    return redirect("/login?err=Check your credentials")
+            except:
+
+                u = users.find({"email":email,"password":password})[0]
+                red.set(u["_id"],json.dumps(u))
+                red.set(u["email"],json.dumps(u))
         except:
             return redirect("/login") 
 
@@ -1029,7 +1114,17 @@ class UXRoutes:
         try:
             email = request.cookies.get("e")
             password = request.cookies.get("p")
-            u = users.find({"email":email,"password":password})[0]
+            try:
+                u = json.loads(red.get(email))
+                if u["password"] == password:
+                    pass
+                else:
+                    return redirect("/login?err=Check your credentials")
+            except:
+
+                u = users.find({"email":email,"password":password})[0]
+                red.set(u["_id"],json.dumps(u))
+                red.set(u["email"],json.dumps(u))
         except:
             return redirect("/")
 
@@ -1058,7 +1153,8 @@ class UXRoutes:
                 "type":"unsubscribe",
                 "reason":reason,
                 "explanation":explain,
-                "usr":u
+                "usr":u,
+                "email":u["email"]
             }
             forms.insert_one(data)
             stripe.Subscription.cancel(stripe.Subscription.list(customer=u["customer_id"])["data"][0]["id"])
@@ -1072,21 +1168,48 @@ class UXRoutes:
         try:
             email = request.cookies.get("e")
             password =request.cookies.get("p")
-            u = users.find({"email":email,"password":password})[0]
+            try:
+                u = json.loads(red.get(email))
+                if u["password"] == password:
+                    pass
+                else:
+                    return redirect("/login")
+            except:
+
+                u = users.find({"email":email,"password":password})[0]
+                red.set(u["_id"],json.dumps(u))
+                red.set(u["email"],json.dumps(u))
         except:
             return redirect("/")
         users.update_one({"_id":u["_id"]},{"$set":{"newbie":False}})
+        u["newbie"] = False
+        red.set(u["_id"],json.dumps(u))
+        red.set(u["email"],json.dumps(u))
+
         return redirect("/")
     @app.route("/upgrade-plan")
     def upgradePlan():
+
         try:
             email = request.cookies.get("e")
             password =request.cookies.get("p")
             u= users.find({"email":email,"password":password})[0]
         except:
             return redirect("/")
-        sub = stripe.Subscription.list(customer=u["customer_id"])["data"][0]["id"]
-        return sub
+        if u["plan"] == "standardM":
+            return redirect("/")
+        if u["plan"] == "basicM":
+            price_id = 'price_1OSLwuEz0P2Wm1hTxf5UXsGK' # for standard.
+            sub = stripe.Subscription.list(customer=u["customer_id"])["data"][0]["id"]
+            mod = stripe.Subscription.modify(
+                sub,
+                items=[{"id": sub, "price": price_id}],
+            )
+            u["plan"]= "standardM"
+            red.set(u["email"],json.dumps(u))
+            red.set(u["_id"],json.dumps(u))
+            users.update_one({"_id":u["_id"]},{"$set":{"plan":"standardM"}})
+            return mod
 class Portfolio:
     @app.route("/api/add2port/<ticker>",methods=["GET"])
     def add2p(ticker):
@@ -1274,8 +1397,120 @@ class Admin:
             data["_id"] = generate_id(20)
             filters.insert_one(data)
         return redirect("/godmin/filters")
+    
 
 
+    @app.route("/godmin/blog",methods=["POST","GET"])
+    def godminBlog():
+        try:
+            email =request.cookies.get("email")
+            password = request.cookies.get("password")
+            ad = admin.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/godmin")
+        
+        if request.method == "POST":
+            content = request.form.get("content")# content in html form
+            title = request.form.get("title")
+            author = request.form.get("author")
+            page_URL = request.form.get("url")
+            mainImage = request.form.get("mainImage") # as URL
+            description = request.form.get("description")
+            category = request.form.get("category")
+            filename = generate_id(30)+".html"
+            if author == None or author == "":
+                author = "Efe Akaröz"
+            
+            if content == None or len(content)<30 or title==None or mainImage==None:
+                return redirect("/godmin/blog")
+
+            if page_URL == None:
+                page_URL = generate_id(13)
+            try:
+                blog.find({"_id":page_URL})[0]
+                page_URL = generate_id(15)
+            except:
+                pass
+            html = """
+{% extends "blogs/base.html" %}
+{% block body %}
+"""+content+"""
+{% endblock %}
+            """
+            open("templates/blogs/{}".format(filename),"w").write(html)
+            data= {
+                "time":time.time(),
+                "author":author,
+                "title":title,
+                "content":content,
+                "_id":page_URL,
+                "mainImage":mainImage,
+                "visible":True,
+                "createdBy":ad["_id"],
+                "fileName":filename,
+                "category":category,
+                "description":description
+
+            }
+            blog.insert_one(data)
+
+            return data
+        return render_template("godmin/blog.html")
+    
+class Blog:
+    @app.route("/tutorials")
+    def tutorialCenter():
+        return "Tutorials"
+    @app.route("/tutorials/<url>")
+    def tutorialView(url):
+        try:
+            tutorial = blog.find({"_id":url,"category":"tutorial"})[0]
+            filename = tutorial["fileName"]
+            return render_template(f"blogs/{filename}")
+        except:
+            return abort(404)
+    @app.route("/blog")
+    def blogKentel():
+        return render_template("blogView.html")
+    
+    @app.route("/api/blog/search")
+    def blogSearchApi():
+        q = request.args.get("q")
+        if q == None:
+            return abort(403)
+        if len(q)<3:
+            return {"err":"too short"},403
+        q = q.lower().strip()
+        
+        allArticles = []
+        for a in blog.find({"visible":True}):
+            title = a["title"]
+            content = a["content"]
+            searchScore = 0
+            if q in title.lower():
+                searchScore +=1
+            if q in content.lower():
+                searchScore +=0.5
+            a["score"] = searchScore
+            print(searchScore)
+            if searchScore>0:
+                allArticles.append(a)
+        allArticles.sort(key= lambda x:x["score"],reverse=True)
+        allArticles = allArticles[:20]
+        return {"out":allArticles}
+
+    @app.route("/blog/<url>")
+    def blogRender(url):
+        try:
+            b = blog.find({"_id":url,"category":"blog","visible":True})[0]
+            url = "https://kentel.dev/blog/"+url
+            title = b["title"]
+            description=b["description"]
+            return render_template("blogs/"+b["fileName"],data=b,title=title,url=url,description=description)
+        except Exception as e:
+            print(e)
+            return str(e)
+        return str(url)
 class Public:
     @app.route("/about")
     def about():

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXFPT2TM2X"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-YXFPT2TM2X');
+    </script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+
+    <!-- Ionic icons -->
+    <link href="https://unpkg.com/ionicons@4.2.0/dist/css/ionicons.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+    
+    <title>Kentel Articles - Find about latest news and articles</title>
+    <meta property="og:title" content="Kentel Articles" />
+    <meta property="og:description" content="Find latest articles about trading and stock market!" />
+    <meta property="og:image" content="//kentel.dev/static/images/kentel_300x200.png" />
+    <meta property="og:url" content="https://kentel.dev/blogs" />
+    <meta property="og:type" content="article" />
+
+    <meta name="description" content="Find out about recent articles and blog posts on Kentel">
+    <meta name="keywords" content="Kentel, AI, stock predictions, finance technology, stock market, artificial intelligence,kentel blog, kentel blog search">
+
+    
+  </head>
+
+  <body> 
+    
+  <!-- N A V B A R -->
+  <nav class="navbar navbar-default navbar-expand-lg fixed-top custom-navbar">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="icon ion-md-menu"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <div class="container">
+        {% if category=="tutorial" %}
+        <img src="/static/images/tutorials.png" class="img-fluid nav-logo-desktop" alt="Kentel Tutorials">
+        {% else %}
+        <img src="/static/images/articles.png" class="img-fluid nav-logo-desktop" alt="Kentel Articles">
+        {% endif %}
+        <ul class="navbar-nav ml-auto nav-right" data-easing="easeInOutExpo" data-speed="1250" data-offset="65">
+          <li class="nav-item nav-custom-link">
+            <a class="nav-link" href="/">Home <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+          <li class="nav-item nav-custom-link">
+            <a class="nav-link" href="/#marketing">Features <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+          
+          <li class="nav-item nav-custom-link">
+            <a class="nav-link" href="/#pricing">Pricing <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+          <li class="nav-item nav-custom-link">
+            <a class="nav-link" href="/login">Sign In <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+          <li class="nav-item nav-custom-link btn btn-demo-small">
+            <a class="nav-link" href="/#pricing">Try for Free <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- E N D  N A V B A R -->
+  
+  <!-- H E R O --> <br><br><br>
+  <div class="content"><br>
+    <center>
+        <div style="margin-top:10%; width: 600px;text-align: center;" class="card">
+            <h5 class="card-title">Search on Kentel</h5>
+            <div  class="grid2" style="text-align: center;">
+                <input type="text"  id="search" style="width: 100%;" placeholder="Search" class="form-control">
+                <button onclick="search()" class="btn btn-dark" style="margin-left:10px;width: 50px;"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+        <div style="margin-top:10px; width: 600px;text-align: center;"  id="results">
+
+        </div>
+    </center>
+
+
+
+  </div>
+  <!--  F O O T E R  -->
+
+  <footer >
+    <div class="container">
+      <div class="row">
+        
+        <div class="col-md-6">
+          <h5>Kentel</h5>
+          <p>Contact us from this email for B2B products and in case of any questions.</p>
+          <p><a href="mailto:sales@kentel.dev" class="external-links">sales@kentel.dev</a></p>
+          <p><a href="https://wa.me/447418355491" class="external-links">Whatsapp Business</a></p>
+        </div>
+        <div class="col-md-6">
+          <h5>More links</h5>
+          <p><a href="/about">About Us</a></p>
+          <p><a href="/faq">Frequently Asked Questions</a></p>
+        </div>
+      </div> 
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col-md-6 col-xs-12" style="display:none">
+            <a href="#"><i class="icon ion-logo-facebook"></i></a>
+            <a href="#"><i class="icon ion-logo-instagram"></i></a>
+            <a href="#"><i class="icon ion-logo-twitter"></i></a>
+            <a href="#"><i class="icon ion-logo-youtube"></i></a>
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <small>2024 &copy; All rights reserved. Kentel LTD
+          </div>
+      </div>
+    </div>
+  </footer>
+  
+</div>
+  
+  <style>
+    img{
+        border-radius: 10px;
+    }
+  </style>
+  
+  <!--  E N D  F O O T E R  -->
+    <script src="/static/js/logo.js"></script>
+
+    <!-- External JavaScripts -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+    <script>
+        function search(){
+            term=  document.getElementById("search").value;
+            $.getJSON("/api/blog/search?q="+term,function(data){
+                var out = data.out;
+                document.getElementById("results").innerHTML = ""
+                for (let index = 0; index < out.length; index++) {
+                    const element = out[index];
+                    html = '<a class="result" href="https://kentel.dev/'+element.category+'/'+element._id+'"><h3 >'+element.title+'</h3></a><p class="resultText">'+element.description+'<br>Author:'+element.author+'</p><br>'
+                    document.getElementById("results").innerHTML = document.getElementById("results").innerHTML+html
+                    
+                }
+            })
+        }
+    </script>
+  </body>
+</html>
