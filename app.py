@@ -21,6 +21,34 @@ import requests
 import yfinance as yf
 import trader
 from filters import FinLister
+from sshtunnel import SSHTunnelForwarder
+import pymongo
+import pprint
+import socket
+
+hostname = socket.gethostname()
+ip_address = socket.gethostbyname(hostname)
+issues = None 
+filters = None
+if ip_address !="160.20.108.219":
+    MONGO_HOST = "160.20.108.219" #For stock market scanning issues
+    MONGO_DB = "KentelPlatform"
+    MONGO_USER = "efeakaroz13"
+    MONGO_PASS = "greenanarchist"
+
+    server = SSHTunnelForwarder(
+        MONGO_HOST,
+        ssh_username=MONGO_USER,
+        ssh_password=MONGO_PASS,
+        remote_bind_address=('127.0.0.1', 27016)
+    )
+
+    server.start()
+
+    client = pymongo.MongoClient('127.0.0.1', server.local_bind_port) # server.local_bind_port is assigned local port
+    dbS = client[MONGO_DB]
+    issues = dbS["Issues"]
+    filters = dbS["Filters"]
 
 ## TODO
 ## Make least amount of database calls with redis
@@ -32,10 +60,20 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 mongo = pymongo.MongoClient()
 db = mongo["KentelPlatform"]
+
+if issues:
+    pass
+else:
+    issues = db["Issues"]
+if filters:
+    pass
+else:
+    filters = db["Filters"]
+
 users = db["Users"]
-issues = db["Issues"]
+
 logs = db["logs"]
-filters = db["Filters"]
+
 portfolios = db["Portfolios"]
 forms = db["forms"]
 admin = db["admin"]
