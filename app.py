@@ -623,8 +623,8 @@ class Tutorials:
     @app.route("/tutorials")
     def tutorials():
         try:
-            email = request.cookies.get("email")
-            password = request.cookies.get("password")
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
             try:
                 u = json.loads(red.get(email))
                 if u["password"] == password:
@@ -638,7 +638,7 @@ class Tutorials:
 
         except:
             return redirect("/")
-        return render_template("tutorials.html")
+        return render_template("tutorials.html",active="tutorials",title="Tutorial Center - ")
 class APIs:
     @app.route("/api/login",methods=["POST"])
     def apiLogin():
