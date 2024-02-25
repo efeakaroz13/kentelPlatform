@@ -11,11 +11,11 @@ import os
 from multiprocessing import Process
 import time
 import redis
-from pymongo import MongoClient
+import pymongo
 from app import generate_id
 
 red = redis.Redis()
-mongo = MongoClient()
+mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@160.20.108.219/")
 db = mongo["KentelPlatform"]
 issues = db["Issues"]
 

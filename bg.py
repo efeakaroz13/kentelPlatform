@@ -9,7 +9,7 @@ from datetime import datetime
 from app import base
 import trader
 
-mongo = pymongo.MongoClient()
+mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@160.20.108.219/")
 db = mongo["KentelPlatform"]
 users = db["Users"]
 alarms = db["alarms"]
