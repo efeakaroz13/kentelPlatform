@@ -26,27 +26,18 @@ import pymongo
 import pprint
 import socket
 
+
 hostname = socket.gethostname()
 ip_address = socket.gethostbyname(hostname)
 issues = None 
 filters = None
+
 if ip_address !="160.20.108.219":
-    MONGO_HOST = "160.20.108.219" #For stock market scanning issues
-    MONGO_DB = "KentelPlatform"
-    MONGO_USER = "efeakaroz13"
-    MONGO_PASS = "greenanarchist"
+       
 
-    server = SSHTunnelForwarder(
-        MONGO_HOST,
-        ssh_username=MONGO_USER,
-        ssh_password=MONGO_PASS,
-        remote_bind_address=('127.0.0.1', 27016)
-    )
-
-    server.start()
-
-    client = pymongo.MongoClient('127.0.0.1', server.local_bind_port) # server.local_bind_port is assigned local port
-    dbS = client[MONGO_DB]
+    client = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@160.20.108.219/") # server.local_bind_port is assigned local port
+    
+    dbS = client["KentelPlatform"]
     issues = dbS["Issues"]
     filters = dbS["Filters"]
 
@@ -61,11 +52,11 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 mongo = pymongo.MongoClient()
 db = mongo["KentelPlatform"]
 
-if issues:
+if issues !=None:
     pass
 else:
     issues = db["Issues"]
-if filters:
+if filters != None:
     pass
 else:
     filters = db["Filters"]
@@ -81,6 +72,8 @@ filters=  db["filters"]
 blog = db["blog"]
 mode = "test"
 base = "https://kentel.dev"
+affiliates = db["affiliates"]
+gifts = db["gifts"]
 red = redis.Redis()
 
 plans = ["standardM","basicM"]
@@ -96,6 +89,7 @@ def index():
 
         try:
             u = json.loads(red.get(email))
+
             if u["password"] == password:
                 pass
             else:
@@ -128,54 +122,95 @@ def index():
                                                     issueToReturn = None """
 
         if u["emailVerified"]:
-            if len(stripe.Subscription.list(customer=u["customer_id"])["data"]) == 0:
-                return redirect("/checkout")
+            if u["giftCode"]:
+                #do this for gifted:
+                msg = request.args.get("msg")
+                filtersList = filters.find({})
+                return render_template("home.html",data=u,msg=msg,active="home",title="",filters=filtersList)
             else:
-                if  stripe.Subscription.list(customer=u["customer_id"])["data"][0]["plan"]["active"]:
-                    msg = request.args.get("msg")
-                    filtersList = filters.find({})
-                    return render_template("home.html",data=u,msg=msg,active="home",title="",filters=filtersList)
+                cusid = u["customer_id"]
+                try:
+                    req = json.loads(red.get(cusid))
+                except:
+                    req = stripe.Subscription.list(customer=u["customer_id"])["data"]
+                    red.set(cusid,json.dumps(req),ex=86400)
+                if len(req) == 0:
+                    return redirect("/checkout")
                 else:
-                    return redirect("/not_paid")
+                    if  req[0]["plan"]["active"]:
+                        msg = request.args.get("msg")
+                        filtersList = filters.find({})
+                        return render_template("home.html",data=u,msg=msg,active="home",title="",filters=filtersList)
+                    else:
+                        return redirect("/not_paid")
         else:
             return redirect("/verify/email")
     except Exception as e:
         print(e)
         
     
-    agent =uaparse(str(request.headers.get("User-Agent")))
-    device = agent.device.family
-    osinfo = agent.os.family
+    # agent =uaparse(str(request.headers.get("User-Agent")))
+    # device = agent.device.family
+    # osinfo = agent.os.family
 
-    referer = request.headers.get("Referer")
-    try:
-        acceptLang = request.headers.get("Accept-Language")
-        acceptLang.split(";")[0].split(",")[0]
-    except:
-        acceptLang = None
-    data = {
+    # referer = request.headers.get("Referer")
+    # try:
+    #     acceptLang = request.headers.get("Accept-Language")
+    #     acceptLang.split(";")[0].split(",")[0]
+    # except:
+    #     acceptLang = None
+    # data = {
 
-        "device":str(device),
-        "os":str(osinfo),
-        "time":time.time(),
-        "ipaddr":request.environ.get('HTTP_X_REAL_IP', request.remote_addr),
-        "host":request.headers.get("Host"),
-        "_id":generate_id(50),
-        "referer":referer,
-        "language":acceptLang
-    }
-    try:
-        l = logs.find({"ipaddr":request.environ.get('HTTP_X_REAL_IP', request.remote_addr)})[0]
-        if l["time"]<time.time()-345600:
-            pass 
-        else:
-            return render_template("index.html")
-    except:
-        pass 
-    if agent.is_bot == False:
-        logs.insert_one(data)
+    #     "device":str(device),
+    #     "os":str(osinfo),
+    #     "time":time.time(),
+    #     "ipaddr":request.environ.get('HTTP_X_REAL_IP', request.remote_addr),
+    #     "host":request.headers.get("Host"),
+    #     "_id":generate_id(50),
+    #     "referer":referer,
+    #     "language":acceptLang
+    # }
+    # try:
+    #     l = logs.find({"ipaddr":request.environ.get('HTTP_X_REAL_IP', request.remote_addr)})[0]
+    #     if l["time"]<time.time()-345600:
+    #         pass 
+    #     else:
+    #         return render_template("index.html")
+    # except:
+    #     pass 
+    # if agent.is_bot == False:
+    #     logs.insert_one(data)
     
     return render_template("index.html")
+
+
+## for affiliates and following who is what
+@app.route("/<url>")
+def affiliateIndex(url):
+    try:
+        af = json.loads(red.get(f"affiliate_{url}"))
+    except:
+        try:
+            af = affiliates.find({"_id":url})[0]
+            red.set("affiliate_{}".format(url),json.dumps(af))
+        except:
+            return abort(404)
+    response = make_response(redirect("/"))
+
+    expire_date = datetime.datetime.now()
+    expire_date = expire_date + datetime.timedelta(days=90)
+
+    response.set_cookie("af",url,expires=expire_date)
+    return response
+@app.route("/gift/<giftCode>")
+def giftCodeCookieClaim(giftCode):
+    try:
+        g = gifts.find({"code":giftCode})[0]
+    except:
+        return abort(404)
+    response = make_response(redirect("/"))
+    response.set_cookie("gift",giftCode)
+    return response
 
 
 class Auth:
@@ -229,6 +264,22 @@ class Auth:
               name=fullName,
               email=email
             )
+            af= request.cookies.get("af") # affiliate, if there are
+            if af:
+                if len(af)>20:
+                    af=None
+            gift = request.cookies.get("gift")
+            if gift == None:
+                pass
+            else:
+                try:
+                    g = gifts.find({"code":gift})[0]
+                    if g["numPeople"]==0:
+                        gift= None
+                    else:
+                        gifts.update_one({"code":gift},{"$set":{"numPeople":g["numPeople"]-1}})
+                except:
+                    gift = None
             
             #giftCode = request.forrm.get("giftCode")
             data = {
@@ -240,13 +291,14 @@ class Auth:
                 "openedIssues":[],
                 "stripeScc":False,
                 "plan":plan,
-                "giftCode":None,
                 "emailVerified":False,
                 "newbie":True,
                 "beta":False,
                 "time":time.time(),
                 "_id":generate_id(20),
-                "customer_id":cus["id"]
+                "customer_id":cus["id"],
+                "af":af,
+                "giftCode":gift
             }
 
             expire_date = datetime.datetime.now()
@@ -475,7 +527,15 @@ class IssuesDifferentPackages:
         if u["plan"] == "standardM":
             filter_selected = request.args.get("filter")
             if filter_selected == None or filter_selected == "" or filter_selected == "undefinded" or filter_selected == "null" or filter_selected=="defno" or filter_selected=="def":
-            
+                try:
+                    d = json.loads(red.get("NASDAQ"))
+                    try:
+                        del d["allF"]
+                    except:
+                        pass
+                    return d
+                except:
+                    pass
                 try:
                     i = issues.find({"exchange":"NASDAQ"})
                     allIssuesArray = []
@@ -494,11 +554,15 @@ class IssuesDifferentPackages:
                     s_f = filters.find({"_id":filter_selected})[0]
                     items = s_f["items"]
                     try:
-                        i = issues.find({"exchange":"NASDAQ"})
-                        allIssuesArray = []
-                        for _ in i:
-                            allIssuesArray.append(_)
-                        sissue = allIssuesArray[-1]
+                        try:
+                            sissue = json.loads(red.get("NASDAQ"))
+                        except:
+                            pass
+                            i = issues.find({"exchange":"NASDAQ"})
+                            allIssuesArray = []
+                            for _ in i:
+                                allIssuesArray.append(_)
+                            sissue = allIssuesArray[-1]
                         seli = sissue["allF"] # selected issue for filtering
 
                         #return i
@@ -535,7 +599,11 @@ class IssuesDifferentPackages:
                         print("['/get/last/issue']",e,flush=True)
                         return {"stockList":[]}
         elif u["plan"] == "basicM":
-
+            try:
+                d = json.loads(red.get("SERVER2_DAILY_NASDAQ"))
+                return d
+            except:
+                pass
             try:
 
                 issueToReturn = issues.find({"exchange": "SERVER2_DAILY_NASDAQ"})
@@ -550,6 +618,27 @@ class IssuesDifferentPackages:
         else:
             return {"stockList":[]}
 
+
+class Tutorials:
+    @app.route("/tutorials")
+    def tutorials():
+        try:
+            email = request.cookies.get("email")
+            password = request.cookies.get("password")
+            try:
+                u = json.loads(red.get(email))
+                if u["password"] == password:
+                    pass
+                else:
+                    return redirect("/login")
+            except:
+                u = users.find({"email":email,"password":password})[0]
+                red.set(u["email"],json.dumps(u))
+                red.set(u["_id"],json.dumps(u))
+
+        except:
+            return redirect("/")
+        return render_template("tutorials.html")
 class APIs:
     @app.route("/api/login",methods=["POST"])
     def apiLogin():
@@ -752,6 +841,8 @@ class StripeRoutes:
             email = request.cookies.get("e")
             password = request.cookies.get("p")
             u = users.find({"email":email,"password":password})[0]
+            if u["giftCode"] != None:
+                return redirect("/")
             plan = u["plan"]
 
         except:
@@ -1037,7 +1128,17 @@ class UXRoutes:
         try:
             email = request.cookies.get("e")
             password = request.cookies.get("p")
-            u= users.find({"email":email,"password":password})[0]
+            try:
+                u = json.loads(red.get(email))
+                if u["password"] == password:
+                    pass
+                else:
+                    return redirect("/login")
+            except:
+                u= users.find({"email":email,"password":password})[0]
+                red.set(u["email"],json.dumps(u))
+                red.set(e["_id"],json.dumps(u))
+
         except:
             return redirect("/login") 
         try:
@@ -1048,24 +1149,25 @@ class UXRoutes:
                 "portfolioNotifications":False
             }
         if request.method == "POST":
+            notfList = ["enabled","disabled"]
+            notf = request.form.get("notf")
+            if notf == "" or notf == None:
+                return redirect("/notifications")
+            if notf in notfList:
+                pass
+            else:
+                return redirect("/")
+            if notf  == "enabled":
+                notf=True
+            if notf == "disabled":
+                notf = False 
+            
+            users.update_one({"_id":u["_id"]},{"$set":{"dailyInsight":notf}})
+            u["dailyInsight"] = notf 
+            red.set(u["email"],json.dumps(u))
+            red.set(u["_id"],json.dumps(u))
 
-            dailyInsight = request.form.get("dailyInsight")
-            portfolioNotifications = request.form.get("portfolioNot")
-
-            if dailyInsight == "on":
-                dailyInsight = True
-            if dailyInsight == "off":
-                dailyInsight = False 
-            if portfolioNotifications == "off":
-                portfolioNotifications = False 
-            if portfolioNotifications =="on":
-                portfolioNotifications = True 
-            nd = {
-                "dailyInsight":dailyInsight,
-                "portfolioNotifications":portfolioNotifications
-            }
-            users.update_one({"_id":u["_id"]},{"$set":{"notPref":nd}})
-            return redirect("/notifications")
+            return redirect("/notifications?msg=Updated+prefrences")
         return render_template("notifications.html",data=u,title="Notifications - ",active="notifications",prefs=notPref)
 
     @app.route("/stock/<ticker>")
@@ -1144,7 +1246,12 @@ class UXRoutes:
             cus_id = u["customer_id"]
         except:
             return redirect("/login")
-        status = stripe.Subscription.list(customer=cus_id)["data"][0]["plan"]["active"]
+        if u["giftCode"]:
+            status = True 
+
+        else:
+            status = stripe.Subscription.list(customer=cus_id)["data"][0]["plan"]["active"]
+        
         return render_template("account.html",data=u,active="account",title="Account - ",time=time,stripe_status=status)
 
     @app.route("/settings")
@@ -1225,6 +1332,19 @@ class UXRoutes:
         red.set(u["email"],json.dumps(u))
 
         return redirect("/")
+    
+    @app.route("/upgradeplan")
+    def upgradePlanPage():
+        try:
+            email=request.cookies.get("e")
+            password = request.cookies.get("p")
+            u = users.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/login")
+        if u["plan"] == "standardM":
+            return redirect("/settings")
+        if u["plan"] == "basicM":
+            return render_template("upgradePlan.html")
     @app.route("/upgrade-plan")
     def upgradePlan():
 
@@ -1239,15 +1359,16 @@ class UXRoutes:
         if u["plan"] == "basicM":
             price_id = 'price_1OSLwuEz0P2Wm1hTxf5UXsGK' # for standard.
             sub = stripe.Subscription.list(customer=u["customer_id"])["data"][0]["id"]
+            
             mod = stripe.Subscription.modify(
                 sub,
-                items=[{"id": sub, "price": price_id}],
+                items=[{"price": price_id}],
             )
             u["plan"]= "standardM"
             red.set(u["email"],json.dumps(u))
             red.set(u["_id"],json.dumps(u))
             users.update_one({"_id":u["_id"]},{"$set":{"plan":"standardM"}})
-            return mod
+            return redirect("/settings")
 class Portfolio:
     @app.route("/api/add2port/<ticker>",methods=["GET"])
     def add2p(ticker):
@@ -1494,11 +1615,103 @@ class Admin:
 
             return data
         return render_template("godmin/blog.html")
-    
+    @app.route("/godmin/affiliates",methods=["GET","POST"])
+    def affiliates():
+        try:
+            email =request.cookies.get("email")
+            password = request.cookies.get("password")
+            ad = admin.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/godmin")
+        
+        if request.method == "POST":
+            label = request.form.get("label")
+            url = request.form.get("url")
+            if url == None:
+                url = ""
+            url = url.strip()
+            if len(url)<3:
+                url = generate_id(6)
+            data = {"_id":url,"at":time.time(),"label":label}
+            red.set(f"affiliate_{url}",json.dumps(data))
+            affiliates.insert_one(data)
+            return redirect("/godmin/affiliates")
+        af = [] 
+        for a in affiliates.find({}):
+            af.append(a)
+        return render_template("godmin/affiliates.html",af=af)
+    @app.route("/godmin/affiliates/<idaf>")
+    def affiliateStatus(idaf):
+        try:
+            email =request.cookies.get("email")
+            password = request.cookies.get("password")
+            ad = admin.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/godmin")
+        
+        try:
+            afd = json.loads(redis.get(f"affiliate_{idaf}"))
+        except:
+            try:
+                afd = affiliates.find({"_id":idaf})[0]
+            except:
+                return "Affiliate not found"
+        usersWithAffiliates = users.find({"af":afd})
+        uwaf = []
+        standard = 0
+        base = 0
+        pro = 0
+        for u in usersWithAffiliates:
+            if u["plan"] == "standardM":
+                standard+=1
+            if u["plan"] == "proM":
+                pro+=1
+            if u["plan"] == "basicM":
+                base +=1
+            
+            uwaf.append(u)
+        totalRevenue = standard*60+base*15
+
+        return render_template("godmin/affiliateInspector.html",afd=afd,u=uwaf,standard=standard,base=base,pro=pro,totalRevenue=totalRevenue)
+    @app.route("/godmin/gifts",methods=["POST","GET"])
+    def godminGifts():
+        try:
+            email =request.cookies.get("email")
+            password = request.cookies.get("password")
+            ad = admin.find({"email":email,"password":password})[0]
+        except:
+            return redirect("/godmin")
+        
+        if request.method=="GET":
+            allGifts = gifts.find({})
+            return render_template("godmin/gift.html",ag=allGifts)
+        if request.method == "POST":
+            code = request.form.get("code")
+            if code == None:
+                code = ""
+            code = code.strip()
+            if len(code)<3:
+                code = generate_id(10)
+            numPeople = request.form.get("peopleNumber")
+            if numPeople == None:
+                numPeople = 1
+            else:
+                try:
+                    numPeople = int(numPeople)
+                except:
+                    numPeople= 1
+            if numPeople>10:
+                numPeople = 10
+            data = {
+                "numPeople":numPeople,
+                "code":code,
+                "time":time.time()
+            }
+            gifts.insert_one(data)
+            return redirect("/godmin/gifts")
+
 class Blog:
-    @app.route("/tutorials")
-    def tutorialCenter():
-        return "Tutorials"
+    
     @app.route("/tutorials/<url>")
     def tutorialView(url):
         try:

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kentel Godmin</title>
+    <link rel="shortcut icon" href="/static/images/godmin.png" type="image/png">
+    <link rel="stylesheet" href="/static/css/godmin.css">
+</head>
+<body>
+    <nav>
+        <p>Godmin</p>
+
+    </nav><br><br>
+    <div class="container">
+        <h1>Affiliates</h1>
+        <ul>
+            {% for a in af %}
+            <li onclick="window.location.assign('/godmin/affiliates/{{a["_id"]}}')">{{a["label"]}} - https://kentel.dev/{{a["_id"]}}</li>
+            {%endfor %}
+        </ul> <br>
+
+        <div class="card">
+            <div class="card-body">
+                <form action="" method="POST">
+
+                    <input type="text" name="label" placeholder="Label..." > <br>
+                    <input type="text" name="url" placeholder="Enter Url ID"> <br>
+                    <button>Submit</button>
+
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

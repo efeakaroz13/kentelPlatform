@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kentel Godmin</title>
+    <link rel="shortcut icon" href="/static/images/godmin.png" type="image/png">
+    <link rel="stylesheet" href="/static/css/godmin.css">
+</head>
+<body>
+    <nav>
+        <p>Godmin</p>
+
+    </nav><br><br>
+    <div class="container">
+        <h1>Gift Codes</h1>
+        <ul>
+
+            {% for g in ag %}
+            <li>{{g["code"]}} - {{g["numPeople"]}} Remaining</li>
+            {% endfor%}
+        </ul>
+        <form action="" method="POST">
+            <input type="text" name="code" placeholder="Enter Gift Code..."> <br>
+            <input type="number" name="peopleNumber" placeholder="Number of claimers..."> <br>
+            <button>Submit</button>
+            
+        </form>
+
+        
+    </div>
+    
+</body>
+</html>

@@ -10,6 +10,8 @@
     <meta name="robots" content="noindex">
     {% block head %}
     {% endblock %}
+    <link rel="manifest" href="/static/manifest.json">
+
 
 </head>
 <body>
@@ -24,7 +26,7 @@
                 <ion-item  id="portfolio">
                     <ion-button  id='portfolio_btn' color="dark" class='ion-margin'fill="clear" ><ion-icon name="wallet-sharp" ></ion-icon></ion-button> Portfolio(Coming Soon)
                 </ion-item>
-                <ion-item  id="notifications" style="display: none;" >
+                <ion-item  id="notifications" >
                     <ion-button id='notifications_btn' onclick="openLink('/notifications')"  color="dark"class='ion-margin'fill="clear" ><ion-icon name="notifications-sharp" ></ion-icon></ion-button> Notifications
                 </ion-item>
                 <ion-item  id="account">
@@ -335,7 +337,27 @@ ion-item {
 }
 
     </style>
-
+    <script>
+        function n (){
+            console.log("hello")
+            var hostname = window.location.host
+            var currentURL=window.location.href.split(hostname)[1]
+            var baseURL = currentURL.split("?")[0]
+            try{
+                arg1 = currentURL.split("?")[1].split("&")[0]
+                var key = arg1.split("=")[0]
+                var value = arg1.split("=")[1]
+                if (key == "msg") {
+                    alert(value.replace("%20"," ").replace("+"," "));
+                    window.location.assign(baseURL)
+                }
+            }catch{
+                null
+            }
+        }
+        setTimeout(n,500)
+        
+    </script>
 </body>
 </html>
 

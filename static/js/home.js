@@ -99,7 +99,7 @@ function loadScan(){
                 chtml = '<ion-item>\
                 <ion-grid>\
                     <ion-row>\
-                        <ion-col>'+d.ticker+'</ion-col>\
+                        <ion-col>'+d.comp.ticker+'</ion-col>\
                         <ion-col>'+d.score.toFixed(2)+'%</ion-col>\
                         <ion-col>'+d.acc.toFixed(2)+'%</ion-col>\
                     </ion-row>\

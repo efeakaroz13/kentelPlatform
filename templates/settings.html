@@ -7,10 +7,16 @@
   
   message="Do you really want to unsubscribe? If you have any issues with the app, you can always contact us."
 ></ion-alert>
+
 <center>
 <ion-list class="lister" style="text-align: left;">
-  <ion-item>
-    <ion-label>Upgrade Plan</ion-label>
+  <ion-item >
+
+    {% if data["plan"] == "basicM" %}
+    <ion-button onclick="window.location.assign('/upgradeplan')" color="primary" fill="clear">Upgrade Plan</ion-button>
+    {% else %}
+    <ion-button onclick="console.log()" color="primary" fill="clear">You are using the best plan</ion-button>
+    {% endif %}
   </ion-item>
   <ion-item>
     <ion-button onclick="changeTheme()" color="success" fill="clear">Change Theme</ion-button>

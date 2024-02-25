@@ -17,7 +17,7 @@
                         <p style="text-align: left;">
                             Thank you for signing up to Kentel! We have a couple of advices and warnings for you to use this platform properly. We strongly suggest that you need to make your own research and analysis in order to make trading decisions. Also, this app is specifically designed for swing trading which means that it may be impractical to hold the companies' stocks for more than 2 weeks. Another warning is that as we saw on the analytics of this cutting edge technology, the recommendations tend to drop a little first before going up. Also you can find our courses about trading and technical analysis on the tutorials tab for free.
                         </p>
-                        <br><ion-button onclick="window.location.assign('/notanewbie')" >Continue</ion-button>
+                        <br><ion-button color="success" onclick="window.location.assign('/notanewbie')" >Continue</ion-button>
                     </div>
                     </center>
                     
@@ -31,12 +31,12 @@
     {% else %}
     <p style="display: none;" id="date"></p>
         <div id="discover">
-            <ion-title class="ion-margin">Discover <ion-button fill="clear"  onclick="loadScan()" style="margin-bottom:20px"><ion-icon name="refresh-outline" color="success"></ion-icon></ion-button></ion-title>
+            <ion-title class="ion-margin">Discover <ion-button fill="clear" color="success"  onclick="loadScan()" style="margin-bottom:20px"><ion-icon name="refresh-outline" color="success"></ion-icon></ion-button></ion-title>
 
             <center>
             
             {% if data["plan"] == "standardM" %}
-            <ion-select style="text-align:left"  class="lister" label="Select a Filter" label-placement="floating" id="filters">
+            <ion-select color="success" style="text-align:left"  class="lister" label="Select a Filter" label-placement="floating" id="filters">
                 <ion-select-option value="defno" >No Filter</ion-select-option>
                 {% for f in filters %}
                     <ion-select-option value="{{f['_id']}}">{{f["label"]}}</ion-select-option>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block body %}
+<br>
+<ion-title class="ion-margin">Upgrade Plan</ion-title>
+<center>
+    <p style="max-width: 600px;padding:20px">You are currently using the Base package. Do you confirm upgrading your current plan to the standard package?  </p> <br>
+
+    <ion-grid style="max-width: 600px;">
+        <ion-row>
+            <ion-col>
+                <ion-button color="danger" fill="clear">Cancel</ion-button>
+            </ion-col>
+            <ion-col>
+                
+                <ion-button color="success" fill="solid" onclick="window.location.assign('/upgrade-plan')">Confirm</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</center>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/settings.js"></script>
+{% endblock %}

@@ -1,0 +1,20 @@
+{
+    "short_name": "Kentel",
+    "name": "Trade Like A Pro",
+    "icons": [
+      
+      {
+        "src": "/static/images/ic_launcher/play_store_512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "id": "/",
+    "start_url": "/",
+    "background_color": "#121212",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#121212"
+    
+  }
+  
