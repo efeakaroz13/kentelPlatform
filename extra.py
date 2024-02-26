@@ -42,9 +42,9 @@ class Mailer:
         
         msg = MIMEMultipart()
         msg.set_unixfrom('author')
-        msg['From'] = 'sales@kentel.dev'
+        msg['From'] = '<Kentel> sales@kentel.dev'
         msg['To'] = email
-        msg['Subject'] = 'Here is your verification code! - Kentel'
+        msg['Subject'] = 'Verify your email'
         message = emailHTMLStart
         msg.attach(MIMEText(message,"html"))
 
@@ -66,7 +66,7 @@ class Mailer:
         
         msg = MIMEMultipart()
         msg.set_unixfrom('author')
-        msg['From'] = 'sales@kentel.dev'
+        msg['From'] = '<Kentel> sales@kentel.dev'
         msg['To'] = udata["email"]
         msg['Subject'] = '😿 We are sorry to see you go :('
         message = emailHTMLStart

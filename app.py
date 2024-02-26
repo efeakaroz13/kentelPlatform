@@ -9,7 +9,6 @@ import time
 import stripe
 import redis
 import hashlib
-from user_agents import parse as uaparse
 import random
 from extra import generate_id,Mailer
 import datetime
@@ -21,7 +20,6 @@ import requests
 import yfinance as yf
 import trader
 from filters import FinLister
-from sshtunnel import SSHTunnelForwarder
 import pymongo
 import pprint
 import socket
@@ -988,6 +986,16 @@ class InstanceExchange:
             listStart = page*50
 
             for b in basicUsers:
+                try:
+                    notf = b["notf"]
+                    if notf == False:
+                        continue 
+                    else:
+                        pass
+
+
+                except:
+                    pass
                 b= {
                             "email":b["email"],
                             "_id":b["_id"]
@@ -995,19 +1003,20 @@ class InstanceExchange:
                 mailingList.append(b)
             for s in standard:
                 try:
-                    notPref = s["notPref"]
-                    if notPref["dailyInsight"]:
-                        s= {
-                            "email":s["email"],
-                            "_id":s["_id"]
-                        }
-                        mailingList.append(s)
+                    notf = s["notf"]
+                    if notf == False:
+                        continue 
+                    else:
+                        pass 
+
                 except:
-                    s= {
-                            "email":s["email"],
-                            "_id":s["_id"]
-                    }
-                    mailingList.append(s)
+                    pass 
+                
+                s= {
+                        "email":s["email"],
+                        "_id":s["_id"]
+                }
+                mailingList.append(s)
 
             mailingList = mailingList[page*50:][:50]
             return {"m":mailingList}
