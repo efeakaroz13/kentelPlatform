@@ -129,11 +129,17 @@ def index():
                 return render_template("home.html",data=u,msg=msg,active="home",title="",filters=filtersList)
             else:
                 cusid = u["customer_id"]
+                ut = u["time"]
+                hasPassed = time.time()-ut 
                 try:
                     req = json.loads(red.get(cusid))
                 except:
+                    
                     req = stripe.Subscription.list(customer=u["customer_id"])["data"]
-                    red.set(cusid,json.dumps(req),ex=86400)
+                    if hasPassed>=86400*14:
+                        red.set(cusid,json.dumps(req),ex=86400)
+                    
+                    
                 if len(req) == 0:
                     return redirect("/checkout")
                 else:

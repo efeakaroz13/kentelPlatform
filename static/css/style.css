@@ -222,6 +222,7 @@ section {
 
 #hero {
 	background-color: #f6f8f9;
+	min-height: 100vh;
 }
 
 #hero h1 {
