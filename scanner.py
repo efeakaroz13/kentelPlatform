@@ -108,7 +108,7 @@ def task(tickers,workerID):
                 outputData.append(data)
 
         except:
-            time.sleep(9)
+            time.sleep(3)
             try:
                 signal,score,price,change = trader.DailySignal(t)
                 score = score*100
