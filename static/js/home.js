@@ -89,7 +89,8 @@ function loadScan(){
     '
          g("discoverList").innerHTML = basehtml
          scanTime  = new Date( data.time*1000);
-         g("date").innerHTML = scanTime.toLocaleString()
+         g("lastUpdate").innerHTML = scanTime.toLocaleString()
+
         if(exchange=="SERVER2_DAILY_NASDAQ"){
             var items = data.notifications;
             

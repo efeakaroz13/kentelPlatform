@@ -1,4 +1,4 @@
-Base Package:(14.99$ a month, 5 days free trial)(152.99$ a year, 12.75 a month)
+Base Package:(14.99$ a month, 5 days free trial)(152.99$ a year, 12.75 a month) decided to do 20
  - Mailing List
  - 1 Daily Scan
  - Indvidual Search
@@ -20,3 +20,10 @@ Pro Package:(coming soon)
  note: add an experimental mode to limit the number of outcomes.
  note: save button in email with href to add a certain stock to an accounts portfolio
  
+
+
+ Standard:price_1OoUaYA7lNRXMlNswWPH191i
+ Price 60$ per month 
+
+Daily Insight:price_1OoUaYA7lNRXMlNs7map0Tep
+Price 20$ß

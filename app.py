@@ -75,7 +75,7 @@ gifts = db["gifts"]
 red = redis.Redis()
 
 plans = ["standardM","basicM"]
-stripe.api_key = "sk_test_51KNGcuEz0P2Wm1hTXPKe291k3qbGjhJqxaryuuNe2J0mSFhiZrI69LYIbWIAYIbGT3LYPOc4MyTAnkGmtleJobxh00LPcn5oI7"
+stripe.api_key = "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"
 
 
 @app.route("/")
@@ -852,7 +852,7 @@ class StripeRoutes:
         except:
             return redirect("/")
         if plan == "standardM":
-            price_id = 'price_1OSLwuEz0P2Wm1hTxf5UXsGK'
+            price_id = 'price_1OoUaYA7lNRXMlNswWPH191i'
 
             session = stripe.checkout.Session.create(
               success_url=base+'/checkout/success?session_id={CHECKOUT_SESSION_ID}',
@@ -873,7 +873,7 @@ class StripeRoutes:
             return redirect(session.url, code=303)
         if plan == "basicM":
 
-            price_id = 'price_1OSMSiEz0P2Wm1hTieKpwDBJ'
+            price_id = 'price_1OoUaYA7lNRXMlNs7map0Tep'
 
             session = stripe.checkout.Session.create(
               success_url=base+'/checkout/success?session_id={CHECKOUT_SESSION_ID}',
@@ -1372,7 +1372,7 @@ class UXRoutes:
         if u["plan"] == "standardM":
             return redirect("/")
         if u["plan"] == "basicM":
-            price_id = 'price_1OSLwuEz0P2Wm1hTxf5UXsGK' # for standard.
+            price_id = 'price_1OoUaYA7lNRXMlNswWPH191i' # for standard.
             sub = stripe.Subscription.list(customer=u["customer_id"])["data"][0]["id"]
             
             mod = stripe.Subscription.modify(

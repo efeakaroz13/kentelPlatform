@@ -34,7 +34,7 @@
             <ion-title class="ion-margin">Discover <ion-button fill="clear" color="success"  onclick="loadScan()" style="margin-bottom:20px"><ion-icon name="refresh-outline" color="success"></ion-icon></ion-button></ion-title>
 
             <center>
-            
+            <p style="text-align:left;width:80%">Last Update <a id="lastUpdate"></a></p>
             {% if data["plan"] == "standardM" %}
             <ion-select color="success" style="text-align:left"  class="lister" label="Select a Filter" label-placement="floating" id="filters">
                 <ion-select-option value="defno" >No Filter</ion-select-option>

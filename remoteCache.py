@@ -13,7 +13,7 @@ client = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@160.20.1
 dbS = client["KentelPlatform"]
 issues = dbS["Issues"]
 filters = dbS["Filters"]
-
+print("Process Started")
 while True:
     try:
         i = issues.find({"exchange":"NASDAQ"})

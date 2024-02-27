@@ -42,7 +42,7 @@ class Mailer:
         
         msg = MIMEMultipart()
         msg.set_unixfrom('author')
-        msg['From'] = '<Kentel> sales@kentel.dev'
+        msg['From'] = 'Kentel <sales@kentel.dev>'
         msg['To'] = email
         msg['Subject'] = 'Verify your email'
         message = emailHTMLStart
@@ -66,7 +66,7 @@ class Mailer:
         
         msg = MIMEMultipart()
         msg.set_unixfrom('author')
-        msg['From'] = '<Kentel> sales@kentel.dev'
+        msg['From'] = 'Kentel <sales@kentel.dev>'
         msg['To'] = udata["email"]
         msg['Subject'] = '😿 We are sorry to see you go :('
         message = emailHTMLStart
