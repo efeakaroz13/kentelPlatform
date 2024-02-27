@@ -66,7 +66,6 @@ logs = db["logs"]
 portfolios = db["Portfolios"]
 forms = db["forms"]
 admin = db["admin"]
-filters=  db["filters"]
 blog = db["blog"]
 mode = "test"
 base = "https://kentel.dev"
