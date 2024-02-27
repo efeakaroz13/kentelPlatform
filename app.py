@@ -37,7 +37,7 @@ if ip_address !="160.20.108.219":
     
     dbS = client["KentelPlatform"]
     issues = dbS["Issues"]
-    filters = dbS["Filters"]
+    filters = dbS["filters"]
 
 ## TODO
 ## Make least amount of database calls with redis
@@ -57,7 +57,7 @@ else:
 if filters != None:
     pass
 else:
-    filters = db["Filters"]
+    filters = db["filters"]
 
 users = db["Users"]
 
