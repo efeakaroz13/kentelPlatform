@@ -39,7 +39,7 @@
                     <ion-button  id='beta_btn'  onclick="window.location.assign('/tutorials')" color="dark"class='ion-margin'fill="clear" ><ion-icon name="book-outline"></ion-icon></ion-button> Tutorials
                 </ion-item>
                 <ion-item id="discord" >
-                    <ion-button id='discord_btn' onclick="openLink('https://discord.gg/AtsX73mB')"  color="dark"class='ion-margin' fill="clear" ><ion-icon name="logo-discord" ></ion-icon> </ion-button>Discord
+                    <ion-button id='discord_btn' onclick="window.open('https://discord.gg/4GpUVzc8')"  color="dark"class='ion-margin' fill="clear" ><ion-icon name="logo-discord" ></ion-icon> </ion-button>Discord
                 </ion-item>
                 <ion-item  id="support">
                     <ion-button id='support_btn' onclick="openLink('mailto:sales@kentel.dev')"  color="dark" class='ion-margin' fill="clear" ><ion-icon name="mail-sharp" ></ion-icon></ion-button> Support
@@ -92,9 +92,9 @@
                 document.body.classList.toggle('dark', false); 
             }
         }else{
-            document.body.classList.toggle('dark', true);
-            localStorage.setItem("theme","dark");
-            theme="dark"
+            document.body.classList.toggle('dark', false);
+            localStorage.setItem("theme","light");
+            theme="light"
         }   
         
 
@@ -140,7 +140,7 @@
         function g(id){
             return document.getElementById(id);
         }
-        g(cactive).setAttribute("color","success");
+        g(cactive).setAttribute("color","primary");
         g(cactive+"_btn").setAttribute("color","light");
         
 
@@ -188,7 +188,7 @@
             }
         }
         .active{
-            --background-color:var(--ion-color-success);
+            --background-color:var(--ion-color-primary);
 
         }
         body.dark {

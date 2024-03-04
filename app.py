@@ -82,7 +82,7 @@ def index():
     email  =request.cookies.get("e")
     password = request.cookies.get("p")
     try:
-
+       
 
         try:
             u = json.loads(red.get(email))
@@ -184,7 +184,20 @@ def index():
     # if agent.is_bot == False:
     #     logs.insert_one(data)
     
-    return render_template("index.html")
+    response =  make_response(render_template("index.html"))
+    ref=request.cookies.get("ref")
+    if ref == None:
+        ref= request.headers.get("Referer")
+        if ref!=None:
+            expire_date = datetime.datetime.now()
+            expire_date = expire_date + datetime.timedelta(days=900)
+            response.set_cookie("ref",ref,expires=expire_date)
+            pass# set ref cookie.
+
+    secfetch = request.headers.get("Sec-Fetch-Dest")
+    if secfetch == "iframe":
+        return render_template("iframe.html")
+    return response
 
 
 ## for affiliates and following who is what
@@ -202,7 +215,10 @@ def affiliateIndex(url):
 
     expire_date = datetime.datetime.now()
     expire_date = expire_date + datetime.timedelta(days=90)
-
+    expire_date2 = expire_date + datetime.timedelta(days=900)
+    ref= request.headers.get("Referer")
+    if ref!= None:
+        response.set_cookie("ref",ref,expires=expire_date2)
     response.set_cookie("af",url,expires=expire_date)
     return response
 @app.route("/gift/<giftCode>")
@@ -284,6 +300,8 @@ class Auth:
                 except:
                     gift = None
             
+            ref = request.cookies.get("ref")
+
             #giftCode = request.forrm.get("giftCode")
             data = {
 
@@ -301,7 +319,8 @@ class Auth:
                 "_id":generate_id(20),
                 "customer_id":cus["id"],
                 "af":af,
-                "giftCode":gift
+                "giftCode":gift,
+                "ref":ref
             }
 
             expire_date = datetime.datetime.now()
@@ -1538,6 +1557,8 @@ class Admin:
             afDic[f['_id']] = f 
         import json 
         return render_template("godmin/filters.html",allFilters=allFilters,dic=json.dumps(afDic))
+    
+
     @app.route("/godmin/filter/edit",methods=["POST"])
     def godmingfilterEdit():
         try:
@@ -1675,7 +1696,17 @@ class Admin:
         standard = 0
         base = 0
         pro = 0
+        allInvoices = []
+        totalAmount = 0
         for u in usersWithAffiliates:
+            ut = u["time"]
+            if time.time()-ut>31536000:
+                continue
+            inv = stripe.Invoice.list(customer=u)["data"]
+            for i in inv:
+                amount = i["amount_paid"]
+                allInvoices.append(amount/100)
+                totalAmount += amount/100
             if u["plan"] == "standardM":
                 standard+=1
             if u["plan"] == "proM":
@@ -1685,8 +1716,8 @@ class Admin:
             
             uwaf.append(u)
         totalRevenue = standard*60+base*15
-
-        return render_template("godmin/affiliateInspector.html",afd=afd,u=uwaf,standard=standard,base=base,pro=pro,totalRevenue=totalRevenue)
+        
+        return render_template("godmin/affiliateInspector.html",afd=afd,u=uwaf,standard=standard,base=base,pro=pro,totalRevenue=totalAmount)
     @app.route("/godmin/gifts",methods=["POST","GET"])
     def godminGifts():
         try:
