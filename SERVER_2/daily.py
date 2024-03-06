@@ -6,7 +6,6 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import stripe
-
 import requests
 from bs4 import BeautifulSoup
 import redis
@@ -124,7 +123,6 @@ class MailFetcher:
         data = json.loads(page.content)["m"]
         for m in data:
             self.mails.append(m)
-
         if len(data) == 0 :
             pass
         else:
@@ -133,7 +131,11 @@ class MailFetcher:
 def send(mails,content):
     #There is a person identifier image that let's us see if the person opened the email or not.
     #For that, you need to send the user ID to the HTML content.
+    mailserver = smtplib.SMTP_SSL('smtpout.secureserver.net', 465)
+    mailserver.ehlo()
+    mailserver.login('sales@kentel.dev', 'efeAkaroz123')
     for m in mails:
+        print(m)
         id_ = m["_id"]
         content.replace("-id-",id_)
         m = m["email"]
@@ -146,13 +148,11 @@ def send(mails,content):
 
         msg.attach(MIMEText(message,"html"))
 
-        mailserver = smtplib.SMTP_SSL('smtpout.secureserver.net', 465)
-        mailserver.ehlo()
-        mailserver.login('sales@kentel.dev', 'efeAkaroz123')
+        
 
         mailserver.sendmail('sales@kentel.dev',m,msg.as_string())
 
-        mailserver.quit()
+    mailserver.quit()
     return 0
 if __name__ == "__main__":
     if server == "main":
@@ -190,8 +190,16 @@ if __name__ == "__main__":
     stocks = fin.stocks
     notifications = []
     for s in stocks:
-
-        signal,score,price,change = trader.DailySignal(s["ticker"])
+        try:
+            
+            signal,score,price,change = trader.DailySignal(s["ticker"])
+        except:
+            time.sleep(5)
+            try:
+                signal,score,price,change = trader.DailySignal(s["ticker"])
+            except Exception as e:
+                print(f"[{time.ctime(time.time())}]",e,flush=True)
+                continue
         score = round(score*100,2)
         acc= float(r.get(s["ticker"]).decode())*100
         if acc<72:
@@ -209,7 +217,7 @@ if __name__ == "__main__":
             }
             notifications.append(d)
 
-    print(notifications)
+    #print(notifications)
     data = {
         "d":{
             "notifications":notifications,
@@ -224,7 +232,7 @@ if __name__ == "__main__":
     datestring = f"{now.month}/{now.day}/{now.year}"
     content = ""
     for n in notifications:
-        line = f"<p style='font-weight:400;font-size:20px'>{n['comp']['ticker']} | <a style='color:green'>{n['score']}% {n['signal']}</a> | <a>{n['acc']} Accuracy</a> | <a>{round(n['price'],2)}$</a></p>"
+        line = f"<p style='font-weight:400;font-size:20px'>{n['comp']['ticker']} | <a style='color:green'>{n['score']}% {n['signal']}</a> | <a>{n['acc']} Accuracy</a> | <a>$</a></p>"
         content = content+line
 
     mailHTML = open("templates/email/scan.html","r").read().replace("-date-",datestring).replace("-content-",content).replace("-number-",str(len(notifications))).replace("-preview-","Stay informed with your daily stock report from Kentel! Discover valuable insights and predictions to navigate the stock market effectively.")

@@ -348,6 +348,8 @@ class Auth:
         if request.method == "POST":
             email = request.form.get("email")
             password = request.form.get("password")
+            if email == None or password == None:
+                return redirect("/login")
             p = hashlib.sha256()
             p.update(password.encode())
             password = p.hexdigest()
