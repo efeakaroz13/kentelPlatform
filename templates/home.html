@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block head %}
-
+<link href="https://fonts.cdnfonts.com/css/euclid-circular-b" rel="stylesheet">
 {% endblock %}
 {% block body %}
+
     {% if data["newbie"] %}
 
 
@@ -12,14 +13,85 @@
                         <i class="bi bi-arrow-right-square-fill fs-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"></i>
                     </button><br><br> <br><br>
                     <center>
-                    <div style="max-width: 70%;">
-                        <h3>Before You Continue</h3>
-                        <p style="text-align: left;">
-                            Thank you for signing up to Kentel! We have a couple of advices and warnings for you to use this platform properly. We strongly suggest that you need to make your own research and analysis in order to make trading decisions. Also, this app is specifically designed for swing trading which means that it may be impractical to hold the companies' stocks for more than 2 weeks. Another warning is that as we saw on the analytics of this cutting edge technology, the recommendations tend to drop a little first before going up. Also you can find our courses about trading and technical analysis on the tutorials tab for free.
-                        </p>
-                        <br><ion-button color="primary" onclick="window.location.assign('/notanewbie')" >Continue</ion-button>
+
+                    
+                    <div style="width: 80%; text-align:left;max-width: 800px;font-family: 'Euclid Circular B', sans-serif;                    ">
+                        <img src="/static/images/welcome.png" style="width:80%;margin-bottom:-10%" alt="">
+
+                        <p style="text-align: left;font-size:larger">
+                            Hey, it is nice to see you here. But before you continue we strongly recommend you to read this page completely and learn about the platform.
+                        </p> <br>
+                        <br>
+                        <h1 style="text-align: left;font-size:40px; font-weight: 700;">
+                            The interface
+                        </h1>
+                        <img src="/static/images/SS.png" style="width:80%" alt="">
+                        <p>This is the page you will see after this tutorial and this step by step guide will make you more familiar with it. You can see the last AI scans on the platform alongside to the AIs scores to the companies. </p>
+                        <img src="/static/images/ws1.png" loading="lazy" alt="Company names and AI scores">
+                        <p>This table is where you will get your trading positions and on the list there will be stocks that has the highest <strong>increasing probability</strong>. But in a future update, both short and long positions will be available.</p> <br>
+                        
+                    
+                        <img src="/static/images/ts.png" loading="lazy" alt="Last updated date and time">
+                        <p>This date and time indicates when was the <strong>last AI stock scan</strong>. So if you are seeing an outdated version of a scan while the market is open, like 2 days old, we don't recommend you to use it. And if you are a day trader and you have decent technical analysis skills, we recommend you to wait for <strong>fresh ones</strong>  which are being published every single hour.</p>
+                        <br> 
+                        <img src="/static/images/fs.png" loading="lazy" alt="Filters">
+                        <p>If you are a standard package user, you will be able to see multiple filters that indicate different technical analysis base filters for AI. We don't recommend you to use them, unless you know what you're doing. We recommend our users to use <strong>"Editor's Favourite"</strong> filter for their trades and increasing the odds of winning.</p>
+                        
+                        <br>
+                        <br>
+                        <br>
+                        <h1 style="font-size:40px;font-weight: 800;">Daily Insight Email</h1>
+                        <p>Both packages recieve this email every business day and it can be turned off from the notifications settings. It sends stock scans with "Editor's Favourite" filter and it is accurate. Base package users can also see this on their homepage by default.</p>
+                        <p>But even if we have a high accuracy AI, this doesn't mean that market can experience crashes and maybe the specific company may have a bad day, because of this, before buying any of the stocks we recommend you to do your own research and check if there is an upcoming earning report or if there is an ongoing trial that might hurt the stock price. And don't forget that this AI only makes technical analysis without looking into any financials and news.</p>
+                        <br>
+                        <br><br>
+                        <br>
+                        <br>
+                        <h1 style="font-size:40px;font-weight: 800;">Supported Exchanges & Future Updates</h1>
+                        <p>Our current list of scans includes 3.5k+ companies that have been listed in <strong>US stock exchanges</strong>. And we are working on adding support new exchanges to this network including Cryptos. If you want to see the development process and be a part of our team, you can join our <strong>Discord</strong> from the menu bar</p>
+                        <br>
+                        <br><br>
+                        <br>
+                        <h1 style="font-size:40px;font-weight: 800;">Risk Management and Length of holding the stock</h1>
+                        <p>Our AI model is specialized in <strong>daily and weekly analysis</strong> which means holding the stock for more than 2-3 weeks may not be the wisest choice. And it also depends on how many stocks you've bought looking at our charts. We recommend to divide your portfolio to at least 5 stocks and diversify. If the AI just gave 1 stock for that day, maybe a small portion of your portfolio can be invested into this specific stock.</p>
+                        <br>
+                        <br><br>
+                        <br>
+                        <h1 style="font-size:40px;font-weight: 800;">Stop Loss and Take Profit points</h1>
+                        <p>For better risk management we suggest you to add automatic buy and sell points after buying a certain stock. Our recommendation is <strong>Stop loss 3% under the price</strong> and <strong>Take profit 5% above the price</strong> for people who want to trade in a 2-3 day period. But for weekly holders, we recommend <strong>Take Profit 9% above the price</strong> and use the <strong>Stop Loss</strong></p>
+                        <br>
+                        <br><br>
+                        <br>
+
+                        <h1 style="font-size:40px;font-weight: 800;">These are not financial advices</h1>
+                        <p>Even we have a strong AI and we trust its results, we are not in a position to give you financial advice. Make your own research before anticipating in any investment or trade. </p>
+
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <h1 style="font-size:40px;font-weight: 800;">Why Trust Us?</h1>
+                        <p>We acknowledge that it is hard to trust websites these days and specifically that looks to good to be true. But we've developed the technology and infastructre for offering high amounts of profits to traders and people with low financial literacy. Our main goal is to make profits for our customers and unlike other banks or investment organizations, we don't take a single penny from you as a commission. And our goal is to democratise this industry and make trading and high amounts of profit available to the general public.</p>
+                        <br>
+                        <br><br>
+                        <br>
+                        <h1 style="font-size:40px;font-weight: 800;">Customer Support</h1>
+                        <p>You can always contact to customer support and we will reply to your emails in less than 24 hours. You can even text to our company's WhatsApp account for your questions and recommendations and book zoom calls with our team. </p>
+
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <h1 style="font-size:40px;font-weight: 800;">Tutorials</h1>
+                        <p>You will be able to find tutorials which are published just for our subscribers and learn more about trading and technical analysis. It is not available at the moment but don't forget to check your inbox for release date.</p>
+                        <br><ion-button color="primary" fill="clear" onclick="window.location.assign('/notanewbie')" >Continue</ion-button>
                     </div>
-                    </center>
+                </center>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
                     
                     
                     
