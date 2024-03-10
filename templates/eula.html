@@ -1,127 +1,59 @@
-<!doctype html>
-<html lang="en-US">
-  <head>
+{% extends "indbase.html" %}
+  {% block head %}
+    
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <meta name="description" content="Learn more about Kentel">
+    <meta name="keywords" content="Kentel, AI, EULA">
+    <meta property="og:title" content="EULA - Kentel" />
+    <meta property="og:description" content="Kentel User Agreement" />
+    <meta property="og:image" content="//kentel.dev/static/images/kentel_300x200.png" />
 
-    <!-- Custom Css -->
-    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+    <title>Kentel EULA(End User License Agreement)</title>
+{% endblock%}
 
-    <!-- Ionic icons -->
-    <link href="https://unpkg.com/ionicons@4.2.0/dist/css/ionicons.min.css" rel="stylesheet">
+{% block body %}
+<section >
+  <div class="container">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+      
 
-    <title>Kentel LTD - End User License Agreement (EULA)</title>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXFPT2TM2X"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+          <h1 class="h1">End User License Agreement (EULA)</h1> <br>
+          <br>
 
-      gtag('config', 'G-YXFPT2TM2X');
-    </script>
-  </head>
-
-  <body>
-
-  <!-- N A V B A R -->
-  <nav class="navbar navbar-default navbar-expand-lg fixed-top custom-navbar">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="icon ion-md-menu"></span>
-    </button>
-    <img src="/static/images/logo.png" class="img-fluid nav-logo-mobile" alt="Company Logo">
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <div class="container">
-      	<img src="/static/images/logo.png" class="img-fluid nav-logo-desktop" alt="Company Logo">
+          <p>This End User License Agreement (the "Agreement") is a legal agreement between you (the "User") and Kentel LTD ("Company") for the use of the Stock Prediction AI (the "Software").</p>
+      
+          <h2 class="h1">1. Disclaimer of Warranty</h2>
+      
+          <p>The Software is provided "as is" without warranty of any kind, either expressed or implied, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose. The entire risk as to the quality and performance of the Software is with the User.</p>
+      
+          <h2 class="h1">2. No Financial Advice</h2>
+      
+          <p>The Company is not a financial advisor, and the Software is not intended to provide financial advice. The User acknowledges and agrees that all decisions to buy or sell stocks are made at their own discretion and risk.</p>
+      
+          <h2 class="h1">3. Limitation of Liability</h2>
+      
+          <p >In no event shall the Company be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of the Software, even if advised of the possibility of such damage.</p>
+      
+          <h2 class="h1">4. User's Responsibility</h2>
+      
+          <p>The User is solely responsible for any decisions made based on the information provided by the Software. The Company shall not be liable for any financial losses or damages resulting from the User's use of the Software.</p>
+      
+          <h2 class="h1">5. Governing Law</h2>
+      
+          <p>This Agreement shall be governed by and construed in accordance with the laws of the United Kingdom.</p>
+      
+          <p>By using the Software, the User agrees to be bound by the terms and conditions of this Agreement.</p>
+      
+          <p>Last updated: 05-02-2024(DD/MM/YYYY)</p>
         
-      </div>
-    </div>
-  </nav>
-  <!-- E N D  N A V B A R -->
+
+
+  </div>
+</section>
+{%endblock%}
   
-  <!-- H E R O -->
-  <section id="hero">
-    <div class="container">
-      <div class="row">
-        
-        <div class="col content-box hero-content">
-            <h1>End User License Agreement (EULA)</h1>
-
-            <p>This End User License Agreement (the "Agreement") is a legal agreement between you (the "User") and Kentel LTD ("Company") for the use of the Stock Prediction AI (the "Software").</p>
-        
-            <h2>1. Disclaimer of Warranty</h2>
-        
-            <p>The Software is provided "as is" without warranty of any kind, either expressed or implied, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose. The entire risk as to the quality and performance of the Software is with the User.</p>
-        
-            <h2>2. No Financial Advice</h2>
-        
-            <p>The Company is not a financial advisor, and the Software is not intended to provide financial advice. The User acknowledges and agrees that all decisions to buy or sell stocks are made at their own discretion and risk.</p>
-        
-            <h2>3. Limitation of Liability</h2>
-        
-            <p>In no event shall the Company be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of the Software, even if advised of the possibility of such damage.</p>
-        
-            <h2>4. User's Responsibility</h2>
-        
-            <p>The User is solely responsible for any decisions made based on the information provided by the Software. The Company shall not be liable for any financial losses or damages resulting from the User's use of the Software.</p>
-        
-            <h2>5. Governing Law</h2>
-        
-            <p>This Agreement shall be governed by and construed in accordance with the laws of the United Kingdom.</p>
-        
-            <p>By using the Software, the User agrees to be bound by the terms and conditions of this Agreement.</p>
-        
-            <p>Last updated: 05-02-2024(DD/MM/YYYY)</p>
-          
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- E N D  H E R O -->
 
 
-  <!--  F O O T E R  -->
-  <footer>
-    <div class="container">
-      <div class="row">
-        
-        <div class="col-md-3">
-          <h5>Company</h5>
-          <p>Contact us from this email for B2B products and in case of any questions.</p>
-          <p><a href="mailto:sales@kentel.dev" class="external-links">sales@kentel.dev</a></p>
-        </div>
-      </div> 
-      <div class="divider"></div>
-      <div class="row">
-        <div class="col-md-6 col-xs-12">
-            <a href="#"><i class="icon ion-logo-facebook"></i></a>
-            <a href="#"><i class="icon ion-logo-instagram"></i></a>
-            <a href="#"><i class="icon ion-logo-twitter"></i></a>
-            <a href="#"><i class="icon ion-logo-youtube"></i></a>
-          </div>
-          <div class="col-md-6 col-xs-12">
-            <small>2024 &copy; All rights reserved. Kentel LTD
-          </div>
-      </div>
-    </div>
-  </footer>
-  
-</div>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
-  <!--  E N D  F O O T E R  -->
-    <script src="/static/js/logo.js"></script>
-
-    <!-- External JavaScripts -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-    
-</html>

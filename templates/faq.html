@@ -1,30 +1,8 @@
-<!doctype html>
-<html lang="en-US">
-  <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXFPT2TM2X"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+{% extends "indbase.html" %}
+  {% block head %}
+    
 
-      gtag('config', 'G-YXFPT2TM2X');
-    </script>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-
-    <!-- Custom Css -->
-    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
-
-    <!-- Ionic icons -->
-    <link href="https://unpkg.com/ionicons@4.2.0/dist/css/ionicons.min.css" rel="stylesheet">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
-
+    
     <title>Frequently Asked Questions(FAQ) - Kentel</title>
     <meta name="description" content="Answer to some of your questions">
     <meta name="keywords" content="Kentel, AI, stock predictions, finance technology, stock market, artificial intelligence">
@@ -77,64 +55,38 @@
           ]
         }
     </script>
-  </head>
 
-  <body> 
-    
-  <!-- N A V B A R -->
-  <nav class="navbar navbar-default navbar-expand-lg fixed-top custom-navbar">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="icon ion-md-menu"></span>
-    </button>
-    <img src="/static/images/logo.png" class="img-fluid nav-logo-mobile" alt="Company Logo">
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <div class="container">
-      	<img src="/static/images/logo.png" class="img-fluid nav-logo-desktop" alt="Company Logo">
-        <ul class="navbar-nav ml-auto nav-right" data-easing="easeInOutExpo" data-speed="1250" data-offset="65">
-          <li class="nav-item nav-custom-link">
-            <a class="nav-link" href="/">Home <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
-          </li>
-          <li class="nav-item nav-custom-link">
-            <a class="nav-link" href="/#marketing">Features <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
-          </li>
-          
-          <li class="nav-item nav-custom-link">
-            <a class="nav-link" href="#pricing">Pricing <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
-          </li>
-          <li class="nav-item nav-custom-link">
-            <a class="nav-link" href="/login">Sign In <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
-          </li>
-          <li class="nav-item nav-custom-link btn btn-demo-small">
-            <a class="nav-link" href="/#pricing">Try for Free <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <!-- E N D  N A V B A R -->
+
+{% endblock%}
+
+{% block body %}
+     <br>
+     <br>
+     <br>
+  
   
   <!-- H E R O -->
-  <section class="container">
+  <section class="container containerdiv">
     <center>
-        <h1>Frequently Asked Questions(FAQ)</h1><br><br>
+        <h1 class="h1">Frequently Asked Questions</h1><br><br>
     </center>
-    <p style="font-size:20px"><h4>What makes Kentel's stock predictions different from others in the market?</h4>
-        <p>At Kentel, our stock predictions are powered by cutting-edge artificial intelligence algorithms that analyze vast amounts of data to identify patterns and trends. Unlike traditional methods, our platform utilizes advanced machine learning techniques to provide highly accurate forecasts, giving users a competitive edge in the market.</p> <br>
+    <p style="font-size:20px"><h4 class="h2">What makes Kentel's stock predictions different from others in the market?</h4>
+        <p>At Kentel, our stock predictions are powered by cutting-edge artificial intelligence algorithms that analyse vast amounts of data to identify patterns and trends. Unlike traditional methods, our platform utilizes advanced machine learning techniques to provide highly accurate forecasts, giving users a competitive edge in the market.</p> <br>
         <img src="/static/images/pexels-pixabay-373543.jpg" style="max-width: 100%;" alt=""><br> <br>
         
-        <h4>How reliable are Kentel's predictions?</h4>
+        <h4 class="h2">How reliable are Kentel's predictions?</h4>
         <p>We take pride in the accuracy of our predictions, which are the result of rigorous testing and validation processes. While no prediction can be guaranteed with absolute certainty, our platform consistently delivers reliable insights based on comprehensive data analysis and robust algorithms.</p>
         <img src="/static/images/pexels-photomix-company-95916.jpg" style="max-width: 100%;" alt=""><br> <br>
         
-        <h4>Can anyone use Kentel's platform, or do I need prior experience in finance?</h4>
+        <h4 class="h2">Can anyone use Kentel's platform, or do I need prior experience in finance?</h4>
         <p>Kentel is designed to be user-friendly and accessible to individuals of all backgrounds, regardless of their level of experience in finance. Our intuitive interface and simplified approach make it easy for anyone to navigate the platform and benefit from our predictions, without the need for technical expertise or financial knowledge.</p>
         <img src="/static/images/3people.png"  style="max-width: 100%;"alt=""><br><br>
         
-        <h4>How does Kentel ensure user privacy and data security?</h4>
+        <h4 class="h2">How does Kentel ensure user privacy and data security?</h4>
         <p>We prioritize the privacy and security of our users' data and adhere to stringent protocols to safeguard sensitive information. Our platform employs industry-standard encryption techniques to protect user data during transmission and storage. Additionally, we strictly adhere to data protection regulations and continuously monitor our systems to mitigate any potential security risks.</p>
         <!-- Stock image: [data security and privacy] -->
         <img style="max-width: 100%;" src="/static/images/pexels-pixabay-207574.jpg"><br><br>
-        <h4>What support does Kentel offer to its users?</h4>
+        <h4 class="h2">What support does Kentel offer to its users?</h4>
         <p>At Kentel, we are committed to providing exceptional support to our users every step of the way. Our dedicated customer service team is available to assist with any inquiries or issues that may arise, ensuring a seamless experience for our users. Additionally, we offer comprehensive resources, including tutorials and FAQs, to help users maximize the value of our platform.</p> <br>
         <img src="/static/images/wegotyourback.png" style="width: 100%;" alt="">
         <!-- Stock image: [customer support] -->
@@ -145,97 +97,20 @@
     </p>
 </center>
   </section>
-  <!--  F O O T E R  -->
-  <footer>
-    <div class="container">
-      <div class="row">
-        
-        <div class="col-md-3">
-          <h5>Kentel</h5>
-          <p>Contact us from this email for B2B products and in case of any questions.</p>
-          <p><a href="mailto:sales@kentel.dev" class="external-links">sales@kentel.dev</a></p>
-          <p><a href="https://wa.me/447418355491" class="external-links">Whatsapp Business</a></p>
-        </div>
-      </div> 
-      <div class="divider"></div>
-      <div class="row">
-        <div class="col-md-6 col-xs-12" style="display:none">
-            <a href="#"><i class="icon ion-logo-facebook"></i></a>
-            <a href="#"><i class="icon ion-logo-instagram"></i></a>
-            <a href="#"><i class="icon ion-logo-twitter"></i></a>
-            <a href="#"><i class="icon ion-logo-youtube"></i></a>
-          </div>
-          <div class="col-md-6 col-xs-12">
-            <small>2024 &copy; All rights reserved. Kentel LTD
-          </div>
-      </div>
-    </div>
-  </footer>
+
+  
   
 </div>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script>
-    function setCookie(name,value,days) {
-      var expires = "";
-      if (days) {
-          var date = new Date();
-          date.setTime(date.getTime() + (days*24*60*60*1000));
-          expires = "; expires=" + date.toUTCString();
-      }
-      document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-  }
-  function getCookie(name) {
-      var nameEQ = name + "=";
-      var ca = document.cookie.split(';');
-      for(var i=0;i < ca.length;i++) {
-          var c = ca[i];
-          while (c.charAt(0)==' ') c = c.substring(1,c.length);
-          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-      }
-      return null;
-  }
-
-  function eraseCookie(name) {   
-      document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-  }
-
-  function cookieConsent() {
-      if (!getCookie('allowCookies')) {
-        gc("toast").style.display = ""
-      }
-  }
-
- 
-
-  // load
-  cookieConsent()
-
-
   
-  function g(id){
-    return document.getElementById(id)
-
-  }
-  function gc(classN){ 
-    return document.getElementsByClassName(classN)[0]
-
-  }
-  g("btnAccept").addEventListener("click",function(){
-    setCookie('allowCookies','1',7)
-    gc("toast").style.display = "none";
-  })
-  g("btnDeny").addEventListener("click",function(){
-    eraseCookie('allowCookies')
-    gc("toast").style.display = "none";
-  })
-
-
-
-
-  </script>
   <style>
     img{
         border-radius: 10px;
+        width: 100%;
+    }
+    .containerdiv{
+      max-width: 800px;
+
+    
     }
   </style>
   <!--  E N D  F O O T E R  -->
@@ -246,13 +121,7 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-    {% if msg %}
-    <script>
-        alert("{{msg}}");
-        window.history.pushState({}, document.title, "/" );
-
-    </script>
-    {% endif %}
+   
     <script src="/static/js/mainCode.js"></script>
-  </body>
-</html>
+
+{%endblock%}

@@ -1,58 +1,36 @@
-<!doctype html>
-<html lang="en-US">
-  <head>
+{% extends "indbase.html" %}
+  {% block head %}
+    
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <meta name="description" content="Sign Up to the revolutionary finance AI Kentel">
+    <meta name="keywords" content="Kentel, Sign Up, register, subscribe">
+    <meta property="og:title" content="Sign Up - Kentel" />
+    <meta property="og:description" content="Kentel Sign Up" />
+    <meta property="og:image" content="//kentel.dev/static/images/kentel_300x200.png" />
 
-    <!-- Custom Css -->
-    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+    <title>Sign Up to Kentel</title>
+{% endblock%}
 
-    <!-- Ionic icons -->
-    <link href="https://unpkg.com/ionicons@4.2.0/dist/css/ionicons.min.css" rel="stylesheet">
+{% block body %}
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
 
-    <title>Signup to Kentel</title>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXFPT2TM2X"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
 
-      gtag('config', 'G-YXFPT2TM2X');
-    </script>
-    <meta name="description" content="Unleash the potential of stock market with Kentel's cutting edge AI.">
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-  </head>
 
-  <body>
 
-  <!-- N A V B A R -->
-  <nav class="navbar navbar-default navbar-expand-lg fixed-top custom-navbar">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="icon ion-md-menu"></span>
-    </button>
-    <img src="/static/images/logo.png" class="img-fluid nav-logo-mobile" alt="Company Logo">
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <div class="container">
-      	<img src="/static/images/logo.png" class="img-fluid nav-logo-desktop" alt="Company Logo">
-        
-      </div>
-    </div>
-  </nav>
-  <!-- E N D  N A V B A R -->
+
   
   <!-- H E R O -->
+
+
+
   <section id="hero">
+    <center>
     <div class="container">
-      <div class="row">
-        
-        <div class="col content-box hero-content">
+
+
+        <div class=" content-box hero-content login">
           <span>Kentel - {{planVisual}}<br> <i style="font-size:10px;text-decoration: underline;" onclick="window.location.assign('/#pricing')">Change Plan</i></span>
           <h1>Sign Up</h1>
           <br>
@@ -62,60 +40,21 @@
           	<input name="email" placeholder="E-Mail" class="form-control" required> <br>
           	<input name="password" minlength="8" placeholder="Password" type="password" class="form-control" required> <br>
             <div class="g-recaptcha" data-sitekey="6LczjW8pAAAAAI7QmmC-fmayrL-Nwz1BShHW0ki6"></div><br>
-            <p style="font-size:12px;">By singing up, you agree to our <a href="/kentel-eula" target="_blank">End User License Agreement(EULA).</a> And accept daily mails for stock market(that's how Kentel works)</p>
+            <i style="font-size:10px;">By singing up, you agree to our <a href="/kentel-eula" target="_blank">End User License Agreement(EULA).</a> And accept daily mails for stock market(You can change from settings)</i> <br>
           	<button href="" class="btn btn-regular">Sign Up</button>
           </form>
           
         </div>
-      </div>
+
+
+    </center>
     </div>
   </section>
   <!-- E N D  H E R O -->
 
 
-  <!--  F O O T E R  -->
-  <footer>
-    <div class="container">
-      <div class="row">
-         
-        <div class="col-md-3">
-          <h5>Company</h5>
-          <p>Contact us from this email for B2B products and in case of any questions.</p>
-          <p><a href="mailto:sales@kentel.dev" class="external-links">sales@kentel.dev</a></p>
-        </div>
-      </div> 
-      <div class="divider"></div>
-      <div class="row">
-        <div class="col-md-6 col-xs-12">
-            <a href="#"><i class="icon ion-logo-facebook"></i></a>
-            <a href="#"><i class="icon ion-logo-instagram"></i></a>
-            <a href="#"><i class="icon ion-logo-twitter"></i></a>
-            <a href="#"><i class="icon ion-logo-youtube"></i></a>
-          </div>
-          <div class="col-md-6 col-xs-12">
-            <small>2024 &copy; All rights reserved. Kentel LTD
-          </div>
-      </div>
-    </div>
-  </footer>
-  <div class="fixed-bottom p-4">
-    <div style="display:none" class="toast bg-dark text-white w-100 mw-100" role="alert" data-autohide="false">
-        <div class="toast-body p-4 d-flex flex-column">
-            <h4>Cookie Warning</h4>
-            <p>
-            This website stores data such as cookies to enable site functionality including analytics and personalization. By using this website, you automatically accept that we use cookies. 
-            </p>
-            <div class="ml-auto">
-                <button type="button" class="btn btn-outline-light mr-3" id="btnDeny">
-                    Deny
-                </button>
-                <button type="button" class="btn btn-light" id="btnAccept">
-                    Accept
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+  
+  
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
   <!--  E N D  F O O T E R  -->
@@ -133,4 +72,56 @@
 
     </script>
     {% endif %}  </body>
-</html>
+  </section>
+  <!-- E N D  H E R O -->
+
+    <script src="/static/js/logo.js"></script>
+
+    <!-- External JavaScripts -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    {% if err %}
+    <script>
+        alert("{{err}}");
+        window.location.assign("/login")
+
+    </script>
+    {% endif %}
+    <script type="text/javascript" src="/static/js/mainCode.js"></script>
+
+    <style>
+      #call-to-action{
+        display: none;
+      }
+      section{
+        height: 100vh;
+        position:relative
+      }
+      input{
+        width:100%;
+      }
+      form{
+        text-align:center
+      }
+
+      .container{
+        width:100%
+      }
+      .login{
+        width:80%;
+        max-width:800px;
+
+        text-align: left;
+      }
+      .logintop{
+        width: 100%;
+
+
+      }
+    </style>
+{%endblock%}
+  
+  
+  

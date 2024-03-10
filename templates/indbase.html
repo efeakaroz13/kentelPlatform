@@ -26,10 +26,8 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
 
-    <title>Kentel - Where everyone trades like a pro.</title>
     <link href="https://fonts.cdnfonts.com/css/euclid-circular-b" rel="stylesheet">
-    <meta name="description" content="Kentel is a cutting-edge AI platform offering highly accurate stock predictions. Utilizing innovative technology and approaches, Kentel provides unparalleled insights into the stock market.">
-    <meta name="keywords" content="Kentel, AI, stock predictions, finance technology, stock market, artificial intelligence">
+    
     <script type="application/ld+json">
       {
         "@context": "http://schema.org",
@@ -41,190 +39,61 @@
         "sameAs" : ["https://www.youtube.com/@kentel_","https://twitter.com/kentel_dev","https://www.linkedin.com/company/kentel-dev"]
       }
     </script>
-    <meta property="og:title" content="Kentel" />
-    <meta property="og:description" content="Where everyone trades like a pro" />
-    <meta property="og:image" content="//kentel.dev/static/images/kentel_300x200.png" />
-    <meta property="og:url" content="https://kentel.dev" />
     
+        {% block head %}
+        {% endblock %}
   </head>
 
   <body> 
     
   <!-- N A V B A R -->
   <nav class="navbar navbar-default navbar-expand-lg fixed-top custom-navbar">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="/#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="icon ion-md-menu"></span>
     </button>
     
     <div  class="img-fluid nav-logo-mobile" alt="Kentel">
-      <b href="" class="kentelText">Kentel</b>
+      <b class="kentelText" onclick="window.location.assign('/')">Kentel</b>
     </div>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <div class="container">
       	<div  class="mything" alt="Kentel">
-          <b href=""  class="kentelText">Kentel</b>
+          <b   class="kentelText" onclick="window.location.assign('/')">Kentel</b>
         </div>
         <ul class="navbar-nav ml-auto nav-right" data-easing="easeInOutExpo" data-speed="1250" data-offset="65">
           <li class="nav-item nav-custom-link">
             <a class="nav-link" href="/">Home <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
           </li>
           <li class="nav-item nav-custom-link">
-            <a class="nav-link" href="#marketing">Features <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+            <a class="nav-link" href="/#marketing">Features <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
           </li>
           
           <li class="nav-item nav-custom-link">
-            <a class="nav-link" href="#pricing">Pricing <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+            <a class="nav-link" href="/#pricing">Pricing <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
           </li>
           <li class="nav-item nav-custom-link">
             <a class="nav-link" href="/login">Sign In <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
           </li>
           <li class="nav-item nav-custom-link btn btn-demo-small">
-            <a class="nav-link" href="#pricing">Try for Free <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+            <a class="nav-link" href="/#pricing">Try for Free <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
-  <!-- E N D  N A V B A R -->
+  {% block body%}
+  {% endblock %}
   
-  <!-- H E R O -->
-  <section id="hero">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-          <img src="/static/images/iphone.png" class="img-fluid" alt="Demo image">
-        </div>
-        <div class="col-md-7 content-box hero-content">
-          <span>75+%Prediction Accuracy</span>
-          <h1>Stock Market innovation and the <b>Future of Trading</b></h1>
-          <p>Get ahead of 90% of investors with Kentel.</p>
-          <a href="#pricing" class="btn btn-regular">Learn more</a>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- E N D  H E R O -->
 
-  <!-- E N D  M A R K E T I N G -->
-  <section id="marketing">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-5">
-          <div class="content-box">
-            <span>Daily Insight Report</span>
-            <h2>Lastest Stock Scans in Your Inbox</h2>
-            <p>Receive emails from the <strong>only Stock Market AI</strong></p>
-            <a href="#pricing" class="btn btn-regular">Start Free Trial</a>
-          </div>
-        </div>
-        <div class="col-md-6">
-            <img  src="/static/images/demo-image.png" class="img-fluid" alt="Demo image">
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- E N D  M A R K E T I N G -->
-
-  <section id="hero2">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-          <img src="/static/images/tawa.png" class="img-fluid" alt="Demo image">
-        </div>
-        <div class="col-md-7 content-box hero-content">
-          <span>Best and only ML Technical Analysis</span>
-          <h1>Too good to be true? <b></b></h1>
-          <p>Try it yourself and see astonishing results</p> 
-          <li class="nav-item nav-custom-link btn btn-demo-small2">
-            <a class="nav-link" href="#pricing">Try for Free </a>
-          </li>
-          <br>
-          <br>
-
-          <a href="/about" >Read more</a>
-        </div>
-      </div>
-    </div>
-  </section>
   
-  <!-- P R I C I N G -->
-  <section id="pricing">
-    <div class="container">
-      <div class="title-block">
-        <h2>Plans and Pricing</h2>
-        <p>The best software to profit consistently.</p>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="pricing-box">
-            <h3 class="demo">Daily Insight</h3>
-            <h6>$20</h6>
-            <small>per month</small>
-            <p>With 7 days trial</p>
-            <div class="divider-light"></div>
-            <ul>
-              <li><i class="icon ion-md-checkmark-circle-outline demo"></i>Daily AI report</li>
-              <li><i class="icon ion-md-checkmark-circle-outline demo"></i>Indvidual Search(15/day)</li>
-              <li><i class="icon ion-md-checkmark-circle-outline demo"></i>1 Filter</li>
-              <li><i class="icon ion-md-checkmark-circle-outline demo"></i>1 Daily Scan</li> <br>
-              <br><br><br>
-              
-            </ul>
-            <div class="text-center">
-              <a href="/set/cookie?redirect=/signup&key=plan&value=basicM" class="btn btn-demo">Start free trial</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4" >
-          <div class="pricing-box" style="-webkit-box-shadow:0px 0px 50px 10px rgba(0,148,247,0.27);-moz-box-shadow: 0px 0px 50px 10px rgba(0,148,247,0.27);box-shadow: 0px 0px 50px 10px rgba(0,148,247,0.27);">
-            <h3>Standard Version</h3>
-            <h6>$60</h6>
-            <small>per month</small>
-            <p>Best tool to swingtrade</p>
-            <div class="divider-light"></div>
-            <ul>
-              <li><i class="icon ion-md-checkmark-circle-outline"></i>Mailing List(optional) </li>
-              <li><i class="icon ion-md-checkmark-circle-outline"></i>Unlimited Scans</li>
-              <li><i class="icon ion-md-checkmark-circle-outline"></i>Indvidual Stock Search(unlimited)</li>
-              <li><i class="icon ion-md-checkmark-circle-outline"></i>10+ filters</li>
-              <li><i class="icon ion-md-checkmark-circle-outline"></i>Save to portfolio, watch stock</li><br>
-            </ul>
-            <div class="text-center">
-              <a href="/set/cookie?redirect=/signup&key=plan&value=standardM" class="btn btn-buy">Buy now</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="pricing-box">
-            <h3 style="color:black;font-weight:300">Kentel Pro</h3>
-            <h6>?</h6>
-            <small>Coming Soon</small>
-            <p>For day traders and professional investors</p>
-            <div class="divider-light"></div>
-            <ul>
-              <li><i class="icon ion-md-checkmark-circle-outline"></i>Add Alarms</li>
-              <li><i class="icon ion-md-checkmark-circle-outline"></i>Continious Signal Change notifications</li>
-              <li><i class="icon ion-md-checkmark-circle-outline"></i>Keywords explorer</li>
-              <li><i class="icon ion-md-checkmark-circle-outline"></i>Sell signals for portfolio</li>
-              <li><i class="icon ion-md-checkmark-circle-outline"></i>Quarterly AI company analysis</li>
-            </ul>
-            <div class="text-center">
-              <a href="#" style="background:black;" class="btn btn-buy disabled">Coming Soon!</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- E N D  P R I C I N G -->
+  
 
-  <!-- C A L L  T O  A C T I O N -->
   <section id="call-to-action">
     <div class="container text-center">
       <h2>Increase your profit margin right now</h2>
       <div class="title-block">
         <p>Gain up to 30% every single month.</p>
-        <a href="#" class="btn btn-regular">Get Started</a>
+        <a href="/#" class="btn btn-regular">Get Started</a>
       </div>
     </div>
   </section>
