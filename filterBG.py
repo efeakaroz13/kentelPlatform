@@ -5,7 +5,7 @@
 from filters import FinLister
 import pymongo
 import time 
-mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@160.20.108.219/")
+mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@45.155.124.85/")
 db = mongo["KentelPlatform"]
 filters= db["filters"]
 

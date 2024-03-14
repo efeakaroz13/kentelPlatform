@@ -15,7 +15,7 @@ import pymongo
 from app import generate_id
 
 red = redis.Redis()
-mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@160.20.108.219/")
+mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@45.155.124.85/")
 db = mongo["KentelPlatform"]
 issues = db["Issues"]
 
