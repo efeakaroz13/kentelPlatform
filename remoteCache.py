@@ -35,4 +35,14 @@ while True:
         red.set("SERVER2_DAILY_NASDAQ",json.dumps(issueToReturn))
     except Exception as e:
         print(e)
+    try:
+        filters = filters.find({})
+        f = []
+        for _ in filters:
+            f.append(_)
+
+        red.set("filters",json.dumps(f))
+    except:
+        pass 
+
     time.sleep(30)

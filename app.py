@@ -122,7 +122,10 @@ def index():
             if u["giftCode"]:
                 #do this for gifted:
                 msg = request.args.get("msg")
-                filtersList = filters.find({})
+                try:
+                    filtersList = json.loads(red.get("filters"))
+                except:
+                    filtersList = filters.find({}) 
                 return render_template("home.html",data=u,msg=msg,active="home",title="",filters=filtersList)
             else:
                 cusid = u["customer_id"]

@@ -26,6 +26,14 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
     
     <title>{{title}} - Kentel</title>
+    <!-- Ionic icons -->
+    <link href="https://unpkg.com/ionicons@4.2.0/dist/css/ionicons.min.css" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+
+    <link href="https://fonts.cdnfonts.com/css/euclid-circular-b" rel="stylesheet">
     <meta property="og:title" content="{{title}}" />
     <meta property="og:description" content="Kentel Blog" />
     <meta property="og:image" content="//kentel.dev/static/images/kentel_300x200.png" />
@@ -42,21 +50,18 @@
     
   <!-- N A V B A R -->
   <nav class="navbar navbar-default navbar-expand-lg fixed-top custom-navbar">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="/#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="icon ion-md-menu"></span>
     </button>
-    {% if category=="tutorial" %}
-    <img src="/static/images/tutorials.png" class="img-fluid nav-logo-mobile" alt="Kentel Tutorials">
-    {% else %}
-    <img src="/static/images/articles.png" class="img-fluid nav-logo-mobile" alt="Kentel Articles">
-    {% endif %}
+    
+    <div  class="img-fluid nav-logo-mobile" alt="Kentel">
+      <b class="kentelText" onclick="window.location.assign('/')">Kentel <b style="color:rgb(20, 118, 246)">Blog</b></b>
+    </div>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <div class="container">
-        {% if category=="tutorial" %}
-        <img src="/static/images/tutorials.png" class="img-fluid nav-logo-desktop" alt="Kentel Tutorials">
-        {% else %}
-        <img src="/static/images/articles.png" class="img-fluid nav-logo-desktop" alt="Kentel Articles">
-        {% endif %}
+      	<div  class="mything" alt="Kentel">
+          <b   class="kentelText" onclick="window.location.assign('/')">Kentel <b style="color:rgb(20, 118, 246)">Blog</b></b>
+        </div>
         <ul class="navbar-nav ml-auto nav-right" data-easing="easeInOutExpo" data-speed="1250" data-offset="65">
           <li class="nav-item nav-custom-link">
             <a class="nav-link" href="/">Home <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
@@ -79,43 +84,56 @@
     </div>
   </nav>
   <!-- E N D  N A V B A R -->
+  <center>
+
   
   <!-- H E R O --> <br><br><br>
-  <div class="content"><br>
+  <div class="content container" style="text-align: left;" ><br>
     {% block body %}
     {% endblock %}
-  </div>
-  <!--  F O O T E R  -->
 
-  <footer >
-    <div class="container">
-      <div class="row">
+  </div>
+  <style>
+    body{
+      font-family: 'Euclid Circular B', sans-serif;
+      color:black
+    }
+  </style>
+
+</center>
+  <!--  F O O T E R  -->
+  <footer>
+    <div class="container" style="width:100%">
+      <center>
+      <div class="row" style="width:100%">
         
-        <div class="col-md-6">
-          <h5>Kentel</h5>
-          <p>Contact us from this email for B2B products and in case of any questions.</p>
-          <p><a href="mailto:sales@kentel.dev" class="external-links">sales@kentel.dev</a></p>
-          <p><a href="https://wa.me/447418355491" class="external-links">Whatsapp Business</a></p>
+        <div class="col">
+          <h5 style="text-align: left;">Kentel</h5>
+          <p>Don't hesitate to contact us if you have any questions in your mind. We're always here to help you!</p>
+          
         </div>
-        <div class="col-md-6">
-          <h5>More links</h5>
+        <div class="col" >
+          <h5 style="text-align: left;">More links</h5>
           <p><a href="/about">About Us</a></p>
           <p><a href="/faq">Frequently Asked Questions</a></p>
         </div>
       </div> 
       <div class="divider"></div>
       <div class="row">
-        <div class="col-md-6 col-xs-12" style="display:none">
-            <a href="#"><i class="icon ion-logo-facebook"></i></a>
-            <a href="#"><i class="icon ion-logo-instagram"></i></a>
-            <a href="#"><i class="icon ion-logo-twitter"></i></a>
-            <a href="#"><i class="icon ion-logo-youtube"></i></a>
+        <div class="col " style="text-align: left;" >
+
+            <a href="https://www.linkedin.com/company/kentel-dev"><i class="icon ion-logo-linkedin"></i></a>
+            <a href="https://twitter.com/kentel_dev"><i class="icon ion-logo-twitter"></i></a>
+            <a href="https://www.youtube.com/@kentel_"><i class="icon ion-logo-youtube"></i></a>
+            <a href="https://wa.me/447418355491"> <i class="icon ion-logo-whatsapp"></i></a>
+            <a href="mailto:sales@kentel.dev"> <i><ion-icon name="mail"></ion-icon></i></a>
           </div>
-          <div class="col-md-6 col-xs-12">
+          <div class="col col-xs-12">
             <small>2024 &copy; All rights reserved. Kentel LTD
           </div>
       </div>
     </div>
+  </center>
   </footer>
   
 </div>
@@ -138,3 +156,7 @@
 
   </body>
 </html>
+
+
+
+
