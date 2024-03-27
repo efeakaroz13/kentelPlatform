@@ -1809,8 +1809,8 @@ class Blog:
             description=b["description"]
             return render_template("blogs/"+b["fileName"],data=b,title=title,url=url,description=description)
         except Exception as e:
-            print(e)
-            return str(e)
+            print(f"[{time.time()}]",e,flush=True)
+            return abort(404)
         return str(url)
 class Public:
     @app.route("/about")
