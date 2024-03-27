@@ -1802,9 +1802,10 @@ class Blog:
 
     @app.route("/blog/<url>")
     def blogRender(url):
-        return url
+    
         try:
-            b = blog.find({"_id":url,"category":"blog","visible":True})[0]
+            b = blog.find({"_id":url})[0]
+            return b
             url = "https://kentel.dev/blog/"+url
             title = b["title"]
             description=b["description"]
