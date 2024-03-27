@@ -1804,8 +1804,11 @@ class Blog:
     def blogRender(url):
     
         try:
-            b = blog.find({"_id":url})[0]
-            return b
+            try:
+                b = blog.find({"_id":url+"\r"})[0]
+            except:
+                b = blog.find({"_id":url})[0]
+
             url = "https://kentel.dev/blog/"+url
             title = b["title"]
             description=b["description"]
