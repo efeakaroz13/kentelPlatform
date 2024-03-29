@@ -252,12 +252,32 @@ class Auth:
             planVisual = "Standard"
 
         if request.method == "POST":
-            gcaptcha = request.form.get("g-recaptcha-response")
+            gcaptcha = request.form.get("captcha")
+            print("gcaptcha",gcaptcha)
             if gcaptcha == None or gcaptcha == "":
                 return redirect("/signup?err=Solve+the+captcha")
-            page = json.loads(requests.post("https://www.google.com/recaptcha/api/siteverify",data={"secret":"6LczjW8pAAAAAPQEem6J97xQ_wnAzqmCvO6g5uu2","response":gcaptcha}).content)["success"]
-            if page != True:
+            gcaptcha = gcaptcha.replace("\r","").replace(" ","").strip()
+            
+            if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
+                ip = request.environ['REMOTE_ADDR']
+            else:
+                ip = request.environ['HTTP_X_FORWARDED_FOR']
+
+
+            #captcha
+            try:
+            
+                captData = json.loads(red.get(f"{ip}_captcha"))
+
+            except:
+                return redirect("/signup?err=Reload+the+page+and+try+again")
+
+            if gcaptcha != captData["text"]:
                 return redirect("/signup?err=Solve+the+captcha")
+
+
+            #captcha pass 
+
             email = request.form.get("email")
             if '@' not in email or '.' not in email:
                 return redirect("/signup?err=Email+not+valid")
@@ -1833,5 +1853,47 @@ class Public:
     @app.route("/sitemap.xml")
     def sitemap():
         return send_file("other/sitemap.xml",as_attachment=False)
+
+class Captcha:
+    @app.route("/give_captcha")
+    def giveCaptcha():
+
+
+        if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
+            ip = request.environ['REMOTE_ADDR']
+        else:
+            ip = request.environ['HTTP_X_FORWARDED_FOR']
+
+        try:
+            stat = json.loads(red.get(ip+"_captcha"))
+            file = stat["file"]
+            image_binary = open("temp_captcha/"+file,"rb").read()
+            response = make_response(image_binary)
+            response.headers.set('Content-Type', 'image/jpeg')
+            return response
+        except:
+            pass
+        pid = generate_id(20)
+        allCaptchas = os.listdir("temp_captcha")
+        selection = random.choice(allCaptchas)
+        image_binary = open("temp_captcha/"+selection,"rb").read()
+        response = make_response(image_binary)
+        response.headers.set('Content-Type', 'image/jpeg')
+        text = selection.split(".")[0]
+        stat = {"ip":ip,"file":selection,"text":text,"pid":pid}
+        stat = json.dumps(stat)
+
+        red.set(ip+"_captcha",stat,ex=100)
+
+
+        return response
+
+    @app.route("/whatsmyip")
+    def whatsmyip():
+        if request.environ.get("HTTP_X_FORWARDED_FOR") is None:
+            ip=request.environ["REMOTE_ADDR"]
+        else:
+            ip = request.environ["HTTP_X_FORWARDED_FOR"]
+        return str(ip)
 if __name__ == "__main__":
     app.run(debug=True,port=3000)

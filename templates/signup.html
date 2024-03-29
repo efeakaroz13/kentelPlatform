@@ -39,7 +39,12 @@
           	<input name="fullName" placeholder="Full Name" class="form-control" required> <br>
           	<input name="email" placeholder="E-Mail" class="form-control" required> <br>
           	<input name="password" minlength="8" placeholder="Password" type="password" class="form-control" required> <br>
-            <div class="g-recaptcha" data-sitekey="6LczjW8pAAAAAI7QmmC-fmayrL-Nwz1BShHW0ki6"></div><br>
+            <div class="captcha" style="text-align:left">
+            <label>Solve Captcha</label> <br>
+
+            <img src="/give_captcha" style="height:80px;"> <br>
+          </div>
+            <input name="captcha" max="10" placeholder="Captcha Text" type="text" class="form-control" required>
             <i style="font-size:10px;">By singing up, you agree to our <a href="/kentel-eula" target="_blank">End User License Agreement(EULA).</a> And accept daily mails for stock market(You can change from settings)</i> <br>
           	<button href="" class="btn btn-regular">Sign Up</button>
           </form>
