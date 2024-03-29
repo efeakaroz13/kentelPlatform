@@ -895,7 +895,7 @@ class StripeRoutes:
         except:
             return redirect("/")
         if plan == "standardM":
-            price_id = 'price_1OoUaYA7lNRXMlNswWPH191i'
+            price_id = 'price_1OzgSUA7lNRXMlNssAE3SPfJ'
 
             session = stripe.checkout.Session.create(
               success_url=base+'/checkout/success?session_id={CHECKOUT_SESSION_ID}',
@@ -906,6 +906,7 @@ class StripeRoutes:
                 # For metered billing, do not pass quantity
                 'quantity': 1
               }],
+              subscription_data={"trial_period_days":7},
               customer=u["customer_id"]
               
             )
@@ -916,7 +917,7 @@ class StripeRoutes:
             return redirect(session.url, code=303)
         if plan == "basicM":
 
-            price_id = 'price_1OoUaYA7lNRXMlNs7map0Tep'
+            price_id = 'price_1OzgR9A7lNRXMlNsKMw0CKIP'
 
             session = stripe.checkout.Session.create(
               success_url=base+'/checkout/success?session_id={CHECKOUT_SESSION_ID}',
@@ -1415,7 +1416,7 @@ class UXRoutes:
         if u["plan"] == "standardM":
             return redirect("/")
         if u["plan"] == "basicM":
-            price_id = 'price_1OoUaYA7lNRXMlNswWPH191i' # for standard.
+            price_id = 'price_1OzgSUA7lNRXMlNssAE3SPfJ' # for standard.
             sub = stripe.Subscription.list(customer=u["customer_id"])["data"][0]["id"]
             
             mod = stripe.Subscription.modify(
