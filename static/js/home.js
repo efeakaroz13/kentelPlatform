@@ -146,3 +146,61 @@ function filterChangeChecker(){
     }
 }
 setInterval(filterChangeChecker,1000)
+
+
+if(window.location.pathname=="/"){
+
+
+    dji = {}
+    nasdaq = {}
+    function updateIndexFundStatus(){
+        $.getJSON("/api/indexFunds",function(data){
+            for (let index = 0; index < data.length; index++) {
+                const element = data[index];
+                if(element.index=="^DJI"){
+                    dji = element
+                }else if(element.index=="^NDX"){
+                    nasdaq = element
+                }
+            }
+            loadIndexFunds()
+            setInterval(loadIndexFunds,10000);
+        })
+    }
+    updateIndexFundStatus()
+    setInterval(updateIndexFundStatus,110000)
+
+    current = "nasdaq"
+
+    function loadIndexFunds(){
+        if(current == "dowjones"){
+            document.getElementById("nasdaq").style.display = "";
+            document.getElementById("dowjones").style.display = "none";
+            document.getElementById("nasdaq").getElementsByTagName("a")[0].innerHTML = nasdaq.score+"%";
+            if(nasdaq.signal == "BUY"){
+                document.getElementById("nasdaq").style.background = "green";
+        
+            }else{
+                document.getElementById("nasdaq").style.background="red";
+            }
+            current = "nasdaq";
+
+        }else if(current == "nasdaq"){
+            document.getElementById("nasdaq").style.display = "none";
+            document.getElementById("dowjones").style.display = "";
+            document.getElementById("dowjones").getElementsByTagName("a")[0].innerHTML = dji.score+"%";
+            if(dji.signal == "BUY"){
+                document.getElementById("dowjones").style.background = "green";
+        
+            }else{
+                document.getElementById("dowjones").style.background="red";
+            }
+            current= "dowjones"
+
+        }
+    }
+
+    function indexFundAlert(){
+        alert("This feature you've clicked on is for showing the overall market status. Check it before participating in any trade.")
+    }
+}

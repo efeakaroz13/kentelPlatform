@@ -871,6 +871,23 @@ class APIs:
             return {"out":rd,"compinfo":compinfo}
         except Exception as e:
             return {"e":str(e)}
+        
+    @app.route("/api/indexFunds")
+    def indexFundsApi():
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            try:
+                u =  json.loads(red.get(email))
+                if u["password"] != password:
+                    return abort(403)
+            except:
+                u = users.find({"email":email,"password":password})[0]
+
+        except:
+            return abort(403)
+        d = json.loads(red.get("indexFunds"))
+        return d
 class Policies:
     @app.route("/privacy-policy")
     def privacy_policy():
@@ -1531,8 +1548,8 @@ class Admin:
             except:
                 return redirect("/godmin?err=Incorrect+credentials")
             response = redirect("/godmin")
-            response.set_cookie("email",email)
-            response.set_cookie("password",password)
+            response.set_cookie("email",email,max_age=31560000)
+            response.set_cookie("password",password,max_age=31560000)
             return response
 
         return render_template("godmin/login.html",err=err)
@@ -1855,6 +1872,29 @@ class Public:
     def sitemap():
         return send_file("other/sitemap.xml",as_attachment=False)
 
+
+class Archives:
+    @app.route("/archive")
+    def archiveViewer():
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            try:
+                u = json.loads(red.get(email))
+                if u["password"] != password:
+                    return redirect("/login?err=Check your credentials")
+
+            except:
+                u = users.find({"email":email,"password":password})[0]
+                
+
+        except:
+            return redirect("/login?err=You need to be logged in in order to view this page.")
+        if u["plan"] != "standardM":
+            return redirect("/")
+        
+
+        return render_template("archive.html",active="archive",data=u,title="Archive")
 class Captcha:
     @app.route("/give_captcha")
     def giveCaptcha():

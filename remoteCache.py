@@ -12,7 +12,7 @@ client = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@45.155.1
 
 dbS = client["KentelPlatform"]
 issues = dbS["Issues"]
-filters = dbS["Filters"]
+filters = dbS["filters"]
 print("Process Started")
 while True:
     try:
@@ -26,6 +26,7 @@ while True:
         red.set("NASDAQ",json.dumps(d))
     except Exception as e:
         print(e)
+
     try:
         issueToReturn = issues.find({"exchange": "SERVER2_DAILY_NASDAQ"})
         issueToReturn_ = []
@@ -35,14 +36,17 @@ while True:
         red.set("SERVER2_DAILY_NASDAQ",json.dumps(issueToReturn))
     except Exception as e:
         print(e)
+
     try:
-        filters = filters.find({})
+        fils = filters.find({})
+
         f = []
-        for _ in filters:
+        for _ in fils:
             f.append(_)
 
+
         red.set("filters",json.dumps(f))
-    except:
-        pass 
+    except Exception as e:
+        print(e) 
 
     time.sleep(30)

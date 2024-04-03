@@ -20,33 +20,38 @@
           
           <ion-content >
             <ion-list>
-                <ion-item  id="home" >
+                <ion-item  id="home"  >
                     <ion-button fill="clear"id='home_btn' onclick="openLink('/')"  color="dark" class="ion-margin"><ion-icon   name="home-sharp" ></ion-icon></ion-button> Home
                 </ion-item>
-                <ion-item  id="portfolio">
+                {% if data["plan"] == "standardM" %}
+                <ion-item  id="archive"  >
+                    <ion-button fill="clear"id='archive_btn' onclick="openLink('/archive')"  color="dark" class="ion-margin"><ion-icon name="archive-outline"></ion-icon></ion-button> Archives
+                </ion-item>
+                {% endif %}
+                <ion-item  id="portfolio" >
                     <ion-button  id='portfolio_btn' color="dark" class='ion-margin'fill="clear" ><ion-icon name="wallet-sharp" ></ion-icon></ion-button> Portfolio(Coming Soon)
                 </ion-item>
-                <ion-item  id="notifications" >
+                <ion-item  id="notifications"  >
                     <ion-button id='notifications_btn' onclick="openLink('/notifications')"  color="dark"class='ion-margin'fill="clear" ><ion-icon name="notifications-sharp" ></ion-icon></ion-button> Notifications
                 </ion-item>
-                <ion-item  id="account">
+                <ion-item  id="account" >
                     <ion-button  id='beta_btn' onclick="openLink('/account')"  color="dark"class='ion-margin'fill="clear" ><ion-icon name="person-sharp" ></ion-icon></ion-button> Account
                 </ion-item>
-                <ion-item  style="display: none;" id="beta">
+                <ion-item  style="display: none;" id="beta" >
                     <ion-button  id='beta_btn' onclick="openLink('/beta')"  color="dark"class='ion-margin'fill="clear" ><ion-icon name="flask-sharp" ></ion-icon></ion-button> Beta
                 </ion-item>
-                <ion-item  id="tutorials">
+                <ion-item  id="tutorials" >
                     <ion-button  id='beta_btn'  onclick="window.location.assign('/tutorials')" color="dark"class='ion-margin'fill="clear" ><ion-icon name="book-outline"></ion-icon></ion-button> Tutorials
                 </ion-item>
-                <ion-item id="discord" >
+                <ion-item id="discord"  >
                     <ion-button id='discord_btn' onclick="window.open('https://discord.gg/4GpUVzc8')"  color="dark"class='ion-margin' fill="clear" ><ion-icon name="logo-discord" ></ion-icon> </ion-button>Discord
                 </ion-item>
-                <ion-item  id="support">
+                <ion-item  id="support" >
                     <ion-button id='support_btn' onclick="openLink('mailto:sales@kentel.dev')"  color="dark" class='ion-margin' fill="clear" ><ion-icon name="mail-sharp" ></ion-icon></ion-button> Support
                 </ion-item>
 
 
-                <ion-item id="settings" >
+                <ion-item id="settings"  >
                     <ion-button id='settings_btn' onclick="openLink('/settings')" color="dark"class='ion-margin'fill="clear" ><ion-icon name="cog-sharp" ></ion-icon></ion-button> Settings
                 </ion-item>
 
@@ -63,6 +68,10 @@
                     <ion-menu-toggle>
                     <ion-button fill="clear" ><ion-icon name="menu-outline"></ion-icon></ion-button>
                     </ion-menu-toggle>
+                </ion-buttons>
+                <ion-buttons slot="end">
+                    <button  onclick="indexFundAlert()" class="INDEXFUNDBUTTON" id="nasdaq" style="display:none"> <img src="/static/images/nasdaq.png" height="30" alt=""> <a>78%</a></button>
+                    <button  onclick="indexFundAlert()" class="INDEXFUNDBUTTON2" id="dowjones" style="display:none"> <img src="/static/images/dowjones.png" height="30" alt=""> <a>78%</a></button>
                 </ion-buttons>
               </ion-toolbar>
 
@@ -335,7 +344,69 @@
 ion-item {
   --transition: none;
 }
+    .INDEXFUNDBUTTON{
 
+        background:rgb(255, 10, 10);
+        border-radius:30px;
+        color:white;
+        padding:10px;
+        padding-left:20px;
+        padding-right:50px;
+        font-size:18px;
+        font-weight: 600;
+        position:relative;
+        width: 200px;
+        height: 50px;
+    }
+    .INDEXFUNDBUTTON img{
+        margin-right:10px;
+
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color:white;
+    text-decoration: none;
+    left:30px
+    }
+    .INDEXFUNDBUTTON a{
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        color:white;
+        text-decoration: none;
+        right:10px
+    }
+    .INDEXFUNDBUTTON2{
+
+    background:rgb(255, 10, 10);
+    border-radius:30px;
+    color:white;
+    padding:10px;
+    padding-left:20px;
+    padding-right:50px;
+    font-size:18px;
+    font-weight: 600;
+    position:relative;
+    width: 200px;
+    height: 50px;
+    }
+    .INDEXFUNDBUTTON2 img{
+    margin-right:10px;
+    position: absolute;
+    top: 60%;
+    transform: translateY(-50%);
+    color:white;
+    text-decoration: none;
+    left:30px
+    }
+    .INDEXFUNDBUTTON2 a{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color:white;
+    text-decoration: none;
+    right:10px
+    }
     </style>
     <script>
         function n (){
