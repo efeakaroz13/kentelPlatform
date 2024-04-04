@@ -48,5 +48,18 @@ while True:
         red.set("filters",json.dumps(f))
     except Exception as e:
         print(e) 
+    try:
+        issueToReturn = issues.find({"exchange": "NASDAQ"})
+        issueToReturn_ = []
+        for i in issueToReturn:
+            issueToReturn_.append(i)
+        issueToReturn_.reverse()
 
-    time.sleep(30)
+        issueToReturn = issueToReturn_[:100]
+        red.set("archiveStock",json.dumps(issueToReturn))
+    except Exception as e:
+        print(e) 
+
+
+
+    time.sleep(200)

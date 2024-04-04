@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block body %} <br> <br>
+<ion-title>View Issue #{{r["issueNumber"]}}</ion-title>
+<center>
+
+<br>
+<div  style="width:80%;max-width: 800px;text-align:left">
+    <ion-button fill="solid">Calculate Performance</ion-button>
+    Last Calculated: Never
+</div>
+
+<ion-list style="width:80%;max-width: 800px;">
+    <ion-item >
+
+        <ion-row style="width:100%">
+            <ion-col><strong>Ticker</strong></ion-col>
+            <ion-col><strong>Signal</strong></ion-col>
+            <ion-col><strong>Score</strong></ion-col>
+            <ion-col><strong>Accuracy</strong></ion-col>
+            <ion-col><strong>Price</strong></ion-col>
+        </ion-row>
+    </ion-item>
+
+    {% for a in r["stockList"] %}
+    <ion-item >
+
+        <ion-row style="width:100%">
+            <ion-col>{{a["ticker"]}}</ion-col>
+            <ion-col>{{a["signal"]}}</ion-col>
+            <ion-col>{{round(a["score"],2)}}</ion-col>
+            <ion-col>{{round(a["acc"],2)}}</ion-col>
+            <ion-col>{{round(a["price"],2)}}$</ion-col>
+        </ion-row>
+    </ion-item>
+    {% endfor %}
+</ion-list>
+</center>
+<style>
+    a{
+        text-decoration: none;
+        color:black;
+        margin-left:10px
+    }
+</style>
+{% endblock %}

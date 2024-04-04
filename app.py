@@ -1893,8 +1893,80 @@ class Archives:
         if u["plan"] != "standardM":
             return redirect("/")
         
+        archiveStock = json.loads(red.get("archiveStock"))
 
-        return render_template("archive.html",active="archive",data=u,title="Archive")
+        return render_template("archive.html",active="archive",data=u,title="Archive",archiveStock=archiveStock)
+    @app.route("/archive/<issueNumber>")
+    def archiveIssueViewer(issueNumber):
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            try:
+                u = json.loads(red.get(email))
+                if u["password"] != password:
+                    return redirect("/login?err=Check your credentials")
+
+            except:
+                u = users.find({"email":email,"password":password})[0]
+                
+
+        except:
+            return redirect("/login?err=You need to be logged in in order to view this page.")
+        
+        archiveStock = json.loads(red.get("archiveStock"))
+        r = None
+        for r in archiveStock:
+            if r["issueNumber"] == issueNumber:
+                issue = r
+                break 
+        if r == None:
+            return redirect("/archive")
+
+
+        return render_template("archiveInd.html",data=u,active="archive",r=r,round=round)
+    @app.route("/archive/<issueNumber>/calculatePerformance")
+    def archiveCalculatePerformance(issueNumber):
+        try:
+            email = request.cookies.get("e")
+            password = request.cookies.get("p")
+            try:
+                u = json.loads(red.get(email))
+                if u["password"] != password:
+                    return redirect("/login?err=Check your credentials")
+
+            except:
+                u = users.find({"email":email,"password":password})[0]
+                
+
+        except:
+            return redirect("/login?err=You need to be logged in in order to view this page.")
+        issueNumber = int(issueNumber)
+        archiveStock = json.loads(red.get("archiveStock"))
+        r = None
+        for r in archiveStock:
+            if r["issueNumber"] == issueNumber:
+                issue = r
+                break
+        today = time.time()
+        try:
+            lastCalculated = r["lastCalculated"]
+        except:
+            lastCalculated = 0
+        if today - lastCalculated > 86000:
+            allStocks = r["stockList"]
+            for a in allStocks:
+                try:
+                    ticker = yf.Ticker(a["ticker"]).info
+                    cprice = ticker["currentPrice"]
+                    a["updatedPrice"] = cprice #for calculating the difference
+                    a["updatedChange"] = (a["price"]-cprice)*-100/a["price"]
+
+                except:
+                    pass
+            return r
+        else:
+            return {"scc":True}
+        
 class Captcha:
     @app.route("/give_captcha")
     def giveCaptcha():
