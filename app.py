@@ -1926,16 +1926,17 @@ class Archives:
             return redirect("/login?err=You need to be logged in in order to view this page.")
         
         archiveStock = json.loads(red.get("archiveStock"))
-        r = None
+
+        issue = None
         for r in archiveStock:
             if r["issueNumber"] == issueNumber:
                 issue = r
                 break 
-        if r == None:
+        if issue == None:
             return redirect("/archive")
 
 
-        return render_template("archiveInd.html",data=u,active="archive",r=r,round=round)
+        return render_template("archiveInd.html",data=u,active="archive",r=issue,round=round)
     @app.route("/archive/<issueNumber>/calculatePerformance")
     def archiveCalculatePerformance(issueNumber):
         try:
