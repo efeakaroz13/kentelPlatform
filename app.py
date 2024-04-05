@@ -1924,11 +1924,16 @@ class Archives:
 
         except:
             return redirect("/login?err=You need to be logged in in order to view this page.")
+        try:
+            issueNumber = int(issueNumber)
+        except:
+            return redirect("/archive")
         
         archiveStock = json.loads(red.get("archiveStock"))
 
         issue = None
         for r in archiveStock:
+            r["issueNumber"] = int(r["issueNumber"])
             if r["issueNumber"] == issueNumber:
                 issue = r
                 break 
