@@ -36,15 +36,14 @@
           <br>
 
           <form action="" method="POST">
-          	<input name="fullName" placeholder="Full Name" class="form-control" required> <br>
+
           	<input name="email" placeholder="E-Mail" class="form-control" required> <br>
           	<input name="password" minlength="8" placeholder="Password" type="password" class="form-control" required> <br>
             <div class="captcha" style="text-align:left">
-            <label>Solve Captcha</label> <br>
+            <p id="captchaLoad">Loading captcha...</p>
 
-            <img src="/give_captcha" style="height:80px;"> <br>
           </div>
-            <input name="captcha" max="10" placeholder="Captcha Text" type="text" class="form-control" required>
+            <input name="captcha"  placeholder="Answer" type="number" max="20" class="form-control" required>
             <i style="font-size:10px;">By singing up, you agree to our <a href="/kentel-eula" target="_blank">End User License Agreement(EULA).</a> And accept daily mails for stock market(You can change from settings)</i> <br>
           	<button href="" class="btn btn-regular">Sign Up</button>
           </form>
@@ -60,8 +59,7 @@
 
   
   
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <!--  E N D  F O O T E R  -->
     <script src="/static/js/logo.js"></script>
 
@@ -76,7 +74,13 @@
         window.location.assign("/signup")
 
     </script>
-    {% endif %}  </body>
+    {% endif %} 
+    <script>
+      $.getJSON("/captcha/generate",function(data){
+        question = data.question;
+        document.getElementById("captchaLoad").innerHTML = question;
+      })
+    </script>
   </section>
   <!-- E N D  H E R O -->
 
@@ -85,16 +89,8 @@
     <!-- External JavaScripts -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-    {% if err %}
-    <script>
-        alert("{{err}}");
-        window.location.assign("/login")
+    
 
-    </script>
-    {% endif %}
-    <script type="text/javascript" src="/static/js/mainCode.js"></script>
 
     <style>
       #call-to-action{

@@ -242,9 +242,9 @@ class Auth:
 
         plan = request.cookies.get("plan")
         if plan == None:
-            return redirect("/")
+            return redirect("/#pricing")
         if plan not in plans:
-            return redirect("/")
+            return redirect("/#pricing")
         planVisual = ""
         if plan == "basicM":
             planVisual = "Daily Insight"
@@ -252,11 +252,31 @@ class Auth:
             planVisual = "Standard"
 
         if request.method == "POST":
+            captchapid = request.cookies.get("pid")
+            if captchapid == None:
+                return redirect("/signup?err=Try to reload the page, if the error persists contact efeakaroz@kentel.dev")
+            try:
+                captchaPidData = json.loads(red.get(f"captcha_{captchapid}"))#for validating the answer and the PID
+            except:
+                return redirect("/#pricing")
+            captchaAnswer = captchaPidData["answer"]
+
+
             gcaptcha = request.form.get("captcha")
-            print("gcaptcha",gcaptcha)
             if gcaptcha == None or gcaptcha == "":
                 return redirect("/signup?err=Solve+the+captcha")
             gcaptcha = gcaptcha.replace("\r","").replace(" ","").strip()
+            try:
+                gcaptcha = int(gcaptcha)
+            except:
+                return redirect("/signup?err=Captcha answer should be a number")
+            
+            if gcaptcha == captchaAnswer:
+                #pass 
+                pass 
+            else:
+                return redirect("/signup?err=Captcha answer is wrong, please try again ")
+            
             
             if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
                 ip = request.environ['REMOTE_ADDR']
@@ -264,21 +284,13 @@ class Auth:
                 ip = request.environ['HTTP_X_FORWARDED_FOR']
 
 
-            #captcha
-            try:
-            
-                captData = json.loads(red.get(f"{ip}_captcha"))
-
-            except:
-                return redirect("/signup?err=Reload+the+page+and+try+again")
-
-            if gcaptcha != captData["text"]:
-                return redirect("/signup?err=Solve+the+captcha")
-
-
-            #captcha pass 
+           
 
             email = request.form.get("email")
+            if email == None:
+                return abort(404)
+            email = email.strip().lower()
+
             if '@' not in email or '.' not in email:
                 return redirect("/signup?err=Email+not+valid")
             try:
@@ -299,11 +311,10 @@ class Auth:
             psha256.update(password.encode())
             password = psha256.hexdigest()
             #hashing all passwords
-            fullName = request.form.get("fullName")
-            if fullName == None:
-                return abort(403)
+
+            
             cus = stripe.Customer.create(
-              name=fullName,
+
               email=email
             )
             af= request.cookies.get("af") # affiliate, if there are
@@ -330,7 +341,7 @@ class Auth:
 
                 "email":email,
                 "password":password,
-                "fullName":fullName,
+
                 "sentIssues":[],
                 "openedIssues":[],
                 "stripeScc":False,
@@ -373,6 +384,7 @@ class Auth:
             password = request.form.get("password")
             if email == None or password == None:
                 return redirect("/login")
+            email= email.strip().lower()
             p = hashlib.sha256()
             p.update(password.encode())
             password = p.hexdigest()
@@ -1968,38 +1980,41 @@ class Archives:
             return {"scc":True}
         
 class Captcha:
-    @app.route("/give_captcha")
-    def giveCaptcha():
+    @app.route("/captcha/generate")
+    def captchaGenerate():
+        captchaJson = json.loads(open("data/captcha.json","r").read())
+        pid = generate_id(15)
+        
+        num1 = random.randint(1,9)
+        num2 = random.randint(1,9)
+        whichStat = random.randint(0,1)
+        if whichStat == 0:
+            num1_ = captchaJson[str(num1)]
+            num2_ = str(num2)
+        if whichStat == 1:
+            num1_ = num1
+            num2_ = captchaJson[str(num2)]
+
+        QuestionString = f"What is {num1_} + {num2_}?"
+        answer = num1+num2
+        data = {
+            "question":QuestionString,
+            "pid":pid,
+            "answer":answer
+        }
 
 
-        if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
-            ip = request.environ['REMOTE_ADDR']
-        else:
-            ip = request.environ['HTTP_X_FORWARDED_FOR']
-
-        try:
-            stat = json.loads(red.get(ip+"_captcha"))
-            file = stat["file"]
-            image_binary = open("temp_captcha/"+file,"rb").read()
-            response = make_response(image_binary)
-            response.headers.set('Content-Type', 'image/jpeg')
-            return response
-        except:
-            pass
-        pid = generate_id(20)
-        allCaptchas = os.listdir("temp_captcha")
-        selection = random.choice(allCaptchas)
-        image_binary = open("temp_captcha/"+selection,"rb").read()
-        response = make_response(image_binary)
-        response.headers.set('Content-Type', 'image/jpeg')
-        text = selection.split(".")[0]
-        stat = {"ip":ip,"file":selection,"text":text,"pid":pid}
-        stat = json.dumps(stat)
-
-        red.set(ip+"_captcha",stat,ex=100)
-
+        red.set("captcha_"+pid,json.dumps(data),ex=500)
+        res = {
+            "pid":pid,
+            "question":QuestionString,
+            
+        }
+        response = make_response(res)
+        response.set_cookie("pid",pid)
 
         return response
+
 
     @app.route("/whatsmyip")
     def whatsmyip():
