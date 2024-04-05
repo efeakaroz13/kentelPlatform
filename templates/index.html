@@ -50,7 +50,36 @@
   </head>
 
   <body> 
-    <div id="loader"></div>
+    <style>
+      #hero{
+        min-height: 0px;
+      }
+      #hero2{
+        min-height: 0px;
+      }
+      #loader{
+        position:fixed;
+        width:100vw;
+        height: 100vh;
+        top:0;
+        left:0;
+        background: #fff;
+        z-index:1999;
+        overflow:hidden;
+        text-align: center;
+        padding-top:30vh;
+        padding-bottom:30vh;
+        transition: 0.5s;
+      }
+      #loader img{
+        width:60%;
+        max-width: 300px;
+        
+      }
+    </style>
+    <div id="loader">
+      <img src="/static/images/dark.png" alt="Loading...">
+    </div>
   <!-- N A V B A R -->
   <nav class="navbar navbar-default navbar-expand-lg fixed-top custom-navbar">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -348,17 +377,12 @@
   })
 
 
-
+  window.onload= function () {
+    document.getElementById("loader").style.display="none";
+  }
 
   </script>
-  <style>
-    #hero{
-      min-height: 0px;
-    }
-    #hero2{
-      min-height: 0px;
-    }
-  </style>
+  
   <!--  E N D  F O O T E R  -->
     <script src="/static/js/logo.js"></script>
 
