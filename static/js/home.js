@@ -80,8 +80,8 @@ function loadScan(){
         <ion-grid>\
             <ion-row>\
                 <ion-col><strong>Company</strong></ion-col>\
-                <ion-col><strong>Score</strong></ion-col>\
-                <ion-col><strong>Accuracy</strong></ion-col>\
+                <ion-col><strong>Buy Score</strong></ion-col>\
+                <ion-col><strong>AI-Accuracy</strong></ion-col>\
 \
             </ion-row>\
         </ion-grid>\
@@ -137,6 +137,7 @@ function loadScan(){
     
 }
 loadScan()
+setInterval(loadScan,60000)
 
 oldValue = g("filters").value;
 function filterChangeChecker(){
