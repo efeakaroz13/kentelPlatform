@@ -75,7 +75,7 @@ function loadScan(){
     /*edit the code because you werent sober writing this
     */
     $.getJSON(url,function(data){
-        var exchange = data.exchange
+        exchange = data.exchange
         basehtml = '<ion-item>\
         <ion-grid>\
             <ion-row>\
@@ -115,7 +115,7 @@ function loadScan(){
         }else{
             //unlimited Scans
             // add scan button.
-            var items = data.stockList;
+            items = data.stockList;
             items = items.slice(0,12)
             for (var i = items.length - 1; i >= 0; i--) {
                 d = items[i]
