@@ -1,80 +1,20 @@
-<!doctype html>
-<html lang="en-US">
-  <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXFPT2TM2X"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+{% extends 'indbase.html' %}
+{% block head %}
+<title>Kentel Blog - Find about latest news and articles</title>
+<meta property="og:title" content="Kentel Articles" />
+<meta property="og:description" content="Find latest articles about trading and stock market!" />
+<meta property="og:image" content="//kentel.dev/static/images/kentel_300x200.png" />
+<meta property="og:url" content="https://kentel.dev/blogs" />
+<meta property="og:type" content="article" />
 
-      gtag('config', 'G-YXFPT2TM2X');
-    </script>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Find out about recent articles and blog posts on Kentel">
+<meta name="keywords" content="Kentel, AI, stock predictions, finance technology, stock market, artificial intelligence,kentel blog, kentel blog search">
+{% endblock %}
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Custom Css -->
-    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
 
-    <!-- Ionic icons -->
-    <link href="https://unpkg.com/ionicons@4.2.0/dist/css/ionicons.min.css" rel="stylesheet">
+{% block body %}
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
-    
-    <title>Kentel Articles - Find about latest news and articles</title>
-    <meta property="og:title" content="Kentel Articles" />
-    <meta property="og:description" content="Find latest articles about trading and stock market!" />
-    <meta property="og:image" content="//kentel.dev/static/images/kentel_300x200.png" />
-    <meta property="og:url" content="https://kentel.dev/blogs" />
-    <meta property="og:type" content="article" />
 
-    <meta name="description" content="Find out about recent articles and blog posts on Kentel">
-    <meta name="keywords" content="Kentel, AI, stock predictions, finance technology, stock market, artificial intelligence,kentel blog, kentel blog search">
-
-    
-  </head>
-
-  <body> 
-    
-  <!-- N A V B A R -->
-  <nav class="navbar navbar-default navbar-expand-lg fixed-top custom-navbar">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="icon ion-md-menu"></span>
-    </button>
-    
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <div class="container">
-        {% if category=="tutorial" %}
-        <img src="/static/images/tutorials.png" class="img-fluid nav-logo-desktop" alt="Kentel Tutorials">
-        {% else %}
-        <img src="/static/images/articles.png" class="img-fluid nav-logo-desktop" alt="Kentel Articles">
-        {% endif %}
-        <ul class="navbar-nav ml-auto nav-right" data-easing="easeInOutExpo" data-speed="1250" data-offset="65">
-          <li class="nav-item nav-custom-link">
-            <a class="nav-link" href="/">Home <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
-          </li>
-          <li class="nav-item nav-custom-link">
-            <a class="nav-link" href="/#marketing">Features <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
-          </li>
-          
-          <li class="nav-item nav-custom-link">
-            <a class="nav-link" href="/#pricing">Pricing <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
-          </li>
-          <li class="nav-item nav-custom-link">
-            <a class="nav-link" href="/login">Sign In <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
-          </li>
-          <li class="nav-item nav-custom-link btn btn-demo-small">
-            <a class="nav-link" href="/#pricing">Try for Free <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <!-- E N D  N A V B A R -->
   
   <!-- H E R O --> <br><br><br>
   <div class="content"><br>
@@ -159,5 +99,4 @@
             })
         }
     </script>
-  </body>
-</html>
+{% endblock %}

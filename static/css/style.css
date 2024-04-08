@@ -1,5 +1,8 @@
 body {
-	font-family: 'Roboto', sans-serif;
+	font-family: 'Euclid Circular A', sans-serif;
+	text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 	color: #3a3f52;
 }
 
@@ -28,7 +31,40 @@ p {
 	font-size: 14px;
 	font-weight: 400;
 	letter-spacing: .05em;
-	color: #53627C;
+	color: #374051;
+}
+
+
+
+.kentelbtn {
+	background:none;
+	color:#635bff;
+	border: 0px;
+	font-size:15px;
+	padding-left:18px;
+	padding-right:18px;
+	padding-bottom:10px;
+	padding-top:10px;
+	transition:0.2s;
+	border-radius:28px;
+	cursor:pointer;
+	font-weight: 600;
+	font-family: 'Euclid Circular A', sans-serif;
+
+}
+.kentelbtn.solid{
+	background-color:#635bff;
+	color: white !important;
+}
+.kentelbtn.blue{
+	background-color:#0e49f9;
+	color:white !important;
+}
+.kentelbtn:hover{
+	transition:0.2s;
+	box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+	font-size:16px;
+	text-decoration:none;
 }
 
 .grid2 {
@@ -89,7 +125,7 @@ section {
 .title-block p {
 	font-size: 20px;
 	font-weight: 300;
-	color: #8da2b5;
+	color: #343b41;
 	margin-bottom: 0px;
 }
 
@@ -157,15 +193,20 @@ section {
 	font-size: 14px;
 	font-weight: 400;
 	border-radius: 3px !important;
+	opacity: 0.95;
 	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .05), 0 1px 2px 0 rgba(0, 0, 0, .08);
+	transition:0.2s
 }
 
 .btn:hover {
 	text-decoration: none;
+	opacity: 1;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+	transition:0.2s;
 }
 
 .btn-regular {
-	background-color: #0095f7;
+	background-color: #3880ff;
 	color: #ffffff;
 	padding: 10px 25px;
 	letter-spacing: .1em;
@@ -174,13 +215,13 @@ section {
 }
 
 .btn-regular:hover {
-	background-color: #0191f0;
+	background-color: #3880ff;
 	color: #ffffff;
 }
 
 .btn-demo {
 	color: #ffffff;
-	background-color: #6772e5;
+	background-color: #5563f8;
 	letter-spacing: .1em;
 	padding: 15px 48px;
 	display: inline-block;
@@ -190,11 +231,12 @@ section {
 
 .btn-demo:hover {
 	color: #ffffff;
-	background-color: #636ee1;
+	background-color: #5563f8;
 }
 
 .container {
-	position: relative
+	position: relative;
+
 }
 
 .mything {
@@ -204,7 +246,20 @@ section {
 	transform: translateY(-50%);
 
 }
+.rightButtonArea{
+	position: absolute;
+	top: 50%;
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
 
+}
+.my2ndthing{
+	position: absolute;
+	top: 50%;
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+	left:140px;
+}
 .kentelText {
 	text-decoration: none;
 	font-family: 'Euclid Circular B', sans-serif;
@@ -225,12 +280,12 @@ section {
 
 .btn-demo-small {
 	font-size: 12px;
-	background-color: #6772e5;
+	background-color: #5563f8;
 	padding: 1px 4px;
 }
 
 .btn-demo-small:hover {
-	background-color: #636ee1;
+	background-color: #5563f8;
 }
 
 .btn-demo-small a {
@@ -240,12 +295,12 @@ section {
 
 .btn-demo-small2 {
 	font-size: 12px;
-	background-color: #6772e5;
+	background-color: #5563f8;
 	padding: 1px 4px;
 }
 
 .btn-demo-small2:hover {
-	background-color: #636ee1;
+	background-color: #5563f8;
 }
 
 .btn-demo-small2 a {
@@ -273,7 +328,35 @@ section {
 
 #hero {
 	background-color: #f6f8f9;
+	background-image: url("/static/images/contourLine.svg");
+  	background-repeat: no-repeat;
+	background-size:cover;
+	background-position: center;
 	min-height: 100vh;
+	height: 100vh;
+	position:relative
+}
+#heroOverlay{
+	margin: 0;
+  position: absolute;
+  top: 40%;
+  -ms-transform: translateY(-40%);
+  transform: translateY(-60%);
+  text-align:center;
+}
+.vertCent{
+	text-align:left;
+
+
+}
+.nav-link{
+	transition:0.2s;
+}
+
+.nav-link:hover{
+	color:black;
+	font-weight: 600;
+	transition:0.2s;
 }
 
 #hero h1 {
@@ -298,7 +381,12 @@ section {
 
 #hero2 {
 	background-color: #f6f8f9;
+	background-image: url("/static/images/contourLine.svg");
+  	background-repeat: no-repeat;
+	background-size:cover;
+	background-position: center;
 	min-height: 100vh;
+	
 }
 
 #hero2 h1 {
@@ -426,21 +514,38 @@ section {
 	padding: 40px 20px;
 	border: 1px solid #F8F9FB;
 	border-radius: 6px;
-	box-shadow: 0 0 1px 0 rgba(0, 12, 32, 0.04), 0 10px 16px 0 rgba(10, 31, 68, 0.06);
+	box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 	margin-top: 30px;
+	height: 650px;
+	position:relative;
+
+	transition:0.4s;
 }
+.pricing-box:hover{
+	-webkit-box-shadow:0px 0px 50px 10px rgba(2, 21, 33, 0.19);
+	-moz-box-shadow: 0px 0px 50px 10px rgba(6, 41, 64, 0.176);
+	box-shadow: 0px 0px 50px 10px rgba(0, 15, 25, 0.153);
+	transition:0.4s;
+
+}
+.pricing-box .bottombutton{
+	position:absolute;
+	bottom:20px;
+	width:90%
+}
+
 
 .pricing-box h3 {
 	font-size: 22px;
-	font-weight: 300;
-	letter-spacing: .1em;
-	color: #0095f7;
+	font-weight: 600;
+
+	color: #0e49f9;
 }
 
 .pricing-box h6 {
-	font-size: 60px;
-	font-weight: 700;
-	color: #3a3f52;
+	font-size: 40px;
+	font-weight: 100;
+	color: black;
 	margin-bottom: 0px;
 }
 
@@ -473,7 +578,7 @@ section {
 
 .pricing-box i {
 	font-size: 20px;
-	color: #0095f7;
+	color: #0e49f9;
 	margin-right: 10px;
 }
 
@@ -486,14 +591,18 @@ section {
 ===============================================*/
 
 #call-to-action {
-	background-image: url('/static/images/call-to-action.png');
+	background-image: url('/static/images/contourLine.svg');
 	background-repeat: no-repeat;
 	background-size: cover;
 	height: 100%;
+	color:#3880ff
+}
+.highlight{
+	color:#0e49f9;
 }
 
 #call-to-action h2 {
-	color: #ffffff;
+	color: black;
 }
 
 .navbar-toggler {
@@ -509,7 +618,8 @@ section {
 #call-to-action p {
 	font-size: 20px;
 	font-weight: 300;
-	color: #ffffff;
+	color: #020c4a;
+	font-weight: 600;
 	opacity: .8;
 	margin-bottom: 40px;
 }
@@ -519,8 +629,8 @@ section {
 }
 
 #call-to-action .btn-regular {
-	background-color: #ffffff !important;
-	color: #0095f7 !important;
+	background-color: #0022fc !important;
+	color: #fdfdfd !important;
 	padding: 15px 45px;
 }
 
@@ -533,7 +643,7 @@ section {
 ===============================================*/
 
 footer {
-	background-color: #292c31;
+	background-color: #171c23;
 	padding: 60px 0;
 	color: #9a9ca0;
 }
@@ -544,6 +654,7 @@ footer h5 {
 	letter-spacing: .1em;
 	margin-bottom: 20px;
 }
+
 
 footer p {
 	font-size: 12px;
@@ -649,6 +760,9 @@ footer small {
 nav{
 	z-index: 0;
 }
+#secondNav{
+	display:none;
+}
 
 @media (max-width: 768px) {
 	#hero h1 {
@@ -665,7 +779,13 @@ nav{
 	.nav-right {
 		float: left;
 	}
+	#secondNav{
+		display:inline;
 
+		width:100%;
+		top:50px;
+		background:#fff
+	}
 	.nav-custom-link {
 		border-bottom: 1px solid #EEE;
 	}

@@ -414,64 +414,51 @@ class Auth:
         if request.method == "GET":
             err =request.args.get("err")
             return render_template("login.html",err=err)
-    @app.route("/forgot_password",methods=["POST","GET"])
-    def forgotpassword():
+   
+    @app.route("/forgot-password",methods=["POST","GET"])
+    def forgot_password():
         if request.method == "POST":
             email = request.form.get("email")
-            try:
-                u = users.find({"email":email})[0]
-            except:
-                return render_template("forgot_password.html",mode="email",err="The user does not exist")
-            
-            response = make_response(redirect("/forgot_password/code"))
-            response.set_cookie("e",email)
-            return response
-        return render_template("forgot_password.html",mode="email")
 
-    @app.route("/forgot_password/code",methods=["POST","GET"])
-    def forgotpasswordAPI():
-        if request.method == "POST":
-            email =request.cookies.get("e")
-            password = request.form.get("password")
-            codeForm = request.form.get("code")
-            codeCookie = request.cookies.get("code")
-            sha = hashlib.sha256()
-            sha.update(codeForm.encode())
-            codeForm = sha.hexdigest()
-            
-            if codeCookie == codeForm:
-                psha = hashlib.sha256()
-                psha.update(password.encode())
-                password = psha.hexdigest()
-            else:
-                return render_template("forgot_password.html",mode="code", err="Code doesn't match the original.")
             try:
-                u=users.find({"email":email})[0]
+                ud = json.loads(red.get(email))
             except:
-                return render_template("forgot_password.html",mode="code",err="There is no such user with the email given.")
-            
-
-            u["password"] = password
-            red.set(u["email"],json.dumps(u))
-            red.set(u["_id"],json.dumps(u))
-            users.update_one({"_id":u["_id"]},{"$set":{"password":password}})
-            return render_template("success.html",red="/login",msg="Your password has reset successfully")
-            
+                try:
+                    ud = users.find({"email":email})[0]
+                except:
+                    return redirect("/forgot-password?err=Couldn't find your account.")
+            #send the recovery email
+            pid = generate_id(20)
+            red.set(f"recovery_{pid}",json.dumps(ud),ex=600)
+            Mailer.recovery("https://kentel.dev/email/forgotpassword?pid="+pid,email)
+            return redirect("/forgot-password?err=Email Sent for account recovery. Click on the link for deciding your new password. You have 10 minutes to reset your password.")
         if request.method == "GET":
-            email = request.cookies.get("e")
-            if email == None:
-                return redirect("/forgot_password")
-            code= generate_id(6)
-            Mailer.code(code,email)
-            sh = hashlib.sha256()
-            sh.update(str(code).encode())
-           
-            code = sh.hexdigest()
-            response = make_response(make_response("forgot_password.html",mode="code",email=email))
-            code = response.set_cookie("code",code)
-            
-            
-            return response
+            err = request.args.get("err")
+
+            return render_template("forgotpassword.html",err=err)
+        
+    @app.route("/email/forgotpassword",methods=["POST","GET"])
+    def emailForgotPassword():
+        pid = request.args.get("pid")
+        try:
+            recoveryData = json.loads(red.get("recovery_"+pid))
+        except:
+            return abort(403)
+
+
+        if request.method == "POST":
+            password = request.form.get("password")
+            p = hashlib.sha256()
+            p.update(password.encode())
+            p = p.hexdigest()
+            recoveryData["password"] = p 
+            red.set(recoveryData["_id"],json.dumps(recoveryData))
+            red.set(recoveryData["email"],json.dumps(recoveryData))
+            users.update_one({"_id":recoveryData["_id"]},{"$set":{"password":p}})
+            return redirect("/login?err=Password Successfully Updated. Sign in with your new password to continue")
+        if request.method == "GET":
+            return render_template("passwordReset.html")
+
     @app.route("/verify/email",methods=["POST","GET"])
     def verifyEmail():
         if request.method == "POST":
@@ -637,6 +624,8 @@ class IssuesDifferentPackages:
                         if s["acc"]>73 and s["score"]>97.5 and s["ticker"] in filterItemsArray:
                             #filter has passed.
                             output.append(s)
+
+                    output = output.sort(lambda x:x["score"],reverse=True)
                     sissue["stockList"] = output
                     del sissue["allF"]
                     return sissue
@@ -697,7 +686,7 @@ class Tutorials:
 
         except:
             return redirect("/")
-        return render_template("tutorials.html",active="tutorials",title="Tutorial Center - ")
+        return render_template("tutorials.html",active="tutorials",title="Tutorial Center - ",data=u)
 class APIs:
     @app.route("/api/login",methods=["POST"])
     def apiLogin():
@@ -1225,7 +1214,7 @@ class UXRoutes:
             except:
                 u= users.find({"email":email,"password":password})[0]
                 red.set(u["email"],json.dumps(u))
-                red.set(e["_id"],json.dumps(u))
+                red.set(u["_id"],json.dumps(u))
 
         except:
             return redirect("/login") 
@@ -1239,6 +1228,18 @@ class UXRoutes:
         if request.method == "POST":
             notfList = ["enabled","disabled"]
             notf = request.form.get("notf")
+            nasdaq100 = request.form.get("nasdaq100")
+            if nasdaq100 == None or nasdaq100 == "":
+                pass 
+            elif nasdaq100=="enabled":
+                try:
+                    nasdaq100List= json.loads(red.get("nasdaq100List"))
+                except:
+                    nasdaq100List = []
+                nasdaq100List.append(u['_id'])
+
+                red.set("nasdaq100List",json.dumps(nasdaq100List))
+
             if notf == "" or notf == None:
                 return redirect("/notifications")
             if notf in notfList:

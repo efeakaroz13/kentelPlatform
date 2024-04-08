@@ -48,17 +48,20 @@
     
   <!-- N A V B A R -->
   <nav class="navbar navbar-default navbar-expand-lg fixed-top custom-navbar">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="/#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="icon ion-md-menu"></span>
     </button>
-    
-    <div  class="img-fluid nav-logo-mobile" alt="Kentel">
-      <b class="kentelText" onclick="window.location.assign('/')">Kentel</b>
+
+    <div class="img-fluid nav-logo-mobile" alt="Kentel">
+      <b href="" class="kentelText">Kentel</b>
     </div>
+    <div id="secondNav">
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <br>
       <div class="container">
-      	<div  class="mything" alt="Kentel">
-          <b   class="kentelText" onclick="window.location.assign('/')">Kentel</b>
+      	<div class="mything" alt="Kentel">
+          <b href="" class="kentelText">Kentel</b>
         </div>
         <ul class="navbar-nav ml-auto nav-right" data-easing="easeInOutExpo" data-speed="1250" data-offset="65">
           <li class="nav-item nav-custom-link">
@@ -74,18 +77,49 @@
           <li class="nav-item nav-custom-link">
             <a class="nav-link" href="/login">Sign In <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
           </li>
-          <li class="nav-item nav-custom-link btn btn-demo-small">
+          <li class="nav-item nav-custom-link " >
             <a class="nav-link" href="/#pricing">Try for Free <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
           </li>
         </ul>
       </div>
     </div>
+  </div>
+    <div class="collapse navbar-collapse" >
+      <div class="container">
+        <div class="mything" alt="Kentel">
+          <b href="" class="kentelText">Kentel</b>
+        </div>
+        <ul class="navbar-nav ml-auto nav-left my2ndthing" data-easing="easeInOutExpo" data-speed="1250" data-offset="65">
+          <li class="nav-item nav-custom-link">
+            <a class="nav-link" href="/">Home <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+          <li class="nav-item nav-custom-link">
+            <a class="nav-link" href="/#marketing">Features <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+
+          <li class="nav-item nav-custom-link">
+            <a class="nav-link" href="/#pricing">Pricing <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+          <li class="nav-item nav-custom-link">
+            <a class="nav-link" href="/login">Sign In <i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+          </li>
+          
+        </ul>
+        <div class="rightButtonArea" style="width:max-content;position:absolute;right:5px;">
+        <div class="kentelbtn solid"  id="tryforfree" onclick="window.location.assign('/#pricing')">
+          <span  >Try for Free</span>
+        </div>
+      </div>
+      </div>
+    </div>
+    
   </nav>
+  <!-- E N D  N A V B A R -->
   {% block body%}
   {% endblock %}
   
 
-  
+  <ion-slide>
   
 
   <section id="call-to-action">
@@ -133,6 +167,7 @@
     </div>
   </center>
   </footer>
+</ion-slide>
   <div class="fixed-bottom p-4" style="max-width: 500px; max-height: 200px;margin-bottom:10px;opacity: 0.8;border-radius: 20px;">
     <div style="display:none;" class="toast bg-dark text-white w-100 mw-100" role="alert" data-autohide="false">
         <div class="toast-body p-4 d-flex flex-column">
@@ -235,5 +270,6 @@
     </script>
     {% endif %}
     <script src="/static/js/mainCode.js"></script>
+    </ion-slide-box>
   </body>
 </html>

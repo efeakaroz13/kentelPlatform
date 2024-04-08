@@ -2,31 +2,84 @@ from trader import DailySignal
 import time 
 import redis
 import json
+from multiprocessing import Process
+import os 
+
 red= redis.Redis()
 
 
 
 allIndexFunds = ["^NDX","^DJI"]
-while True:
-    funds = []
-    for i in allIndexFunds:
-        try:
-            s,sc,cprice,_ = DailySignal(i)
-            acc = round(float(red.get(i).decode())*100,1)
-            print(i,s,round(sc*100,2),f"{round(cprice,2)}$",acc)
+def p1():
+    while True:
+        funds = []
+        for i in allIndexFunds:
+            try:
+                s,sc,cprice,_ = DailySignal(i)
+                acc = round(float(red.get(i).decode())*100,1)
+                print(i,s,round(sc*100,2),f"{round(cprice,2)}$",acc)
 
-            data = {
-                "index":i,
-                "signal":s,
-                "score":round(sc*100,1),
-                "acc":acc,
+                data = {
+                    "index":i,
+                    "signal":s,
+                    "score":round(sc*100,1),
+                    "acc":acc,
+                    
+                }
+                funds.append(data)
                 
-            }
-            funds.append(data)
-            
+            except:
+                pass
+        red.set("indexFunds",json.dumps(funds))
+        time.sleep(100)
+def p2():
+    #mailer
+    oldScore = 0
+    lastSent = 0
+    time.sleep(5)
+    while True:
+        try:
+            alarmEnabledPeople = red.get(json.loads("nasdaq100List"))
+            print(alarmEnabledPeople)
+        except:
+            alarmEnabledPeople = []
+        try:
+            ifd = json.loads(red.get("indexFunds"))[0]
+            score = ifd["score"]
+            signal = ifd["signal"]
         except:
             pass
-    red.set("indexFunds",json.dumps(funds))
-    time.sleep(100)
+        if score!= oldScore and score>10 and time.time()-lastSent>3600:
+            #alarm situation
+            mails = []
+            for p in alarmEnabledPeople:
+                try:
+                    m = red.get(p)["email"]
+                    mails.append(m)
+                except:
+                    pass 
+            for m in mails:
+                print(m)
+
+
+            lastSent = time.time()
+
+ 
+
+
+        oldScore = ifd["score"]
+
+        time.sleep(40)
+
+if __name__ == "__main__":
+    p_1 = Process(target=p1)
+    p_2 = Process(target=p2)
+    p_1.start()
+    p_2.start()
+    p_1.join()
+    p_2.join()
+
+
+
 
     

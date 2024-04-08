@@ -6,7 +6,7 @@
 <br>
 <ion-list style="width:80%;max-width: 800px;">
     {% for a in archiveStock %}
-    <ion-item  onclick="window.location.assign('/archive/{{a['issueNumber']}}')"><strong>#{{a["issueNumber"]}}</strong><a id="{{a['issueNumber']}}"></a> <script> date_= new Date({{a['time']}}*1000);document.getElementById('{{a["issueNumber"]}}').innerHTML= date_;</script></ion-item>
+    <ion-item  onclick="window.location.assign('/archive/{{a['issueNumber']}}')"><ion-label><strong>#{{a["issueNumber"]}}</strong><ion-label id="{{a['issueNumber']}}"></ion-label> <script> date_= new Date({{a['time']}}*1000);document.getElementById('{{a["issueNumber"]}}').innerHTML= date_;</script></ion-label></ion-item>
     {% endfor %}
 </ion-list>
 </center>
