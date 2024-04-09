@@ -84,6 +84,7 @@ class Mailer:
     def recovery(url,email):
         emailHTMLStart= open("templates/email/recovery.html","r").read()
         emailHTMLStart = emailHTMLStart.replace("-url-",url)
+        emailHTMLStart = emailHTMLStart.replace("-preview-","Account Recovery")
         
         
         

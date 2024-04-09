@@ -571,6 +571,7 @@ class IssuesDifferentPackages:
         except:
             return redirect("/login")
         if u["plan"] == "standardM":
+            print(u["plan"])
             filter_selected = request.args.get("filter")
             if filter_selected == None or filter_selected == "" or filter_selected == "undefinded" or filter_selected == "null" or filter_selected=="defno" or filter_selected=="def":
                 try:
@@ -599,6 +600,7 @@ class IssuesDifferentPackages:
                 try:
                     s_f = filters.find({"_id":filter_selected})[0]
                     items = s_f["items"]
+                    
                     try:
                         try:
                             sissue = json.loads(red.get("NASDAQ"))
@@ -625,14 +627,15 @@ class IssuesDifferentPackages:
                             #filter has passed.
                             output.append(s)
 
-                    output = output.sort(lambda x:x["score"],reverse=True)
+                    output.sort(key=lambda x:x["score"],reverse=True)
                     sissue["stockList"] = output
                     del sissue["allF"]
                     return sissue
                 
 
 
-                except:
+                except Exception as e:
+                    print("--- ",e)
                     try:
                         i = issues.find({"exchange":"NASDAQ"})
                         allIssuesArray = []
@@ -1433,7 +1436,7 @@ class UXRoutes:
         if u["plan"] == "standardM":
             return redirect("/settings")
         if u["plan"] == "basicM":
-            return render_template("upgradePlan.html")
+            return render_template("upgradePlan.html",data=u,active="settings")
     @app.route("/upgrade-plan")
     def upgradePlan():
 

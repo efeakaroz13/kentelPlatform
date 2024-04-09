@@ -143,8 +143,9 @@ oldValue = g("filters").value;
 function filterChangeChecker(){
     console.log(g("filters").value,oldValue)
     if(g("filters").value !=oldValue){
-        loadScan();
         oldValue = g("filters").value;
+        loadScan();
+        
     }
 }
 setInterval(filterChangeChecker,1000)
