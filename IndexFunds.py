@@ -4,7 +4,7 @@ import redis
 import json
 from multiprocessing import Process
 import os 
-
+from extra import Mailer
 red= redis.Redis()
 
 
@@ -39,9 +39,10 @@ def p2():
     time.sleep(5)
     while True:
         try:
-            alarmEnabledPeople = red.get(json.loads("nasdaq100List"))
+            alarmEnabledPeople = json.loads(red.get("nasdaq100List"))["list"]
             print(alarmEnabledPeople)
-        except:
+        except Exception as e:
+
             alarmEnabledPeople = []
         try:
             ifd = json.loads(red.get("indexFunds"))[0]
@@ -49,12 +50,12 @@ def p2():
             signal = ifd["signal"]
         except:
             pass
-        if score!= oldScore and score>10 and time.time()-lastSent>3600:
+        if score!= oldScore and score>98 and time.time()-lastSent>3600:
             #alarm situation
             mails = []
             for p in alarmEnabledPeople:
                 try:
-                    m = red.get(p)["email"]
+                    m = json.loads(red.get(p))["email"]
                     mails.append(m)
                 except:
                     pass 

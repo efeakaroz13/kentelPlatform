@@ -1237,9 +1237,12 @@ class UXRoutes:
             elif nasdaq100=="enabled":
                 try:
                     nasdaq100List= json.loads(red.get("nasdaq100List"))
+
+
                 except:
-                    nasdaq100List = []
-                nasdaq100List.append(u['_id'])
+                    nasdaq100List = {"list":[]}
+                if u["_id"] not in nasdaq100List["list"]:
+                    nasdaq100List["list"].append(u['_id'])
 
                 red.set("nasdaq100List",json.dumps(nasdaq100List))
 
