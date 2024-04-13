@@ -57,7 +57,7 @@ if __name__ == "__main__":
             #Signals: BUY SELL, score: 0-1, price: float
         
 
-            signal,score,price,change = trader.DailySignal(ticker)
+            signal,score,price,change ,warn = trader.DailySignal(ticker)
             score= score*100
             notify = False
             try:

@@ -92,7 +92,7 @@ def task(tickers,workerID):
             acc = 0
         #Signals: BUY SELL, score: 0-1, price: float
         try:
-            signal,score,price,change = trader.DailySignal(t)
+            signal,score,price,change,warn = trader.DailySignal(t)
             score = score*100
             data = {
                 "ticker":t,
@@ -100,7 +100,8 @@ def task(tickers,workerID):
                 "price":price,
                 "signal":signal,
                 "acc":acc,
-                "change":change
+                "change":change,
+                "warning":warn
 
             }
             if signal == "BUY" and score>97:
@@ -110,7 +111,7 @@ def task(tickers,workerID):
         except:
             time.sleep(3)
             try:
-                signal,score,price,change = trader.DailySignal(t)
+                signal,score,price,change,warn  = trader.DailySignal(t)
                 score = score*100
                 data = {
                     "ticker":t,
@@ -118,7 +119,8 @@ def task(tickers,workerID):
                     "price":price,
                     "signal":signal,
                     "acc":acc,
-                    "change":change
+                    "change":change,
+                    "warning":warn
                 }
                 if signal == "BUY" and score>97:
 

@@ -837,7 +837,7 @@ class APIs:
         except:
             return {},401
         try:
-            signal,score,price,change = trader.DailySignal(ticker)
+            signal,score,price,change,warn = trader.DailySignal(ticker)
         except:
             return {"err":"There is an error on our side, AI not available."}
         try:
@@ -846,7 +846,7 @@ class APIs:
             acc = 0
 
 
-        return {"signal":signal,"ticker":ticker,"price":price,"acc":acc,"score":score*100}
+        return {"signal":signal,"ticker":ticker,"price":price,"acc":acc,"score":score*100,"warn":warn}
     @app.route("/api/v1/stockGraph/<ticker>")
     def stockGraphTicker(ticker):
         try:

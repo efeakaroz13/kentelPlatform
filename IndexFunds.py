@@ -23,7 +23,7 @@ def p1():
             funds = []
             for i in allIndexFunds:
                 try:
-                    s,sc,cprice,_ = DailySignal(i)
+                    s,sc,cprice,_ ,warn = DailySignal(i)
                     acc = round(float(red.get(i).decode())*100,1)
                     print(i,s,round(sc*100,2),f"{round(cprice,2)}$",acc)
 

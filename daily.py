@@ -105,7 +105,7 @@ if __name__ == "__main__":
     notifications = []
     for s in stocks:
 
-        signal,score,price,change = trader.DailySignal(s["ticker"])
+        signal,score,price,change ,warn = trader.DailySignal(s["ticker"])
         score = round(score*100,2)
         acc= float(r.get(s["ticker"]).decode())*100
         if acc<72:

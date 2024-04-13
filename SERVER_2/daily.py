@@ -192,11 +192,11 @@ if __name__ == "__main__":
     for s in stocks:
         try:
             
-            signal,score,price,change = trader.DailySignal(s["ticker"])
+            signal,score,price,change ,warn = trader.DailySignal(s["ticker"])
         except:
             time.sleep(5)
             try:
-                signal,score,price,change = trader.DailySignal(s["ticker"])
+                signal,score,price,change ,warn = trader.DailySignal(s["ticker"])
             except Exception as e:
                 print(f"[{time.ctime(time.time())}]",e,flush=True)
                 continue

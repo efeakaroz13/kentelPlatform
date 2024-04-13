@@ -117,7 +117,7 @@ if __name__ == "__main__":
 	stocks = lister.stocks
 	notificationList = [] 
 	for s in stocks:
-		signal1,score1,cprice1,change1 = trader.DailySignal(s["ticker"])
+		signal1,score1,cprice1,change1 ,warn = trader.DailySignal(s["ticker"])
 		if score1<0.95:
 			continue
 
