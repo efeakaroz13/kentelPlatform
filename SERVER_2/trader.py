@@ -25,6 +25,19 @@ import redis
 
 red=redis.Redis()
 
+def checkChange(data):
+
+    d30 = data.tail(30)
+    allClose = d30["Close"]
+    maxC = max(allClose)
+    minC = min(allClose)
+    dif = maxC-minC
+    change = (dif/minC)*100
+    if change>30:
+        return True 
+    else:
+        return False 
+
 
 def DailySignal(ticker_name):
     
@@ -49,6 +62,7 @@ def DailySignal(ticker_name):
     lastDay = data.tail(1)
     cprice = lastDay.iloc[0]["Close"]
     
+    warn = checkChange(data)
     allOpens = data["Open"]
     signals = []
     old = 0
@@ -107,7 +121,7 @@ def DailySignal(ticker_name):
         
     endtime = time.time()
     score = max(output[0])
-    return outputStr[0],score,cprice,0#change
+    return outputStr[0],score,cprice,0,warn#change
     #yfinance
 
 

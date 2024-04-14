@@ -205,13 +205,14 @@ if __name__ == "__main__":
         if acc<72:
             continue
         acc=  round(acc,2)
-        if signal == "BUY" and score>97:
+        if signal == "BUY" and score>98:
             d = {
                 "comp":s,
                 "signal":signal,
                 "score":score,
                 "price":price,
-                "acc":acc
+                "acc":acc,
+                "warning":warn
 
 
             }
@@ -232,23 +233,29 @@ if __name__ == "__main__":
     datestring = f"{now.month}/{now.day}/{now.year}"
     content = ""
     for n in notifications:
-        line = f"<p style='font-weight:400;font-size:20px'>{n['comp']['ticker']} | <a style='color:green'>{n['score']}% {n['signal']}</a> | <a>{n['acc']} Accuracy</a> | <a>$</a></p>"
+        color = ""
+        try:
+            if n["warning"]:
+                color = "color:yellow"
+        except:
+            color = ""
+        line = f"<p style='font-weight:400;font-size:20px;{color}'>{n['comp']['ticker']} | <a style='color:green'>{n['score']}% {n['signal']}</a> | <a>{n['acc']} Accuracy</a> | <a>$</a></p>"
         content = content+line
+    if len(notifications)>0:
+        mailHTML = open("templates/email/scan.html","r").read().replace("-date-",datestring).replace("-content-",content).replace("-number-",str(len(notifications))).replace("-preview-","Stay informed with your daily stock report from Kentel! Discover valuable insights and predictions to navigate the stock market effectively.")
+        upload= requests.post(f"{base}/secret/kentel/issueUpload",data=json.dumps(data),headers={"User-Agent":"sagent",'Content-type':'application/json', 'Accept':'application/json'})
+        p1= Process(target=send,args=(t1,mailHTML))
+        p2= Process(target=send,args=(t2,mailHTML))
+        p3= Process(target=send,args=(t3,mailHTML))
+        p4= Process(target=send,args=(t4,mailHTML))
 
-    mailHTML = open("templates/email/scan.html","r").read().replace("-date-",datestring).replace("-content-",content).replace("-number-",str(len(notifications))).replace("-preview-","Stay informed with your daily stock report from Kentel! Discover valuable insights and predictions to navigate the stock market effectively.")
-    upload= requests.post(f"{base}/secret/kentel/issueUpload",data=json.dumps(data),headers={"User-Agent":"sagent",'Content-type':'application/json', 'Accept':'application/json'})
-    p1= Process(target=send,args=(t1,mailHTML))
-    p2= Process(target=send,args=(t2,mailHTML))
-    p3= Process(target=send,args=(t3,mailHTML))
-    p4= Process(target=send,args=(t4,mailHTML))
-
-    p1.start()
-    p2.start()
-    p3.start()
-    p4.start()
-    p1.join()
-    p2.join()
-    p3.join()
-    p4.join()
+        p1.start()
+        p2.start()
+        p3.start()
+        p4.start()
+        p1.join()
+        p2.join()
+        p3.join()
+        p4.join()
 
 

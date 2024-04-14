@@ -11,12 +11,12 @@ import os
 from multiprocessing import Process
 import time
 import redis
-from pymongo import MongoClient
+import pymongo
 from app import generate_id
 
 red = redis.Redis()
-mongo = MongoClient()
-db = mongo["Kentel"]
+mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@45.155.124.85/")
+db = mongo["KentelPlatform"]
 issues = db["Issues"]
 
 
@@ -92,7 +92,7 @@ def task(tickers,workerID):
             acc = 0
         #Signals: BUY SELL, score: 0-1, price: float
         try:
-            signal,score,price,change ,warn = trader.DailySignal(t)
+            signal,score,price,change,warn = trader.DailySignal(t)
             score = score*100
             data = {
                 "ticker":t,
@@ -100,7 +100,8 @@ def task(tickers,workerID):
                 "price":price,
                 "signal":signal,
                 "acc":acc,
-                "change":change
+                "change":change,
+                "warning":warn
 
             }
             if signal == "BUY" and score>97:
@@ -108,9 +109,9 @@ def task(tickers,workerID):
                 outputData.append(data)
 
         except:
-            time.sleep(9)
+            time.sleep(3)
             try:
-                signal,score,price,change ,warn = trader.DailySignal(t)
+                signal,score,price,change,warn  = trader.DailySignal(t)
                 score = score*100
                 data = {
                     "ticker":t,
@@ -118,7 +119,8 @@ def task(tickers,workerID):
                     "price":price,
                     "signal":signal,
                     "acc":acc,
-                    "change":change
+                    "change":change,
+                    "warning":warn
                 }
                 if signal == "BUY" and score>97:
 
@@ -127,24 +129,29 @@ def task(tickers,workerID):
                 print(e)
     open(f"temp/{sessionName}{workerID}.json","w").write(json.dumps({"out":outputData},indent=4))
 
+def filters():
+
+    os.system("/home/efeakaroz13/kentelPlatform/env/bin/python3 filterBG.py")
 
 if __name__ == "__main__":
     p1 = Process(target=task,args=(l1,"1"))
     p2 = Process(target=task,args=(l2,"2"))
     p3 = Process(target=task,args=(l3,"3"))
     p4 = Process(target=task,args=(l4,"4"))
-
+    p5 = Process(target=filters)
     
 
     p1.start()
     p2.start()
     p3.start()
     p4.start()
+    p5.start()
 
     p1.join()
     p2.join()
     p3.join()
     p4.join()
+    p5.join()
     finals = []
     ## Compose it all together
     t1 = json.loads(open(f"temp/{sessionName}1.json","r").read())

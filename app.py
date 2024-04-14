@@ -1237,6 +1237,7 @@ class UXRoutes:
             elif nasdaq100=="enabled":
                 try:
                     nasdaq100List= json.loads(red.get("nasdaq100List"))
+                    nasdaq100List["list"]
 
 
                 except:
