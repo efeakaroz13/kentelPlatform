@@ -115,16 +115,25 @@ function loadScan(){
         }else{
             //unlimited Scans
             // add scan button.
+            //adding warnings - 14th april 2024
             items = data.stockList;
             items = items.slice(0,12)
+
+
             for (var i = items.length - 1; i >= 0; i--) {
                 d = items[i]
-                chtml = chtml = '<ion-item>\
+                color = ""
+                if(d.warning){
+                    color = "color='warning' onclick='warnExplain()'";
+                    console.log(d)
+                }
+
+                chtml = chtml = '<ion-item >\
                 <ion-grid>\
                     <ion-row>\
-                        <ion-col>'+d.ticker+'</ion-col>\
-                        <ion-col>'+d.score.toFixed(2)+'%</ion-col>\
-                        <ion-col>'+d.acc.toFixed(2)+'%</ion-col>\
+                        <ion-col><ion-text '+color+'>'+d.ticker+'</ion-text></ion-col>\
+                        <ion-col ><ion-text '+color+'>'+d.score.toFixed(2)+'%</ion-text></ion-col>\
+                        <ion-col ><ion-text '+color+'>'+d.acc.toFixed(2)+'%</ion-text></ion-col>\
                     </ion-row>\
                 </ion-grid>\
             </ion-item>\
@@ -206,4 +215,8 @@ if(window.location.pathname=="/"){
     function indexFundAlert(){
         alert("This feature you've clicked on is for showing the overall market status. Check it before participating in any trade.")
     }
+}
+
+function warnExplain(){
+    alert("It is painted yellow because this stock experienced rapid change and it is not reliable.")
 }

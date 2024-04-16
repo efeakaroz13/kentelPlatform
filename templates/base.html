@@ -76,20 +76,86 @@
               </ion-toolbar>
 
             </ion-header>
-            <ion-content >
-
+            <ion-content>
                 {% block body %}
                 {% endblock %}
-
-
-
             </ion-content>
-            
+                
+                
+                <script>
+                    theme = localStorage.getItem("theme");
 
+                    function openDiscover(){
+                        if(window.location.href.includes("/stock")){
+                            window.location.assign("/")
+                        }else{
+
+                        }
+                        g("discover").style.display = "";
+                        g("search").style.display= "none";
+
+                        g("discoverButton").style.color = "blue";
+                        g("search_Button").style.color = "";
+                        if(theme=="dark"){
+                            g("discoverButton").style.color = "#3880ff";
+                        }
+                    }
+                    clickCount = 0
+                    function openSearch(){
+                        clickCount += 1
+                        if(clickCount == 2){
+                            window.location.assign("/#search")
+                        }
+                        g("search").style.display = "block";
+                        g("discover").style.display= "none";
+                        g("discoverButton").style.color = "";
+                        g("search_Button").style.color = "blue";
+                        if(theme=="dark"){
+                            g("search_Button").style.color = "#3880ff";
+                        }
+                    }
+
+
+
+                    if(window.location.href.includes("/stock") || window.location.href.includes()){
+                        setTimeout(openSearch,100);
+                    }else{
+                        setTimeout(openDiscover,100);
+                    }
+                    
+                </script>
+            
+                
+
+              
+              
         </div>
         
 
+        {% if active=="home"%}
 
+                    
+                    
+                
+                    <ion-tab-bar slot="bottom">
+                    <ion-tab-button id="discoverButton" onclick="openDiscover()">
+                        <div id="discoverButton">
+                            <ion-icon name="compass" style="font-size: large;"></ion-icon> <br>
+                            Discover
+                        </div>
+                        
+                    </ion-tab-button>
+                    
+                    <ion-tab-button    onclick="openSearch()">
+                        <div id="search_Button">
+                        <ion-icon name="search" style="font-size: large;"></ion-icon> <br>
+                        Search
+                        </div>
+
+                    </ion-tab-button>
+                    </ion-tab-bar>
+
+                {% endif %}
     </ion-app>
     <script>
         theme = localStorage.getItem("theme")
@@ -157,8 +223,10 @@
         function openLink(url){
             window.location.assign(url)
         }
-
-
+        function g(id){
+            return document.getElementById(id);
+        }
+        
     </script>
     
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>

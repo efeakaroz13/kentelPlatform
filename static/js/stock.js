@@ -1,3 +1,5 @@
+
+theme = localStorage.getItem("theme");
 function g(id){
     return document.getElementById(id);
 }
@@ -24,8 +26,11 @@ async function loadGraph(stock){
     change = (previousClose-price)*-1
     if (change<0){
         g("trend").style.color = "red";
-        g("trendIndicate").className = "fa-solid fa-angle-down";
+        g("trendIndicate").innerHTML = '<ion-icon name="caret-down-outline"></ion-icon>';
+        g("trendIndicate").style.color = "red"
         g("change").style.color= "red";
+    }else{
+        g("trendIndicate").style.color = "green"
     }
     changePercent = Number((change/previousClose)*100).toFixed(2);
     g("change").innerHTML = Number((change).toFixed(2))+"("+changePercent+"%)";
@@ -43,7 +48,7 @@ async function loadGraph(stock){
           
           data: dataset ,  
           backgroundColor: 'transparent',
-          borderColor: 'blue',
+          borderColor: '#3880ff',
           borderWidth: 2,
           tension: 0.4
         }]
@@ -135,6 +140,8 @@ function AIPredictingAnimation(){
 
 }
 async function getPrediction(ticker){
+
+
      AIPredictingAnimation()
     loadingInterval =setInterval(AIPredictingAnimation,8)
     g("predictionResult").innerHTML = "";
@@ -157,12 +164,17 @@ async function getPrediction(ticker){
             g("predictionResult").innerHTML = score+"% Sell";
             g("predictionResult").style.color = "red";
             sell = score;
+            buy = 100-sell;
+            g("predictionPlace").style.gridTemplateColumns = buy+"%"+" "+sell+"%";
 
         }
         if (signal=="BUY"){
             sell = 100-score
+            buy = score
+
             g("predictionResult").innerHTML = score+"% Buy";
             g("predictionResult").style.color = "green"
+            g("predictionPlace").style.gridTemplateColumns = buy+"%"+" "+sell+"%";
         }
         g("accuracy").innerHTML = acc+"% Accuracy"
         AIPredictingAnimation()

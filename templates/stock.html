@@ -8,6 +8,8 @@
 {% endblock %}
 
 {% block body %}
+    <div id="discover"></div>
+    <div id="search">
     <center>
     <div id="loading" style="width:100%;position: fixed;height:100vh;background:#fff;top:0;left:0; align-items: center;padding-top:30vh">
 
@@ -15,7 +17,7 @@
     </div></center>
     <div class="blackout hidden" id="blackout">
     </div>
-    <div class="popup hidden" id="atpPopup">
+    <div class="popup hidden" id="atpPopup" style="display: none;">
         <button class="transparent close" id="closePopup"><i class="fa-solid fa-xmark"></i></button>
         <h2>Add to portfolio</h2>
         <label for="price">Price</label>
@@ -25,16 +27,23 @@
         <button class="btn btn-primary bottomButton" onclick="addToPortfolio()">Add To Portfolio</button>
     </div>
     <div class="titleGrid">
+         <br>
         <div>
-        <h1>{{ticker}}</h1>
+        <h1 style="display:none">{{ticker}}</h1>
+        <ion-title class="ion-margin">{{ticker}}  <ion-text style="color:; font-weight: 200;" id="price"></ion-text><ion-text style="color:; font-weight: 200;">$</ion-text></ion-title>
+        <a class="ion-margin" style="color:green; font-size:12px" id="trend"><a id="trendIndicate"><ion-icon name="caret-up-outline"></ion-icon></a> <a style="color:green; font-size:12px" id="change"></a> <a style="color:gray;font-size:12px">Today</a></a>
         </div>
         <div>
             <button id="atp"><i class="fa-solid fa-plus"></i></button>
         </div>
 
     </div>
+    <center>
+        
+    <div class="everything" style="max-width: 800px;width: 80%; text-align: left; ">
+    
 
-    <h1 style="font-weight: 600">$<a id="price"></a>   <a style="color:green; font-size:12px" id="trend"><i id="trendIndicate" class="fa-solid fa-angle-up"></i> $<a style="color:green; font-size:12px" id="change"></a> <a style="color:gray;font-size:12px">Today</a></a></h1>
+
 
 
 
@@ -48,7 +57,7 @@
             <h4 id="predictionResult" style="color:red">92% Sell</h4>
         </div>
         <div style="width:100%;text-align:center">
-            <h4 id="accuracy" style="color:blue">74% Accuracy</h4>
+            <h4 id="accuracy" style="color:#3880ff">74% Accuracy</h4>
         </div>
     </div>
 
@@ -57,18 +66,15 @@
     <br>
     <br>
     <h3>Company Details</h3>
-    <p style="font-weight: 400" id="companyName"></p>
-    <p id="summary"></p>
+    
+    <p style="font-weight: 400;font-size:12px; color:gray" id="companyName"></p>
+    <p class="ion-margin" id="summary" style="font-weight: 400;font-size:12px; color:gray"></p>
 
     
     <br><br>
-    <nav class="navbar navbar-inverse navbar-fixed-bottom" style="width:100%;position: fixed;bottom:0px;left:0px;padding:20px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;background: white;">
-          <div class="container-fluid" style="text-align: center; width: 100%;display: grid;grid-template-columns: 50% 50%; max-width: 1000px">
-        <button id="openDiscover" style="width:100%;" onclick="window.location.assign('/')"><i class="fa fa-compass"></i></button>
-        <button id="openSearch" style="width:100%;" onclick="window.location.assign('/')" class="active"><i class="fa-solid fa-magnifying-glass"></i></button>
-    
-
-
+</div>
+</div> <br><br>
+</center>
 
 {% endblock %}
 

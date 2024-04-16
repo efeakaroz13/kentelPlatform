@@ -837,6 +837,11 @@ class APIs:
         except:
             return {},401
         try:
+            try:
+                data = json.loads(red.get(f"stockSignal_{ticker}"))
+                return data 
+            except:
+                pass
             signal,score,price,change,warn = trader.DailySignal(ticker)
         except:
             return {"err":"There is an error on our side, AI not available."}
@@ -846,7 +851,9 @@ class APIs:
             acc = 0
 
 
-        return {"signal":signal,"ticker":ticker,"price":price,"acc":acc,"score":score*100,"warn":warn}
+        data =  {"signal":signal,"ticker":ticker,"price":price,"acc":acc,"score":score*100,"warn":warn}
+        red.set(f"stockSignal_{ticker}",json.dumps(data),ex=150)
+        return data
     @app.route("/api/v1/stockGraph/<ticker>")
     def stockGraphTicker(ticker):
         try:
@@ -857,6 +864,11 @@ class APIs:
             return {},401
 
         try:
+            try:
+                data = json.loads(red.get(f"stockData_{ticker}"))
+                return data
+            except:
+                pass
             page = requests.get("https://query1.finance.yahoo.com/v8/finance/chart/"+ticker+"?region=US&lang=en-US&includePrePost=false&interval=15m&useYfid=true&range=5d&corsDomain=finance.yahoo.com&.tsrc=finance",headers={"User-Agent":"Mozilla Firefox Macintel"})
             data = json.loads(page.content)
 
@@ -872,7 +884,10 @@ class APIs:
             except Exception as e:
 
                 compinfo = {"e":str(e)}
-            return {"out":rd,"compinfo":compinfo}
+
+            data =  {"out":rd,"compinfo":compinfo}
+            red.set(f"stockData_{ticker}",json.dumps(data),ex=360)
+            return data,200
         except Exception as e:
             return {"e":str(e)}
         
@@ -975,7 +990,14 @@ class StripeRoutes:
                 u = users.find({"customer_id":cus_id})[0]
                 email = u["email"]
                 password = u["password"]
-                response =  redirect("/")
+                orderid = session_id
+                totalCost = "00.00"
+                if u["plan"] == "standardM":
+                    totalCost = "30.00"
+                if u["plan"] == "basicM":
+                    totalCost = "10.00"
+                
+                response =  make_response(render_template("success.html",orderid=orderid,totalCost=totalCost))
                 expire_date = datetime.datetime.now()
                 expire_date = expire_date + datetime.timedelta(days=120)
                 
@@ -985,7 +1007,7 @@ class StripeRoutes:
                 return response
         except:
             return redirect("/login")
-
+    
     @app.route("/checkout/canceled")
     def checkout_cancel():
         try:
