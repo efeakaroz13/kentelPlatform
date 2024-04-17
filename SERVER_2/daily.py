@@ -232,6 +232,28 @@ if __name__ == "__main__":
     now = datetime.now()
     datestring = f"{now.month}/{now.day}/{now.year}"
     content = ""
+    try:
+        signal,score,price,change ,warn = trader.DailySignal("^NDX")
+        score = round(score*100,2)
+        acc= float(r.get('^NDX').decode())*100
+
+
+        acc=  round(acc,2)
+        if signal == "BUY":
+            contentIndexFund = f"""<br><br>
+            <div style='color:green'>NASDAQ 100:{score}% with {acc}%</div>
+            <p>AI is predicting bullish trend for the index today.</p>
+            """
+        else:
+            contentIndexFund = f"""<br><br>
+            <div style='color:red'>NASDAQ 100:{score}% with {acc}%</div>
+            <p>AI is predicting bearish trend for the index today.</p>
+            <p>Note: Overall Market may affect the AI predictions. Consider NASDAQ 100 AI score before entering in any trade.</p>
+            """
+    except:
+        contentIndexFund = ""
+
+
     for n in notifications:
         color = ""
         try:
@@ -241,6 +263,8 @@ if __name__ == "__main__":
             color = ""
         line = f"<p style='font-weight:400;font-size:20px;{color}'>{n['comp']['ticker']} | <a style='color:green'>{n['score']}% {n['signal']}</a> | <a>{n['acc']} Accuracy</a> | <a>$</a></p>"
         content = content+line
+
+    content +=contentIndexFund
     if len(notifications)>0:
         mailHTML = open("templates/email/scan.html","r").read().replace("-date-",datestring).replace("-content-",content).replace("-number-",str(len(notifications))).replace("-preview-","Stay informed with your daily stock report from Kentel! Discover valuable insights and predictions to navigate the stock market effectively.")
         upload= requests.post(f"{base}/secret/kentel/issueUpload",data=json.dumps(data),headers={"User-Agent":"sagent",'Content-type':'application/json', 'Accept':'application/json'})
