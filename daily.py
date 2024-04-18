@@ -6,7 +6,6 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import stripe
-from app import generate_id
 import requests
 from bs4 import BeautifulSoup
 import redis

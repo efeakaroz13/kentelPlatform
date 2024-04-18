@@ -5,8 +5,6 @@ import os
 import pymongo
 import redis
 from datetime import datetime
-
-from app import base
 import trader
 
 mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@45.155.124.85/")
