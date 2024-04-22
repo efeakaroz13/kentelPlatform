@@ -265,7 +265,7 @@ if __name__ == "__main__":
         content = content+line
 
     content +=contentIndexFund
-    if len(notifications)>0:
+    if True:
         mailHTML = open("templates/email/scan.html","r").read().replace("-date-",datestring).replace("-content-",content).replace("-number-",str(len(notifications))).replace("-preview-","Stay informed with your daily stock report from Kentel! Discover valuable insights and predictions to navigate the stock market effectively.")
         upload= requests.post(f"{base}/secret/kentel/issueUpload",data=json.dumps(data),headers={"User-Agent":"sagent",'Content-type':'application/json', 'Accept':'application/json'})
         p1= Process(target=send,args=(t1,mailHTML))
