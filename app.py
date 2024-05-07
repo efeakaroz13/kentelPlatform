@@ -30,10 +30,10 @@ ip_address = socket.gethostbyname(hostname)
 issues = None 
 filters = None
 
-if ip_address !="45.155.124.85":
+if ip_address !="188.132.243.36":
        
 
-    client = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@45.155.124.85/") # server.local_bind_port is assigned local port
+    client = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@188.132.243.36:27017") # server.local_bind_port is assigned local port
     
     dbS = client["KentelPlatform"]
     issues = dbS["Issues"]

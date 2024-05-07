@@ -7,7 +7,7 @@ import redis
 from datetime import datetime
 import trader
 
-mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@45.155.124.85/")
+mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@188.132.243.36/")
 db = mongo["KentelPlatform"]
 users = db["Users"]
 alarms = db["alarms"]
