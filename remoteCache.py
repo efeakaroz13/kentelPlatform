@@ -1,5 +1,5 @@
-import redis 
-import pymongo 
+import redis
+import pymongo
 import json
 import time
 from multiprocessing import Process
@@ -8,11 +8,12 @@ from multiprocessing import Process
 red = redis.Redis()
 
 
-client = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@188.132.243.36/") # server.local_bind_port is assigned local port
+client = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@185.235.77.16/") # server.local_bind_port is assigned local port
 
 dbS = client["KentelPlatform"]
 issues = dbS["Issues"]
 filters = dbS["filters"]
+print(issues.find({})[0])
 
 def p1():
     print("Process1 Started")
@@ -22,12 +23,12 @@ def p1():
             allIssuesArray = []
             for _ in i:
                 allIssuesArray.append(_)
-            
+
             #del allIssuesArray[-1]["allF"] removed for filtering with caching
             d= allIssuesArray[-1]
             red.set("NASDAQ",json.dumps(d))
         except Exception as e:
-            print(e)
+            print(e,"scanner")
 
         try:
             issueToReturn = issues.find({"exchange": "SERVER2_DAILY_NASDAQ"})
@@ -37,7 +38,7 @@ def p1():
             issueToReturn = issueToReturn_[-1]
             red.set("SERVER2_DAILY_NASDAQ",json.dumps(issueToReturn))
         except Exception as e:
-            print(e)
+            print(e,"daily mail")
 
         try:
             fils = filters.find({})
@@ -49,7 +50,7 @@ def p1():
 
             red.set("filters",json.dumps(f))
         except Exception as e:
-            print(e) 
+            print(e)
 
 
 
@@ -68,7 +69,7 @@ def p2():
             issueToReturn = issueToReturn_[:100]
             red.set("archiveStock",json.dumps(issueToReturn))
         except Exception as e:
-            print(e) 
+            print(e,"archiveStock")
 
         time.sleep(259200)
 
