@@ -14,7 +14,7 @@ from extra import generate_id,Mailer
 import datetime
 import urllib.parse
 import pprint
-import json 
+import json
 from flask_cors import CORS
 import requests
 import yfinance as yf
@@ -27,14 +27,14 @@ import socket
 
 hostname = socket.gethostname()
 ip_address = socket.gethostbyname(hostname)
-issues = None 
+issues = None
 filters = None
 
-if ip_address !="185.235.77.16:
-       
+if ip_address !="185.235.77.16":
+
 
     client = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@185.235.77.16:27017") # server.local_bind_port is assigned local port
-    
+
     dbS = client["KentelPlatform"]
     issues = dbS["Issues"]
     filters = dbS["filters"]
@@ -82,7 +82,7 @@ def index():
     email  =request.cookies.get("e")
     password = request.cookies.get("p")
     try:
-       
+
 
         try:
             u = json.loads(red.get(email))
@@ -96,7 +96,7 @@ def index():
             u = users.find({"email":email,"password":password})[0]
             red.set(u["_id"],json.dumps(u))
             red.set(u["email"],json.dumps(u))
-        
+
 
 
         if u["plan"] == "basicM":
@@ -113,7 +113,7 @@ def index():
             #14.30 in UTC
             """
                                                 try:
-                                    
+
                                                     issueToReturn = issues.find({"exchange":"SERVER2_DAILY_NASDAQ"})[-1]
                                                 except:
                                                     issueToReturn = None """
@@ -125,21 +125,21 @@ def index():
                 try:
                     filtersList = json.loads(red.get("filters"))
                 except:
-                    filtersList = filters.find({}) 
+                    filtersList = filters.find({})
                 return render_template("home.html",data=u,msg=msg,active="home",title="",filters=filtersList)
             else:
                 cusid = u["customer_id"]
                 ut = u["time"]
-                hasPassed = time.time()-ut 
+                hasPassed = time.time()-ut
                 try:
                     req = json.loads(red.get(cusid))
                 except:
-                    
+
                     req = stripe.Subscription.list(customer=u["customer_id"])["data"]
                     if hasPassed>=86400*14:
                         red.set(cusid,json.dumps(req),ex=86400)
-                    
-                    
+
+
                 if len(req) == 0:
                     return redirect("/checkout")
                 else:
@@ -153,8 +153,8 @@ def index():
             return redirect("/verify/email")
     except Exception as e:
         print(e)
-        
-    
+
+
     # agent =uaparse(str(request.headers.get("User-Agent")))
     # device = agent.device.family
     # osinfo = agent.os.family
@@ -179,14 +179,14 @@ def index():
     # try:
     #     l = logs.find({"ipaddr":request.environ.get('HTTP_X_REAL_IP', request.remote_addr)})[0]
     #     if l["time"]<time.time()-345600:
-    #         pass 
+    #         pass
     #     else:
     #         return render_template("index.html")
     # except:
-    #     pass 
+    #     pass
     # if agent.is_bot == False:
     #     logs.insert_one(data)
-    
+
     response =  make_response(render_template("index.html"))
     ref=request.cookies.get("ref")
     if ref == None:
@@ -270,21 +270,21 @@ class Auth:
                 gcaptcha = int(gcaptcha)
             except:
                 return redirect("/signup?err=Captcha answer should be a number")
-            
+
             if gcaptcha == captchaAnswer:
-                #pass 
-                pass 
+                #pass
+                pass
             else:
                 return redirect("/signup?err=Captcha answer is wrong, please try again ")
-            
-            
+
+
             if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
                 ip = request.environ['REMOTE_ADDR']
             else:
                 ip = request.environ['HTTP_X_FORWARDED_FOR']
 
 
-           
+
 
             email = request.form.get("email")
             if email == None:
@@ -301,18 +301,18 @@ class Auth:
 
             try:
                 u_e = users.find({"email":email})[0]
-            
+
                 return redirect("/signup?err=There is an user signed up  with this email")
             except:
                 pass
-            
+
             password =request.form.get("password")
             psha256 = hashlib.sha256()
             psha256.update(password.encode())
             password = psha256.hexdigest()
             #hashing all passwords
 
-            
+
             cus = stripe.Customer.create(
 
               email=email
@@ -333,7 +333,7 @@ class Auth:
                         gifts.update_one({"code":gift},{"$set":{"numPeople":g["numPeople"]-1}})
                 except:
                     gift = None
-            
+
             ref = request.cookies.get("ref")
 
             #giftCode = request.forrm.get("giftCode")
@@ -359,11 +359,11 @@ class Auth:
 
             expire_date = datetime.datetime.now()
             expire_date = expire_date + datetime.timedelta(days=120)
-            
+
             response = make_response(redirect("/"))
             response.set_cookie("e",email,expires=expire_date,secure=False,samesite="Lax")
             response.set_cookie("p",password,expires=expire_date,secure=False,samesite="Lax")
-            
+
             users.insert_one(data)
             red.set(data["email"],json.dumps(data))
             red.set(data["_id"],json.dumps(data))
@@ -409,12 +409,12 @@ class Auth:
             response.set_cookie("e",email,expires=expire_date,secure=False,samesite="Lax")
             response.set_cookie("p",password,expires=expire_date,secure=False,samesite="Lax")
             return response
-        
-            
+
+
         if request.method == "GET":
             err =request.args.get("err")
             return render_template("login.html",err=err)
-   
+
     @app.route("/forgot-password",methods=["POST","GET"])
     def forgot_password():
         if request.method == "POST":
@@ -436,7 +436,7 @@ class Auth:
             err = request.args.get("err")
 
             return render_template("forgotpassword.html",err=err)
-        
+
     @app.route("/email/forgotpassword",methods=["POST","GET"])
     def emailForgotPassword():
         pid = request.args.get("pid")
@@ -451,7 +451,7 @@ class Auth:
             p = hashlib.sha256()
             p.update(password.encode())
             p = p.hexdigest()
-            recoveryData["password"] = p 
+            recoveryData["password"] = p
             red.set(recoveryData["_id"],json.dumps(recoveryData))
             red.set(recoveryData["email"],json.dumps(recoveryData))
             users.update_one({"_id":recoveryData["_id"]},{"$set":{"password":p}})
@@ -495,7 +495,7 @@ class Auth:
             else:
                 return render_template("verify.html",msg="Wrong Code.")
                 #wrong code, or expired.
-            
+
         if request.method == "GET":
             email = request.cookies.get("e")
             password = request.cookies.get("p")
@@ -537,9 +537,9 @@ class Auth:
             red.set(u["email"],json.dumps(u))
             red.set(u["_id"],json.dumps(u))
         return redirect("/")
-    
-            
-    
+
+
+
 class ErrorHandlers:
     @app.errorhandler(404)
     def page_not_found(e):
@@ -588,7 +588,7 @@ class IssuesDifferentPackages:
                     allIssuesArray = []
                     for _ in i:
                         allIssuesArray.append(_)
-                    
+
                     del allIssuesArray[-1]["allF"]
                     return allIssuesArray[-1]
                     #return i
@@ -600,7 +600,7 @@ class IssuesDifferentPackages:
                 try:
                     s_f = filters.find({"_id":filter_selected})[0]
                     items = s_f["items"]
-                    
+
                     try:
                         try:
                             sissue = json.loads(red.get("NASDAQ"))
@@ -621,7 +621,7 @@ class IssuesDifferentPackages:
                     filterItemsArray = []
                     for f in items:
                         filterItemsArray.append(f["ticker"])
-                    output = [] 
+                    output = []
                     for s in seli:
                         if s["acc"]>73 and s["score"]>97.5 and s["ticker"] in filterItemsArray:
                             #filter has passed.
@@ -631,7 +631,7 @@ class IssuesDifferentPackages:
                     sissue["stockList"] = output
                     del sissue["allF"]
                     return sissue
-                
+
 
 
                 except Exception as e:
@@ -641,7 +641,7 @@ class IssuesDifferentPackages:
                         allIssuesArray = []
                         for _ in i:
                             allIssuesArray.append(_)
-                        
+
                         del allIssuesArray[-1]["allF"]
                         return allIssuesArray[-1]
                         #return i
@@ -663,7 +663,7 @@ class IssuesDifferentPackages:
                     issueToReturn_.append(i)
                 issueToReturn = issueToReturn_[-1]
             except Exception as e:
-                issueToReturn = {"e":str(e)} 
+                issueToReturn = {"e":str(e)}
 
             return issueToReturn
         else:
@@ -703,9 +703,9 @@ class APIs:
                 u = users.find({"email":email,"password":password})[0]
             except:
                 return {"err":"Check your credentials."},401
-            
+
             return u,200
-        
+
     @app.route("/api/register",methods=["POST"])
     def apiRegister():
          if True:
@@ -720,7 +720,7 @@ class APIs:
             psha256.update(password.encode())
             password = psha256.hexdigest()
             #hashing all passwords
-            
+
             fullName = request.form.get("fullName")
             #giftCode = request.forrm.get("giftCode")
             data = {
@@ -741,7 +741,7 @@ class APIs:
             return data,200
     @app.route("/api/verify/email",methods=["POST","PUT"])
     def apiVerifyEmail():
-        
+
         email = request.form.get("email")
         password = request.form.get("hash")
         try:
@@ -755,12 +755,12 @@ class APIs:
             code = request.form.get("code")
             codeServer = red.get(email+"_code").decode()
             if code == codeServer:
-                u["emailVerified"] = True              
+                u["emailVerified"] = True
                 return {"msg":"Email verified"},200
             else:
-                
+
                 return {"err":"Codes does not match."},401
-        
+
         verificationCode = random.randint(10000,100000)
         red.set(email+"_code",str(verificationCode),ex=600)
         Mailer.code(verificationCode,email)
@@ -772,7 +772,7 @@ class APIs:
         for _ in allFilters:
             del _["_id"]
             f.append(_)
-        
+
         return {"f":f}
     @app.route("/api/exchanges")
     def exchanges():
@@ -798,8 +798,8 @@ class APIs:
         expire_date = expire_date + datetime.timedelta(days=exp)
         response.set_cookie(key,value,expires=expire_date)
 
-        return response 
-    
+        return response
+
 
     @app.route("/api/ux/search")
     def searchRecommender():
@@ -839,7 +839,7 @@ class APIs:
         try:
             try:
                 data = json.loads(red.get(f"stockSignal_{ticker}"))
-                return data 
+                return data
             except:
                 pass
             signal,score,price,change,warn = trader.DailySignal(ticker)
@@ -890,7 +890,7 @@ class APIs:
             return data,200
         except Exception as e:
             return {"e":str(e)}
-        
+
     @app.route("/api/indexFunds")
     def indexFundsApi():
         try:
@@ -944,7 +944,7 @@ class StripeRoutes:
               }],
               subscription_data={"trial_period_days":30},
               customer=u["customer_id"]
-              
+
             )
 
             # Redirect to the URL returned on the session
@@ -981,7 +981,7 @@ class StripeRoutes:
         cus_id = session["customer"]
 
         try:
-            
+
             activeq = stripe.Subscription.list(customer=cus_id)["data"][0]["plan"]["active"]
             if activeq != True:
                 return redirect("/not_paid")
@@ -996,18 +996,18 @@ class StripeRoutes:
                     totalCost = "30.00"
                 if u["plan"] == "basicM":
                     totalCost = "10.00"
-                
+
                 response =  make_response(render_template("success.html",orderid=orderid,totalCost=totalCost))
                 expire_date = datetime.datetime.now()
                 expire_date = expire_date + datetime.timedelta(days=120)
-                
+
 
                 response.set_cookie("e",email,expires=expire_date,secure=False,samesite="Lax")
                 response.set_cookie("p",password,expires=expire_date,secure=False,samesite="Lax")
                 return response
         except:
             return redirect("/login")
-    
+
     @app.route("/checkout/canceled")
     def checkout_cancel():
         try:
@@ -1053,10 +1053,10 @@ class InstanceExchange:
         try:
             page = int(page)
         except:
-            page = 0 
+            page = 0
         identity = request.headers.get("User-Agent")
         if identity == "sagent":
-            pass 
+            pass
         else:
             return abort(404)
         passpharase = request.form.get("passpharase")
@@ -1076,7 +1076,7 @@ class InstanceExchange:
                 try:
                     notf = b["notf"]
                     if notf == False:
-                        continue 
+                        continue
                     else:
                         pass
 
@@ -1092,13 +1092,13 @@ class InstanceExchange:
                 try:
                     notf = s["notf"]
                     if notf == False:
-                        continue 
+                        continue
                     else:
-                        pass 
+                        pass
 
                 except:
-                    pass 
-                
+                    pass
+
                 s= {
                         "email":s["email"],
                         "_id":s["_id"]
@@ -1121,12 +1121,12 @@ class InstanceExchange:
         try:
             page = int(page)
         except:
-            page = 0 
+            page = 0
 
 
         identity = request.headers.get("User-Agent")
         if identity == "sagent":
-            pass 
+            pass
         else:
             return abort(404)
         allPortfolios = portfolios.find({})
@@ -1136,7 +1136,7 @@ class InstanceExchange:
             try:
                 u = users.find({"_id":pid})[0]
             except:
-                continue 
+                continue
             if u["plan"] == "standardM":
                 uda = {
                     "email":u["email"],
@@ -1165,7 +1165,7 @@ class InstanceExchange:
 
         identity = request.headers.get("User-Agent")
         if identity == "sagent":
-            pass 
+            pass
         else:
             return abort(404)
         data= request.json
@@ -1242,7 +1242,7 @@ class UXRoutes:
                 red.set(u["_id"],json.dumps(u))
 
         except:
-            return redirect("/login") 
+            return redirect("/login")
         try:
             notPref= u["notPref"]
         except:
@@ -1255,7 +1255,7 @@ class UXRoutes:
             notf = request.form.get("notf")
             nasdaq100 = request.form.get("nasdaq100")
             if nasdaq100 == None or nasdaq100 == "":
-                pass 
+                pass
             elif nasdaq100=="enabled":
                 try:
                     nasdaq100List= json.loads(red.get("nasdaq100List"))
@@ -1278,10 +1278,10 @@ class UXRoutes:
             if notf  == "enabled":
                 notf=True
             if notf == "disabled":
-                notf = False 
-            
+                notf = False
+
             users.update_one({"_id":u["_id"]},{"$set":{"dailyInsight":notf}})
-            u["dailyInsight"] = notf 
+            u["dailyInsight"] = notf
             red.set(u["email"],json.dumps(u))
             red.set(u["_id"],json.dumps(u))
 
@@ -1291,7 +1291,7 @@ class UXRoutes:
     @app.route("/stock/<ticker>")
     def stockView(ticker):
 
-        
+
         email = request.cookies.get("e")
         password = request.cookies.get("p")
         try:
@@ -1307,7 +1307,7 @@ class UXRoutes:
                 red.set(u["_id"],json.dumps(u))
                 red.set(u["email"],json.dumps(u))
         except:
-            return redirect("/login") 
+            return redirect("/login")
 
         if u["plan"] == "basicM":
             try:
@@ -1316,7 +1316,7 @@ class UXRoutes:
                 red.set(f"search{u['_id']}",str(remaining))
 
             except:
-                remaining = 14 
+                remaining = 14
                 red.set(f"search{u['_id']}",str(remaining),ex=54000)
 
         #Dailyscan with API and load graph
@@ -1342,9 +1342,9 @@ class UXRoutes:
             }
         for i in usrPort["items"]:
             try:
-               
 
-                
+
+
                 price =yf.Ticker(i["ticker"]).info["currentPrice"]
                 i["lp"] = round((price-i["cost"])*i["shares"],2)
                 i["lpPercent"] = round(i["lp"]*i["shares"]*100/(i["cost"]*i["shares"]),2)
@@ -1365,11 +1365,11 @@ class UXRoutes:
         except:
             return redirect("/login")
         if u["giftCode"]:
-            status = True 
+            status = True
 
         else:
             status = stripe.Subscription.list(customer=cus_id)["data"][0]["plan"]["active"]
-        
+
         return render_template("account.html",data=u,active="account",title="Account - ",time=time,stripe_status=status)
 
     @app.route("/settings")
@@ -1399,7 +1399,7 @@ class UXRoutes:
         response.set_cookie("e","")
         response.set_cookie("p","")
         return response
-    
+
     @app.route("/unsubscribe",methods=["POST","GET"])
     def unsubscribeRoute():
         try:
@@ -1425,7 +1425,7 @@ class UXRoutes:
             Mailer.sorryToSeeYouGo(u)
             return redirect("/")
         return render_template("unsubscribe.html",data=u,active="settings",time=time)
-    
+
     @app.route("/notanewbie")
     def imnotanewbie():
         try:
@@ -1450,7 +1450,7 @@ class UXRoutes:
         red.set(u["email"],json.dumps(u))
 
         return redirect("/")
-    
+
     @app.route("/upgradeplan")
     def upgradePlanPage():
         try:
@@ -1477,7 +1477,7 @@ class UXRoutes:
         if u["plan"] == "basicM":
             price_id = 'price_1OzgSUA7lNRXMlNssAE3SPfJ' # for standard.
             sub = stripe.Subscription.list(customer=u["customer_id"])["data"][0]["id"]
-            
+
             mod = stripe.Subscription.modify(
                 sub,
                 items=[{"price": price_id}],
@@ -1517,7 +1517,7 @@ class Portfolio:
                 "items":[]
             }
 
-        tickerInItems = False 
+        tickerInItems = False
         whereAt = 0
         counter = 0
 
@@ -1639,10 +1639,10 @@ class Admin:
 
         }
         for f in allFilters:
-            afDic[f['_id']] = f 
-        import json 
+            afDic[f['_id']] = f
+        import json
         return render_template("godmin/filters.html",allFilters=allFilters,dic=json.dumps(afDic))
-    
+
 
     @app.route("/godmin/filter/edit",methods=["POST"])
     def godmingfilterEdit():
@@ -1676,7 +1676,7 @@ class Admin:
             data["_id"] = generate_id(20)
             filters.insert_one(data)
         return redirect("/godmin/filters")
-    
+
 
 
     @app.route("/godmin/blog",methods=["POST","GET"])
@@ -1687,7 +1687,7 @@ class Admin:
             ad = admin.find({"email":email,"password":password})[0]
         except:
             return redirect("/godmin")
-        
+
         if request.method == "POST":
             content = request.form.get("content")# content in html form
             title = request.form.get("title")
@@ -1699,7 +1699,7 @@ class Admin:
             filename = generate_id(30)+".html"
             if author == None or author == "":
                 author = "Efe Akaröz"
-            
+
             if content == None or len(content)<30 or title==None or mainImage==None:
                 return redirect("/godmin/blog")
 
@@ -1743,7 +1743,7 @@ class Admin:
             ad = admin.find({"email":email,"password":password})[0]
         except:
             return redirect("/godmin")
-        
+
         if request.method == "POST":
             label = request.form.get("label")
             url = request.form.get("url")
@@ -1756,7 +1756,7 @@ class Admin:
             red.set(f"affiliate_{url}",json.dumps(data))
             affiliates.insert_one(data)
             return redirect("/godmin/affiliates")
-        af = [] 
+        af = []
         for a in affiliates.find({}):
             af.append(a)
         return render_template("godmin/affiliates.html",af=af)
@@ -1768,7 +1768,7 @@ class Admin:
             ad = admin.find({"email":email,"password":password})[0]
         except:
             return redirect("/godmin")
-        
+
         try:
             afd = json.loads(redis.get(f"affiliate_{idaf}"))
         except:
@@ -1798,10 +1798,10 @@ class Admin:
                 pro+=1
             if u["plan"] == "basicM":
                 base +=1
-            
+
             uwaf.append(u)
         totalRevenue = standard*60+base*15
-        
+
         return render_template("godmin/affiliateInspector.html",afd=afd,u=uwaf,standard=standard,base=base,pro=pro,totalRevenue=totalAmount)
     @app.route("/godmin/gifts",methods=["POST","GET"])
     def godminGifts():
@@ -1811,7 +1811,7 @@ class Admin:
             ad = admin.find({"email":email,"password":password})[0]
         except:
             return redirect("/godmin")
-        
+
         if request.method=="GET":
             allGifts = gifts.find({})
             return render_template("godmin/gift.html",ag=allGifts)
@@ -1841,7 +1841,7 @@ class Admin:
             return redirect("/godmin/gifts")
 
 class Blog:
-    
+
     @app.route("/tutorials/<url>")
     def tutorialView(url):
         try:
@@ -1853,7 +1853,7 @@ class Blog:
     @app.route("/blog")
     def blogKentel():
         return render_template("blogView.html")
-    
+
     @app.route("/api/blog/search")
     def blogSearchApi():
         q = request.args.get("q")
@@ -1862,7 +1862,7 @@ class Blog:
         if len(q)<3:
             return {"err":"too short"},403
         q = q.lower().strip()
-        
+
         allArticles = []
         for a in blog.find({"visible":True}):
             title = a["title"]
@@ -1882,7 +1882,7 @@ class Blog:
 
     @app.route("/blog/<url>")
     def blogRender(url):
-    
+
         try:
             try:
                 b = blog.find({"_id":url+"\r"})[0]
@@ -1928,13 +1928,13 @@ class Archives:
 
             except:
                 u = users.find({"email":email,"password":password})[0]
-                
+
 
         except:
             return redirect("/login?err=You need to be logged in in order to view this page.")
         if u["plan"] != "standardM":
             return redirect("/")
-        
+
         archiveStock = json.loads(red.get("archiveStock"))
 
         return render_template("archive.html",active="archive",data=u,title="Archive",archiveStock=archiveStock)
@@ -1950,7 +1950,7 @@ class Archives:
 
             except:
                 u = users.find({"email":email,"password":password})[0]
-                
+
 
         except:
             return redirect("/login?err=You need to be logged in in order to view this page.")
@@ -1958,7 +1958,7 @@ class Archives:
             issueNumber = int(issueNumber)
         except:
             return redirect("/archive")
-        
+
         archiveStock = json.loads(red.get("archiveStock"))
 
         issue = None
@@ -1966,7 +1966,7 @@ class Archives:
             r["issueNumber"] = int(r["issueNumber"])
             if r["issueNumber"] == issueNumber:
                 issue = r
-                break 
+                break
         if issue == None:
             return redirect("/archive")
 
@@ -1984,7 +1984,7 @@ class Archives:
 
             except:
                 u = users.find({"email":email,"password":password})[0]
-                
+
 
         except:
             return redirect("/login?err=You need to be logged in in order to view this page.")
@@ -2014,13 +2014,13 @@ class Archives:
             return r
         else:
             return {"scc":True}
-        
+
 class Captcha:
     @app.route("/captcha/generate")
     def captchaGenerate():
         captchaJson = json.loads(open("data/captcha.json","r").read())
         pid = generate_id(15)
-        
+
         num1 = random.randint(1,9)
         num2 = random.randint(1,9)
         whichStat = random.randint(0,1)
@@ -2044,7 +2044,7 @@ class Captcha:
         res = {
             "pid":pid,
             "question":QuestionString,
-            
+
         }
         response = make_response(res)
         response.set_cookie("pid",pid)
