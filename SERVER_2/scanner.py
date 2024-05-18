@@ -39,7 +39,7 @@ def generate_id(charNumber):
 
 
 red = redis.Redis()
-mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@45.155.124.85/")
+mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@185.235.77.16:27017")
 db = mongo["KentelPlatform"]
 issues = db["Issues"]
 
