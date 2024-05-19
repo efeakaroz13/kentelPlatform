@@ -13,7 +13,7 @@ client = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@185.235.
 dbS = client["KentelPlatform"]
 issues = dbS["Issues"]
 filters = dbS["filters"]
-print(issues.find({})[0])
+
 
 def p1():
     print("Process1 Started")
@@ -27,6 +27,7 @@ def p1():
             #del allIssuesArray[-1]["allF"] removed for filtering with caching
             d= allIssuesArray[-1]
             red.set("NASDAQ",json.dumps(d))
+            print(time.ctime(d["time"]))
         except Exception as e:
             print(e,"scanner")
 
