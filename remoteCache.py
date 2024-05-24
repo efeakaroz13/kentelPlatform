@@ -16,8 +16,14 @@ filters = dbS["filters"]
 
 
 def p1():
+    
     print("Process1 Started")
     while True:
+        client = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@185.235.77.16/") # server.local_bind_port is assigned local port
+
+        dbS = client["KentelPlatform"]
+        issues = dbS["Issues"]
+        filters = dbS["filters"]
         try:
             i = issues.find({"exchange":"NASDAQ"})
             allIssuesArray = []
@@ -28,6 +34,7 @@ def p1():
             d= allIssuesArray[-1]
             red.set("NASDAQ",json.dumps(d))
             print(time.ctime(d["time"]))
+            
         except Exception as e:
             print(e,"scanner")
 
