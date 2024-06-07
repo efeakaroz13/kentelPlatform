@@ -13,9 +13,10 @@ import json
 import time
 import random
 from datetime import datetime
+import os
 
 r=redis.Redis()
-server = "main"
+server = "secondary"
 base = "https://kentel.dev"
 
 stripe.api_key = "sk_test_51KNGcuEz0P2Wm1hTXPKe291k3qbGjhJqxaryuuNe2J0mSFhiZrI69LYIbWIAYIbGT3LYPOc4MyTAnkGmtleJobxh00LPcn5oI7"
@@ -129,13 +130,15 @@ class MailFetcher:
             self.fetch(p=p+1)
 
 def send(mails,content):
+
     #There is a person identifier image that let's us see if the person opened the email or not.
     #For that, you need to send the user ID to the HTML content.
     mailserver = smtplib.SMTP_SSL('smtpout.secureserver.net', 465)
     mailserver.ehlo()
     mailserver.login('sales@kentel.dev', 'efeAkaroz123')
     for m in mails:
-        print(m)
+        
+
         id_ = m["_id"]
         content.replace("-id-",id_)
         m = m["email"]
@@ -154,6 +157,10 @@ def send(mails,content):
 
     mailserver.quit()
     return 0
+
+
+
+
 if __name__ == "__main__":
     if server == "main":
         pass
@@ -179,6 +186,7 @@ if __name__ == "__main__":
         if counter == 4:
             t4.append(m)
             counter = 0
+
         counter +=1
 
 
@@ -241,14 +249,13 @@ if __name__ == "__main__":
         acc=  round(acc,2)
         if signal == "BUY":
             contentIndexFund = f"""<br><br>
-            <div style='color:green'>NASDAQ 100:{score}% with {acc}%</div>
-            <p>AI is predicting bullish trend for the index today.</p>
+            <div style='color:green;font-size:13px'>Nasdaq 100:{score}% Buy score</div>
+            <p>*:experienced rapid change</p>
             """
-        else:
+        elif signal == "SELL":
             contentIndexFund = f"""<br><br>
-            <div style='color:red'>NASDAQ 100:{score}% with {acc}%</div>
-            <p>AI is predicting bearish trend for the index today.</p>
-            <p>Note: Overall Market may affect the AI predictions. Consider NASDAQ 100 AI score before entering in any trade.</p>
+            <div style='color:red;font-size:13px'>Nasdaq 100:{score}% Sell score</div>
+            <p>*:experienced rapid change</p>
             """
     except:
         contentIndexFund = ""
@@ -260,8 +267,11 @@ if __name__ == "__main__":
             if n["warning"]:
                 color = "color:yellow"
         except:
-            color = ""
-        line = f"<p style='font-weight:400;font-size:20px;{color}'>{n['comp']['ticker']} | <a style='color:green'>{n['score']}% {n['signal']}</a> | <a>{n['acc']} Accuracy</a> | <a>$</a></p>"
+            color = None
+        ticker = n['comp']['ticker']
+        if color:
+            ticker=ticker+"*"
+        line = f"<p style='font-weight:400;font-size:20px;'>{ticker} | <a style='color:green'>{n['score']}% {n['signal']}</a> | <a>{n['acc']} Accuracy</a> | <a>${n['price']}</a></p>"
         content = content+line
 
     content +=contentIndexFund
@@ -281,5 +291,6 @@ if __name__ == "__main__":
         p2.join()
         p3.join()
         p4.join()
+        time.sleep(20)
 
 
