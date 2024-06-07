@@ -44,8 +44,15 @@ db = mongo["KentelPlatform"]
 issues = db["Issues"]
 
 
+try:
+    os.listdir("models")
+except:
+    os.system("mkdir models")
 
-
+try:
+    os.listdir("temp")
+except:
+    os.system("mkdir temp")
 
 try:
     exchange = sys.argv[1]

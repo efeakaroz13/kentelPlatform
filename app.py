@@ -1084,8 +1084,8 @@ class InstanceExchange:
                 except:
                     pass
                 b= {
-                            "email":b["email"],
-                            "_id":b["_id"]
+                    "email":b["email"],
+                    "_id":b["_id"]
                 }
                 mailingList.append(b)
             for s in standard:
