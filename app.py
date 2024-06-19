@@ -942,7 +942,7 @@ class StripeRoutes:
                 # For metered billing, do not pass quantity
                 'quantity': 1
               }],
-              subscription_data={"trial_period_days":30},
+              subscription_data={"trial_period_days":7},
               customer=u["customer_id"]
 
             )
@@ -964,7 +964,7 @@ class StripeRoutes:
                 # For metered billing, do not pass quantity
                 'quantity': 1
               }],
-              subscription_data={"trial_period_days":30},
+              subscription_data={"trial_period_days":7},
               customer=u["customer_id"]
             )
 
