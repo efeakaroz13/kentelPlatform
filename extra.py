@@ -8,6 +8,8 @@ from pymongo import MongoClient
 import redis
 import time
 
+import json 
+
 
 def generate_id(charNumber):
     alphabet = "thequickbrownfoxjumpedoverthelazydog"
@@ -105,6 +107,37 @@ class Mailer:
         mailserver.quit()
         
         return True
+
+    def profitmarginalMailingList(email):
+        redirectID = generate_id(20)
+        urlGen = f"https://profitmarginal.com/newsletterComplete/{redirectID}"
+        data = {
+            "email":email,
+            "redirectID":redirectID,
+            "time":time.time()
+
+        }
+        redis.Redis.set(redirectID+"profitmarginal",json.dumps(data,indent=4))
+        html = open("email/profitmarginal.html","r").read().replace("-url-",url)
+        msg = MIMEMultipart()
+        msg.set_unixfrom('author')
+        msg['From'] = 'Profit Marginal <sales@kentel.dev>'
+        msg['To'] = email
+        msg['Subject'] = 'Best Trading AI Tool - Verify Your Email'
+        message = html
+        msg.attach(MIMEText(message,"html"))
+
+        mailserver = smtplib.SMTP_SSL('smtpout.secureserver.net', 465)
+        mailserver.ehlo()
+        mailserver.login('sales@kentel.dev', 'efeAkaroz123')
+
+        mailserver.sendmail('sales@kentel.dev',email,msg.as_string())
+
+        mailserver.quit()
+        
+        return True
+    
+
 
 if __name__ == "__main__":
     print(generate_id(25))

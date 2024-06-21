@@ -49,6 +49,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 mongo = pymongo.MongoClient()
 db = mongo["KentelPlatform"]
+profitMarginalDB = mongo["profitmarginal.com"]
 
 if issues !=None:
     pass
@@ -67,6 +68,7 @@ portfolios = db["Portfolios"]
 forms = db["forms"]
 admin = db["admin"]
 blog = db["blog"]
+pmMailingList = profitMarginalDB["mailingList"]
 mode = "test"
 base = "https://kentel.dev"
 affiliates = db["affiliates"]
@@ -2059,5 +2061,45 @@ class Captcha:
         else:
             ip = request.environ["HTTP_X_FORWARDED_FOR"]
         return str(ip)
+
+
+
+class ProfitMarginalAPIs:
+    @app.route("/profitmarginal/sendmail",methods=["POST"])
+    def profitmarginalSendmail():
+        if request.method == "POST":
+            email = request.form.get("email")
+            try:
+                emus = email.split("@")[0]
+                emsite = email.split("@")[1]
+                if "." not in emsite and not (len(emus)<3 or len(emsite)<3):
+                    #valid email
+                    Mailer.profitmarginalMailingList(email)
+                    return {
+                        "success":True
+                    }
+
+            except:
+                return abort(403)
+            
+    @app.route("/profitmarginal/verificationComplete/<userRedirectID>")
+    def verificationComplete(userRedirectID):
+        red = redis.Redis()
+        try:
+            data = json.loads(red.get(userRedirectID+"profitmarginal"))
+        except:
+            return {"Success":False,"err":"URL"}
+        email = data["email"]
+        timesignup = data["time"]
+        currentTime = time.time()
+        newdata={
+            "firstSignUp":timesignup,
+            "verification":currentTime,
+            "email":email
+        }
+        pmMailingList.insert_one(newdata)
+        return {"success":True}
+
+
 if __name__ == "__main__":
     app.run(debug=True,port=3000)
