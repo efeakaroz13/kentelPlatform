@@ -162,10 +162,10 @@ def send(mails,content):
 
 
 if __name__ == "__main__":
-    if server == "main":
-        pass
-    else:
-        os.system("rm models/*")
+    # if server == "main":
+    #     pass
+    # else:
+    #     os.system("rm models/*")
     mf = MailFetcher()
     mf.fetch()
     mails = mf.mails
@@ -291,6 +291,6 @@ if __name__ == "__main__":
         p2.join()
         p3.join()
         p4.join()
-        time.sleep(20)
+        time.sleep(100)
 
 

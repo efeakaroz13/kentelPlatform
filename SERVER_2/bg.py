@@ -19,7 +19,7 @@ except:
 tasks = {
     "dailyInsight":{
         "days":[1,2,3,4,5],
-        "time":["14:00"],
+        "time":["13:25"],
         "command":"/home/efeakaroz13/kentelPlatform/env/bin/python3 daily.py"
     },
 }
