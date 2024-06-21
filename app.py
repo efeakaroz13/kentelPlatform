@@ -2072,7 +2072,7 @@ class ProfitMarginalAPIs:
             try:
                 emus = email.split("@")[0]
                 emsite = email.split("@")[1]
-                if "." not in emsite and not (len(emus)<3 or len(emsite)<3):
+                if "." in emsite and not (len(emus)<3 or len(emsite)<3):
                     #valid email
                     try:
                         Mailer.profitmarginalMailingList(email)
