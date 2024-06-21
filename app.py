@@ -2074,10 +2074,14 @@ class ProfitMarginalAPIs:
                 emsite = email.split("@")[1]
                 if "." not in emsite and not (len(emus)<3 or len(emsite)<3):
                     #valid email
-                    Mailer.profitmarginalMailingList(email)
-                    return {
-                        "success":True
-                    }
+                    try:
+                        Mailer.profitmarginalMailingList(email)
+                    except Exception as e:
+                        return {"success":False,"err":str(e)}
+                    return {"success":True}
+                else:
+                    return {"success":False}
+
 
             except:
                 return abort(403)

@@ -118,7 +118,7 @@ class Mailer:
 
         }
         redis.Redis.set(redirectID+"profitmarginal",json.dumps(data,indent=4))
-        html = open("email/profitmarginal.html","r").read().replace("-url-",url)
+        html = open("email/profitmarginal.html","r").read().replace("-url-",urlGen)
         msg = MIMEMultipart()
         msg.set_unixfrom('author')
         msg['From'] = 'Profit Marginal <sales@kentel.dev>'
