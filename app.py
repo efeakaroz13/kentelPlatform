@@ -49,7 +49,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 mongo = pymongo.MongoClient()
 db = mongo["KentelPlatform"]
-profitMarginalDB = mongo["profitmarginal.com"]
+profitMarginalDB = mongo["profitmarginal_com"]
 
 if issues !=None:
     pass
