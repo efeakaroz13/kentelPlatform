@@ -2068,6 +2068,19 @@ class ProfitMarginalAPIs:
     @app.route("/profitmarginal/sendmail",methods=["POST"])
     def profitmarginalSendmail():
         if request.method == "POST":
+            try:
+                ip = request.environ['HTTP_X_REAL_IP']
+            except:
+                ip = request.environ['REMOTE_ADDR']
+            try:
+                ipdata = json.loads(red.get(ip))
+                if time.time() - ipdata["lastvisit"]<54000:
+                    return {"scc":False,"err":"spam"}
+            except:
+                pass
+
+            red.set(ip,json.dumps({"lastvisit":time.time()}))
+
             email = request.form.get("email")
             try:
                 emus = email.split("@")[0]
