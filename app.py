@@ -2075,7 +2075,7 @@ class ProfitMarginalAPIs:
             try:
                 ipdata = json.loads(red.get(ip))
                 if time.time() - ipdata["lastvisit"]<54000:
-                    return {"scc":False,"err":"spam"}
+                    return {"scc":False,"err":"We've already sent you an email for mailing list today."}
             except:
                 pass
 
