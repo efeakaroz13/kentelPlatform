@@ -2079,7 +2079,7 @@ class ProfitMarginalAPIs:
             except:
                 pass
 
-            red.set(ip,json.dumps({"lastvisit":time.time()}))
+            
 
             email = request.form.get("email")
             try:
@@ -2089,15 +2089,16 @@ class ProfitMarginalAPIs:
                     #valid email
                     try:
                         Mailer.profitmarginalMailingList(email)
+                        red.set(ip,json.dumps({"lastvisit":time.time()}))
                     except Exception as e:
-                        return {"success":False,"err":str(e)}
-                    return {"success":True}
+                        return {"scc":False,"err":str(e)}
+                    return {"scc":True}
                 else:
-                    return {"success":False}
+                    return {"scc":False,"err":"Invalid Email"}
 
 
-            except:
-                return abort(403)
+            except Exception as e:
+                return {"scc":False,"err":"Invalid Email","ex":str(e)}
             
     @app.route("/profitmarginal/verificationComplete/<userRedirectID>")
     def verificationComplete(userRedirectID):
