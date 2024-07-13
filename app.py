@@ -2123,8 +2123,10 @@ class ProfitMarginalAPIs:
         }
         try:
             pmMailingList.find({"email":email})[0]
-        except:
             return{"success":True}
+        except:
+            pass
+            
         pmMailingList.insert_one(newdata)
         Mailer.profitmarginalMailingList_thx(email)# send an email saying thx
         return {"success":True}
