@@ -2106,7 +2106,7 @@ class ProfitMarginalAPIs:
         try:
             data = json.loads(red.get(userRedirectID+"profitmarginal"))
         except:
-            return {"Success":False,"err":"URL"}
+            return {"success":False,"err":"URL"}
         email = data["email"]
         timesignup = data["time"]
         currentTime = time.time()
