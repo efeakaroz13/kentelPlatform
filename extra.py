@@ -138,6 +138,75 @@ class Mailer:
         
         return True
     
+    def profitmarginalMailingList_thx(email):
+        
+        html= f"""
+            <!DOCTYPE html>
+<html>
+<body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; margin: 0; padding: 0; background-color: #f8f9fa;">
+    <div style="width: 100%; max-width: 600px; margin: 20px auto; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); overflow: hidden;">
+        <div style="background-color: #28a745; color: #fff; padding: 20px; text-align: center;">
+            <h1>Thank You for Subscribing!</h1>
+        </div>
+        <div style="padding: 20px;">
+            <p>Dear Subscriber,</p>
+            <p>
+                Welcome to the <strong>Profit Marginal</strong> community! We're thrilled to have you on board. By subscribing to our newsletter, you've taken the first step towards gaining a competitive edge in the stock market.
+            </p>
+            <p>
+                As a subscriber, you'll receive:
+            </p>
+            <ul>
+                <li><strong>Weekly market insights</strong> to keep you informed about the latest trends.</li>
+                <li><strong>Exclusive trading tips</strong> to help you make informed decisions.</li>
+                <li>Early access to our <strong>cutting-edge AI-driven predictions</strong>.</li>
+            </ul>
+            <p>
+                We're committed to providing you with the tools and knowledge you need to achieve <strong>financial success</strong>. Keep an eye on your inbox for our upcoming newsletters and updates.
+            </p>
+            <p>
+                Thank you for trusting <strong>Profit Marginal</strong> as your go-to source for trading excellence. If you have any questions or feedback, feel free to <a href="mailto:support@profitmarginal.com" style="color: #28a745; text-decoration: none;">contact us</a>.
+            </p>
+            <p>
+                Best Regards,<br>
+                The <strong>Profit Marginal</strong> Team
+            </p>
+        </div>
+        <div style="background-color: #f1f1f1; padding: 10px; text-align: center; font-size: 0.9em; color: #555;">
+            <p>
+                You received this email because you subscribed to our newsletter at <a href="https://www.profitmarginal.com" style="color: #28a745; text-decoration: none;">ProfitMarginal.com</a>. If you no longer wish to receive these emails, you can <a href="https://profitmarginal.com/unsubscribe?email={email}" style="color: #28a745; text-decoration: none;">unsubscribe here</a>.
+            </p>
+            <p>
+                &copy; 2024 ProfitMarginal.com, All rights reserved.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+    
+
+        """
+        
+
+        msg = MIMEMultipart()
+        msg.set_unixfrom('author')
+        msg['From'] = 'Profit Marginal <sales@kentel.dev>'
+        msg['To'] = email
+        msg['Subject'] = 'Thank you! - Profit Marginal'
+        message = html
+        msg.attach(MIMEText(message,"html"))
+
+        mailserver = smtplib.SMTP_SSL('smtpout.secureserver.net', 465)
+        mailserver.ehlo()
+        mailserver.login('sales@kentel.dev', 'efeAkaroz123')
+
+        mailserver.sendmail('sales@kentel.dev',email,msg.as_string())
+
+        mailserver.quit()
+        
+        return True
+    
 
 
 if __name__ == "__main__":

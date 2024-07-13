@@ -69,6 +69,8 @@ forms = db["forms"]
 admin = db["admin"]
 blog = db["blog"]
 pmMailingList = profitMarginalDB["mailingList"]
+pmMailingList_deleted = profitMarginalDB["mailingList_deleted"]
+
 mode = "test"
 base = "https://kentel.dev"
 affiliates = db["affiliates"]
@@ -2124,6 +2126,18 @@ class ProfitMarginalAPIs:
         except:
             return{"success":True}
         pmMailingList.insert_one(newdata)
+        return {"success":True}
+    @app.route("/profitmarginal/unsubscribe")
+    def profitmarginalUnsubscribe():
+        email = request.args.get("email")
+        try:
+            u=  pmMailingList.find({"email":email})[0]
+        except:
+            return {"success":False}
+        pmMailingList.delete_one({"email":email})
+        pmMailingList_deleted.insert_one(u)
+        
+
         return {"success":True}
 
 
