@@ -2122,7 +2122,7 @@ class ProfitMarginalAPIs:
 
         }
         try:
-            pmMailingList.find_one({"email":email})[0]
+            pmMailingList.find({"email":email})[0]
         except:
             return{"success":True}
         pmMailingList.insert_one(newdata)
@@ -2136,7 +2136,7 @@ class ProfitMarginalAPIs:
             return {"success":False}
         pmMailingList.delete_one({"email":email})
         pmMailingList_deleted.insert_one(u)
-        
+
 
         return {"success":True}
 
