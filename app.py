@@ -2107,14 +2107,22 @@ class ProfitMarginalAPIs:
             data = json.loads(red.get(userRedirectID+"profitmarginal"))
         except:
             return {"success":False,"err":"URL"}
+        
         email = data["email"]
+
         timesignup = data["time"]
         currentTime = time.time()
         newdata={
             "firstSignUp":timesignup,
             "verification":currentTime,
-            "email":email
+            "email":email,
+            "_id":generate_id(20),
+
         }
+        try:
+            pmMailingList.find_one({"email":email})[0]
+        except:
+            return{"success":True}
         pmMailingList.insert_one(newdata)
         return {"success":True}
 
