@@ -2126,6 +2126,7 @@ class ProfitMarginalAPIs:
         except:
             return{"success":True}
         pmMailingList.insert_one(newdata)
+        Mailer.profitmarginalMailingList_thx(email)# send an email saying thx
         return {"success":True}
     @app.route("/profitmarginal/unsubscribe")
     def profitmarginalUnsubscribe():
@@ -2136,6 +2137,7 @@ class ProfitMarginalAPIs:
             return {"success":False}
         pmMailingList.delete_one({"email":email})
         pmMailingList_deleted.insert_one(u)
+
 
 
         return {"success":True}
