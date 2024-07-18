@@ -135,7 +135,7 @@ def send(mails,content):
     #For that, you need to send the user ID to the HTML content.
     mailserver = smtplib.SMTP_SSL('smtpout.secureserver.net', 465)
     mailserver.ehlo()
-    mailserver.login('sales@kentel.dev', 'efeAkaroz123')
+    mailserver.login('sales@kentel.dev', 'efeAkaroz123!')
     for m in mails:
         
 
