@@ -78,7 +78,7 @@ gifts = db["gifts"]
 red = redis.Redis()
 
 plans = ["standardM","basicM"]
-stripe.api_key = "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"
+stripe.api_key = ""
 
 
 @app.route("/")
