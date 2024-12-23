@@ -8,7 +8,7 @@ from multiprocessing import Process
 red = redis.Redis()
 
 
-client = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@185.235.77.16/") # server.local_bind_port is assigned local port
+client = pymongo.MongoClient(host="mongodb://efeakaroz13:****@185.235.77.16/") # server.local_bind_port is assigned local port
 
 dbS = client["KentelPlatform"]
 issues = dbS["Issues"]
@@ -19,7 +19,7 @@ def p1():
     
     print("Process1 Started")
     while True:
-        client = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@185.235.77.16/") # server.local_bind_port is assigned local port
+        client = pymongo.MongoClient(host="mongodb://efeakaroz13:****@185.235.77.16/") # server.local_bind_port is assigned local port
 
         dbS = client["KentelPlatform"]
         issues = dbS["Issues"]
