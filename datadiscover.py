@@ -166,7 +166,7 @@ elif a==4:
 
 
 else:
-    mongo = pymongo.MongoClient("mongodb://efeakaroz13:greenanarchist@185.235.77.16:27017")
+    mongo = pymongo.MongoClient("mongodb://efeakaroz13:****@185.235.77.16:27017")
     db = mongo["KentelPlatform"]
     issues = db["Issues"]
 
