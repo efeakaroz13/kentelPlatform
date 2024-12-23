@@ -102,7 +102,7 @@ if __name__ == "__main__":
 
             mailserver = smtplib.SMTP_SSL('smtpout.secureserver.net', 465)
             mailserver.ehlo()
-            mailserver.login('sales@kentel.dev', 'greenanarchist')
+            mailserver.login('sales@kentel.dev', '****')
 
             mailserver.sendmail('sales@kentel.dev',m,msg.as_string())
 
