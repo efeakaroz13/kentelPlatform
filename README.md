@@ -1,5 +1,5 @@
 # Kentel
-Kentel was a ML based AI trading tool. I started its development around July 2023 and created a fully functional product in Q2 2024. However, I needed to shut down the project due to a lack of funds.
+Kentel was a ML based AI trading tool. I started its development around Q2 2023 and created a fully functional product in Q1 2024. However, I needed to shut down the project due to a lack of funds.
 
 ## Structre
 ### Scanner
