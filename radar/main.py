@@ -23,7 +23,7 @@ def getPinpointData(ticker,timeepoch,issues):
         if s["ticker"] == ticker:
             return s
         
-client = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@185.235.77.16:27017") 
+client = pymongo.MongoClient(host="mongodb://efeakaroz13:****@185.235.77.16:27017") 
 db = client["KentelPlatform"]
 issues = db["Issues"]
 allIssues = []
