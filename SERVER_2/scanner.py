@@ -1,7 +1,7 @@
 '''
 © Efe Akaroz 2023
-This code is copyrighted, using it for profit may cause you legal issues
-Agust 28th 2023
+This code is copyrighted, using it for profit may cause legal issues
+August 28th 2023
 
 '''
 import trader 
@@ -39,7 +39,7 @@ def generate_id(charNumber):
 
 
 red = redis.Redis()
-mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:greenanarchist@185.235.77.16:27017")
+mongo = pymongo.MongoClient(host="mongodb://efeakaroz13:****@185.235.77.16:27017")
 db = mongo["KentelPlatform"]
 issues = db["Issues"]
 
